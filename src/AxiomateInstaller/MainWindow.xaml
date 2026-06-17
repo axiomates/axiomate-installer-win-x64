@@ -45,7 +45,10 @@
                     <Hyperlink x:Name="AboutLink" Click="AboutLink_Click" Foreground="{StaticResource Muted}" TextDecorations="None">
                         <Run Text="{DynamicResource Footer_About}"/>
                     </Hyperlink>
-                    <Run Foreground="{StaticResource Muted}" Text="  ·  axiomate.net"/>
+                    <Run Foreground="{StaticResource Muted}" Text="  ·  "/>
+                    <Hyperlink x:Name="WebsiteLink" Click="WebsiteLink_Click" Foreground="#2563EB">
+                        <Run Text="http://axiomate.net"/>
+                    </Hyperlink>
                 </TextBlock>
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
                     <Button x:Name="BackBtn"   Content="{DynamicResource Btn_Back}"   Style="{StaticResource SecondaryButton}" Margin="0,0,8,0" Click="BackBtn_Click"/>
