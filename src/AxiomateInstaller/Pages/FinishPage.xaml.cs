@@ -22,7 +22,7 @@ public partial class FinishPage : WizardPage
 
         if (host.Options.CreateWorkspace)
         {
-            _launcherCmd = Path.Combine(host.Options.WorkspaceDir, "launch-axiomate.cmd");
+            _launcherCmd = Path.Combine(host.Options.InstallDir, "launch-axiomate.cmd");
             HintText.Text = Strings.Get("Finish_HintWithWorkspace");
             LaunchBtn.IsEnabled = File.Exists(_launcherCmd);
             LaunchBtn.Visibility = Visibility.Visible;

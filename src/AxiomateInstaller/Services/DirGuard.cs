@@ -40,6 +40,8 @@ public static class DirGuard
         if (root != null && string.Equals(p.TrimEnd('\\'), root.TrimEnd('\\'), StringComparison.OrdinalIgnoreCase))
             return new(false, "不能直接安装到驱动器根目录。");
 
+        string userProfile = UserProfileResolver.GetUserProfile();
+
         // Forbidden exact dirs.
         var forbiddenExact = new[]
         {
@@ -48,11 +50,12 @@ public static class DirGuard
             Environment.GetFolderPath(Environment.SpecialFolder.SystemX86),
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
             Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
-            Environment.GetFolderPath(Environment.SpecialFolder.UserProfile),
-            Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
-            Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+            userProfile,
+            Path.Combine(userProfile, "Desktop"),
+            Path.Combine(userProfile, "Documents"),
+            Path.Combine(userProfile, "Downloads"),
+            Path.Combine(userProfile, "AppData", "Local"),
+            Path.Combine(userProfile, "AppData", "Roaming"),
             Path.GetTempPath().TrimEnd('\\'),
         };
         foreach (var f in forbiddenExact)

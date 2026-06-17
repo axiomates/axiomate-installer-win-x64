@@ -18,7 +18,7 @@ public sealed class ConfigWriter
 
     public void Write(ModelChoice choice, string apiKey)
     {
-        string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        string home = UserProfileResolver.GetUserProfile(_log);
         if (string.IsNullOrEmpty(home)) throw new InstallStepException(Strings.Get("Err_Cfg_NoHome"));
 
         string axiomateDir = Path.Combine(home, ".axiomate");

@@ -29,12 +29,14 @@ public partial class OptionsPage : WizardPage
 
     private void Browse_Click(object sender, RoutedEventArgs e)
     {
+        string userProfile = UserProfileResolver.GetUserProfile();
+        string resolvedWorkspace = WorkspacePathGuard.ResolveForUser(WorkspacePathBox.Text, userProfile);
         var dlg = new Microsoft.Win32.OpenFolderDialog
         {
             Title = Strings.Get("Opt_PickerTitle"),
-            InitialDirectory = Directory.Exists(WorkspacePathBox.Text)
-                ? WorkspacePathBox.Text
-                : Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
+            InitialDirectory = Directory.Exists(resolvedWorkspace)
+                ? resolvedWorkspace
+                : userProfile
         };
         if (dlg.ShowDialog() == true) WorkspacePathBox.Text = dlg.FolderName;
     }
@@ -49,7 +51,18 @@ public partial class OptionsPage : WizardPage
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
-        try { Path.GetFullPath(p); }
+        try
+        {
+            string userProfile = UserProfileResolver.GetUserProfile(host.Log);
+            _ = WorkspacePathGuard.ResolveForUser(p, userProfile);
+            WorkspacePathGuard.EnsureSeparateFromInstallDir(p, host.Options.InstallDir, userProfile);
+        }
+        catch (InstallStepException ex)
+        {
+            MessageBox.Show(ex.Message, Strings.Get("Opt_BadWorkspaceTitle"),
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
         catch
         {
             MessageBox.Show(Strings.Get("Opt_BadWorkspaceBody_Invalid"), Strings.Get("Opt_BadWorkspaceTitle"),

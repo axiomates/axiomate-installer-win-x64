@@ -395,9 +395,13 @@ There are no routes / fallbacks / auxiliary blocks — Axiomate fills those in o
 
 ## Runtime behaviors
 
-### Path guard (`Services/DirGuard.cs`)
+### User profile resolution and path guard (`Services/UserProfileResolver.cs`, `Services/DirGuard.cs`)
 
-`Evaluate(string)` returns `(Ok, Reason)`. Rejects:
+The installer runs elevated, so user-scoped paths must not blindly use the elevated process profile.
+`UserProfileResolver` resolves the intended user profile from HKCU volatile environment / `USERPROFILE`
+and is used by model config, per-user Git/Python probing, workspace validation, and install path guards.
+
+`DirGuard.Evaluate(string)` returns `(Ok, Reason)`. Rejects:
 
 - empty / non-rooted / paths with invalid chars;
 - a drive root (`C:\`);
@@ -446,15 +450,21 @@ touch their existing pip configuration.
 
 ### Workspace + shortcuts (`Services/WorkspaceCreator.cs`, `Services/ShortcutManager.cs`)
 
-When the workspace option is checked:
+When the workspace option is checked, the wizard and install engine reject any workspace path that is
+the same as the install directory or where either directory contains the other. This is mandatory because
+the install directory is wiped during deployment while workspace is user data.
 
-1. Create the workspace dir (default `%USERPROFILE%\axiomate-workspace`).
-2. Write `<workspace>\launch-axiomate.cmd`:
+1. Default workspace path is `%USERPROFILE%\axiomate-workspace`; it is intentionally left as an
+   environment-variable path so the launcher expands it for the user who actually clicks the shortcut,
+   not the elevated installer account.
+2. Write `<install-dir>\launch-axiomate.cmd`:
 
    ```bat
    @echo off
-   cd /D "<workspace>"
-   axiomate %*
+   set "AXIOMATE_WORKSPACE=%USERPROFILE%\axiomate-workspace"
+   if not exist "%AXIOMATE_WORKSPACE%" mkdir "%AXIOMATE_WORKSPACE%"
+   cd /D "%AXIOMATE_WORKSPACE%"
+   axiomate "%AXIOMATE_WORKSPACE%" %*
    ```
 
 3. Create two `.lnk` files (per-machine paths since this is admin-installed):
@@ -462,8 +472,8 @@ When the workspace option is checked:
    - `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Axiomate.lnk`
    - `C:\Users\Public\Desktop\Axiomate.lnk`
 
-   Both target `launch-axiomate.cmd`, set `WorkingDirectory` to the workspace, and pull the icon
-   from `<install-dir>\axiomate.exe,0`.
+   Both target `<install-dir>\launch-axiomate.cmd`, set `WorkingDirectory` to `<install-dir>`, and
+   pull the icon from `<install-dir>\axiomate.exe,0`.
 
 `.lnk` creation goes through the `IShellLinkW` + `IPersistFile` COM interfaces directly, no
 `WshShell` dependency.

@@ -92,6 +92,8 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Opt_BadWorkspaceTitle">Workspace</sys:String>
     <sys:String x:Key="Opt_BadWorkspaceBody_Empty">Please fill in the workspace directory.</sys:String>
     <sys:String x:Key="Opt_BadWorkspaceBody_Invalid">Workspace path is invalid.</sys:String>
+    <sys:String x:Key="Opt_BadWorkspaceBody_SameAsInstall">Workspace directory cannot be the same as the install directory. Choose another folder.</sys:String>
+    <sys:String x:Key="Opt_BadWorkspaceBody_OverlapsInstall">Workspace directory cannot be the same as the install directory, and neither directory can contain the other. Choose another folder.</sys:String>
 
     <!-- model -->
     <sys:String x:Key="Model_Header">Model configuration</sys:String>

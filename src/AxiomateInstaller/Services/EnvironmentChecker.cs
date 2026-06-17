@@ -7,7 +7,6 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using Microsoft.Win32;
 
 namespace AxiomateInstaller.Services;
 
@@ -59,24 +58,22 @@ public sealed class EnvironmentChecker
         string current = Environment.GetEnvironmentVariable("PATH") ?? "";
         parts.AddRange(current.Split(';', StringSplitOptions.RemoveEmptyEntries));
 
-        // 2. Explicit HKCU\Environment Path. Reading the registry directly bypasses the
-        // "elevated process inherits LocalSystem env" gotcha on some boxes.
-        try
+        // 2. Explicit target-user Environment Path. Reading it directly bypasses
+        // the elevated process using the admin account's HKCU on some boxes.
+        string? activeSid = UserProfileResolver.GetActiveUserSid(_log);
+        string profile = UserProfileResolver.GetUserProfile(_log);
+        string? userPath = UserProfileResolver.ReadUserRegistryValue(activeSid, "Environment", "Path");
+        if (!string.IsNullOrEmpty(userPath))
         {
-            using var key = Registry.CurrentUser.OpenSubKey("Environment");
-            if (key?.GetValue("Path") is string hkcuPath && !string.IsNullOrEmpty(hkcuPath))
+            userPath = userPath.Replace("%USERPROFILE%", profile, StringComparison.OrdinalIgnoreCase);
+            foreach (string p in Environment.ExpandEnvironmentVariables(userPath)
+                                .Split(';', StringSplitOptions.RemoveEmptyEntries))
             {
-                foreach (string p in Environment.ExpandEnvironmentVariables(hkcuPath)
-                                    .Split(';', StringSplitOptions.RemoveEmptyEntries))
-                {
-                    parts.Add(p);
-                }
+                parts.Add(p);
             }
         }
-        catch (Exception ex) { _log.Warn($"Could not read HKCU Path: {ex.Message}"); }
 
         // 3. Common per-user install locations the user might have used.
-        string profile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
         if (!string.IsNullOrEmpty(profile))
         {
             parts.Add(Path.Combine(profile, "AppData", "Local", "Programs", "Git", "cmd"));

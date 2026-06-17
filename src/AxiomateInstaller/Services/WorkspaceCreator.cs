@@ -13,16 +13,18 @@ public sealed class WorkspaceCreator
     private readonly Logger _log;
     public WorkspaceCreator(Logger log) { _log = log; }
 
-    public string CreateWorkspaceLauncher(string workspaceDir)
+    public string CreateWorkspaceLauncher(string installDir, string workspaceDir)
     {
-        Directory.CreateDirectory(workspaceDir);
-        string cmd = Path.Combine(workspaceDir, "launch-axiomate.cmd");
+        Directory.CreateDirectory(installDir);
+        string cmd = Path.Combine(installDir, "launch-axiomate.cmd");
         string content =
             "@echo off\r\n" +
-            $"cd /D \"{workspaceDir}\"\r\n" +
-            "axiomate %*\r\n";
+            $"set \"AXIOMATE_WORKSPACE={workspaceDir}\"\r\n" +
+            "if not exist \"%AXIOMATE_WORKSPACE%\" mkdir \"%AXIOMATE_WORKSPACE%\"\r\n" +
+            "cd /D \"%AXIOMATE_WORKSPACE%\"\r\n" +
+            "axiomate \"%AXIOMATE_WORKSPACE%\" %*\r\n";
         File.WriteAllText(cmd, content);
-        _log.Info($"Wrote workspace launcher: {cmd}");
+        _log.Info($"Wrote workspace launcher: {cmd} -> {workspaceDir}");
         return cmd;
     }
 }

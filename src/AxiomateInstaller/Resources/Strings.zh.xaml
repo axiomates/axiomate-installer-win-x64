@@ -92,6 +92,8 @@
     <sys:String x:Key="Opt_BadWorkspaceTitle">工作区</sys:String>
     <sys:String x:Key="Opt_BadWorkspaceBody_Empty">请填写工作区目录。</sys:String>
     <sys:String x:Key="Opt_BadWorkspaceBody_Invalid">工作区路径不合法。</sys:String>
+    <sys:String x:Key="Opt_BadWorkspaceBody_SameAsInstall">工作区目录不能和安装目录相同。请选择另一个文件夹。</sys:String>
+    <sys:String x:Key="Opt_BadWorkspaceBody_OverlapsInstall">工作区目录不能和安装目录相同, 也不能互相包含。请选择另一个文件夹。</sys:String>
 
     <!-- model -->
     <sys:String x:Key="Model_Header">模型配置</sys:String>

@@ -39,6 +39,8 @@ public sealed class InstallEngine
 
         try
         {
+            ValidateFinalOptions(opt);
+
             Report("Step_Extract");
             payload = extractor.Extract();
 
@@ -80,7 +82,7 @@ public sealed class InstallEngine
             if (opt.CreateWorkspace)
             {
                 Report("Step_Workspace");
-                launcherCmd = workspace.CreateWorkspaceLauncher(opt.WorkspaceDir);
+                launcherCmd = workspace.CreateWorkspaceLauncher(opt.InstallDir, opt.WorkspaceDir);
                 CreateShortcuts(shortcut, opt, launcherCmd);
             }
 
@@ -97,6 +99,13 @@ public sealed class InstallEngine
             if (payload is not null)
                 PayloadExtractor.Cleanup(payload.WorkDir, _log);
         }
+    }
+
+    private void ValidateFinalOptions(InstallOptions opt)
+    {
+        if (!opt.CreateWorkspace) return;
+        string userProfile = UserProfileResolver.GetUserProfile(_log);
+        WorkspacePathGuard.EnsureSeparateFromInstallDir(opt.WorkspaceDir, opt.InstallDir, userProfile);
     }
 
     private static int ComputeStepCount(InstallOptions opt)
@@ -129,14 +138,14 @@ public sealed class InstallEngine
         sm.Create(
             Path.Combine(startMenuDir, "Axiomate.lnk"),
             launcherCmd,
-            opt.WorkspaceDir,
+            opt.InstallDir,
             description,
             axiomateExe);
 
         sm.Create(
             Path.Combine(desktopDir, "Axiomate.lnk"),
             launcherCmd,
-            opt.WorkspaceDir,
+            opt.InstallDir,
             description,
             axiomateExe);
     }
