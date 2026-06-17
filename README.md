@@ -9,7 +9,7 @@ Wraps the Axiomate Windows agent dist together with bundled Git / Python install
 | Output | `artifacts/installer/axiomate-installer-<version>.exe` |
 | Size | ~278 MB (axiomate dist 165 MB + Git 62 MB + Python 26 MB + WPF runtime + uninstaller) |
 | Target OS | Windows 11 (build 22000+), x64 only |
-| Privilege | requires admin (`requireAdministrator` manifest, triggers UAC) |
+| Privilege | self-elevates: starts as invoker, captures original user SID/profile, then relaunches with UAC |
 | UI | 7-step WPF wizard, Chinese strings, light theme matching the Axiomate doc style |
 | Repo state | local git repo on `main`; no remote |
 
@@ -63,7 +63,7 @@ under `artifacts/_intermediate/`. `artifacts/installer/` ends up with **exactly 
 
 End-user view, double-clicking the EXE on a clean Windows 11 box:
 
-1. UAC prompt (admin required).
+1. Starts as the invoking user, captures SID/profile, then shows UAC and relaunches elevated.
 2. Welcome & environment-check pages run.
 3. If Git or Python are missing / too old, the installer offers to install bundled ones silently.
 4. Pick install dir (default `C:\Program Files\Axiomate`). Path is validated against a blacklist.
@@ -167,7 +167,7 @@ axiomate-installer-win-x64/
 └── src/
     ├── AxiomateInstaller/                   ← main wizard EXE
     │   ├── AxiomateInstaller.csproj
-    │   ├── app.manifest                     ← requireAdministrator + Win10/11 GUID + DPI/long-path
+    │   ├── app.manifest                     ← asInvoker + Win10/11 GUID + DPI/long-path
     │   ├── App.xaml(.cs)                    ← global exception handlers, theme styles
     │   ├── MainWindow.xaml(.cs)             ← chrome (header, footer, frame), nav buttons
     │   ├── Pages/
@@ -397,9 +397,11 @@ There are no routes / fallbacks / auxiliary blocks — Axiomate fills those in o
 
 ### User profile resolution and path guard (`Services/UserProfileResolver.cs`, `Services/DirGuard.cs`)
 
-The installer runs elevated, so user-scoped paths must not blindly use the elevated process profile.
-`UserProfileResolver` resolves the intended user profile from HKCU volatile environment / `USERPROFILE`
-and is used by model config, per-user Git/Python probing, workspace validation, and install path guards.
+The installer starts unelevated, captures the original user's SID/profile, then relaunches itself elevated
+with those values as command-line arguments. User-scoped paths must never be inferred from the elevated
+process profile. `UserProfileResolver` uses the captured target user first, then falls back to active-session
+resolution, and is used by model config, per-user Git/Python probing, workspace validation, and install path guards.
+Path comparisons use final-path canonicalization where possible to reduce junction/symlink/subst alias risk.
 
 `DirGuard.Evaluate(string)` returns `(Ok, Reason)`. Rejects:
 

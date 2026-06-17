@@ -26,8 +26,8 @@ public static class WorkspacePathGuard
 
     public static void EnsureSeparateFromInstallDir(string workspaceDir, string installDir, string userProfile)
     {
-        string workspace = ResolveForUser(workspaceDir, userProfile);
-        string install = Normalize(installDir);
+        string workspace = PathCanonicalizer.CanonicalizeForComparison(ResolveForUser(workspaceDir, userProfile));
+        string install = PathCanonicalizer.CanonicalizeForComparison(installDir);
 
         if (string.Equals(workspace, install, StringComparison.OrdinalIgnoreCase) ||
             IsSubdirectoryOf(workspace, install) ||
@@ -39,7 +39,7 @@ public static class WorkspacePathGuard
 
     private static string Normalize(string path)
     {
-        return Path.GetFullPath(path).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        return PathCanonicalizer.Normalize(path);
     }
 
     private static bool IsSubdirectoryOf(string child, string parent)

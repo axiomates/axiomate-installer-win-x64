@@ -58,10 +58,12 @@ public static class DirGuard
             Path.Combine(userProfile, "AppData", "Roaming"),
             Path.GetTempPath().TrimEnd('\\'),
         };
+        string canonicalPath = PathCanonicalizer.CanonicalizeForComparison(p);
         foreach (var f in forbiddenExact)
         {
             if (string.IsNullOrEmpty(f)) continue;
-            if (string.Equals(p, Path.GetFullPath(f).TrimEnd('\\'), StringComparison.OrdinalIgnoreCase))
+            string canonicalForbidden = PathCanonicalizer.CanonicalizeForComparison(f);
+            if (string.Equals(canonicalPath, canonicalForbidden, StringComparison.OrdinalIgnoreCase))
                 return new(false, $"不能安装到系统/用户保留目录：{f}");
         }
 

@@ -11,6 +11,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using Microsoft.Win32;
+using Microsoft.Win32.SafeHandles;
 
 namespace AxiomateUninstaller;
 
@@ -155,7 +156,8 @@ public partial class App : System.Windows.Application
 
     private static void EnsureSafeInstallDirForDeletion(string installDir)
     {
-        string full = Path.GetFullPath(installDir).TrimEnd('\\', '/');
+        string full = CanonicalizeForComparison(installDir);
+        _ = File.GetAttributes(full);
         string root = Path.GetPathRoot(full)?.TrimEnd('\\', '/') ?? "";
         string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile).TrimEnd('\\', '/');
         string[] forbidden =
@@ -174,7 +176,7 @@ public partial class App : System.Windows.Application
         foreach (string forbiddenPath in forbidden)
         {
             if (!string.IsNullOrWhiteSpace(forbiddenPath) &&
-                string.Equals(full, Path.GetFullPath(forbiddenPath).TrimEnd('\\', '/'), StringComparison.OrdinalIgnoreCase))
+                string.Equals(full, CanonicalizeForComparison(forbiddenPath), StringComparison.OrdinalIgnoreCase))
             {
                 throw new InvalidOperationException($"Refusing to delete unsafe install directory: {full}");
             }
@@ -187,6 +189,42 @@ public partial class App : System.Windows.Application
         {
             throw new InvalidOperationException($"Refusing to delete unverified install directory: {full}");
         }
+    }
+
+    private static string CanonicalizeForComparison(string path)
+    {
+        string normalized = Path.GetFullPath(path).TrimEnd('\\', '/');
+        string? final = TryGetFinalPath(normalized);
+        return string.IsNullOrWhiteSpace(final) ? normalized : final.TrimEnd('\\', '/');
+    }
+
+    private static string? TryGetFinalPath(string path)
+    {
+        try
+        {
+            using SafeFileHandle handle = CreateFileW(
+                path,
+                0,
+                0x00000001 | 0x00000002 | 0x00000004,
+                IntPtr.Zero,
+                3,
+                0x02000000,
+                IntPtr.Zero);
+            if (handle.IsInvalid) return null;
+            var sb = new StringBuilder(512);
+            uint len = GetFinalPathNameByHandleW(handle, sb, (uint)sb.Capacity, 0);
+            if (len == 0) return null;
+            if (len > sb.Capacity)
+            {
+                sb.EnsureCapacity((int)len);
+                len = GetFinalPathNameByHandleW(handle, sb, (uint)sb.Capacity, 0);
+                if (len == 0) return null;
+            }
+            string final = sb.ToString();
+            const string prefix = @"\\?\";
+            return final.StartsWith(prefix, StringComparison.Ordinal) ? final[prefix.Length..] : final;
+        }
+        catch { return null; }
     }
 
     private static void ScheduleSelfDelete(string installDir, string ownExe)
@@ -214,6 +252,23 @@ public partial class App : System.Windows.Application
         }
         catch { }
     }
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern SafeFileHandle CreateFileW(
+        string lpFileName,
+        uint dwDesiredAccess,
+        uint dwShareMode,
+        IntPtr lpSecurityAttributes,
+        uint dwCreationDisposition,
+        uint dwFlagsAndAttributes,
+        IntPtr hTemplateFile);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern uint GetFinalPathNameByHandleW(
+        SafeFileHandle hFile,
+        [Out] StringBuilder lpszFilePath,
+        uint cchFilePath,
+        uint dwFlags);
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     private static extern IntPtr SendMessageTimeout(

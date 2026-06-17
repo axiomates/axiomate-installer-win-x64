@@ -10,9 +10,10 @@ public static class UserProfileResolver
 {
     public static string GetUserProfile(Logger? log = null)
     {
-        string? activeSid = GetActiveUserSid(log);
+        string? activeSid = TargetUserContext.Sid ?? GetActiveUserSid(log);
         foreach (string? candidate in new[]
         {
+            TargetUserContext.Profile,
             ReadUserRegistryValue(activeSid, @"Volatile Environment", "USERPROFILE"),
             ReadUserRegistryValue(activeSid, @"Environment", "USERPROFILE"),
             ReadProfileImagePath(activeSid),
@@ -36,6 +37,7 @@ public static class UserProfileResolver
 
     public static string? GetActiveUserSid(Logger? log = null)
     {
+        if (!string.IsNullOrWhiteSpace(TargetUserContext.Sid)) return TargetUserContext.Sid;
         try
         {
             int activeSession = unchecked((int)WTSGetActiveConsoleSessionId());
