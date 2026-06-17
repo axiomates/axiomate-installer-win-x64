@@ -31,7 +31,10 @@ $ResourcesDir    = Join-Path $Root "src\AxiomateInstaller\Resources"
 $DistDest        = Join-Path $ResourcesDir "dist"
 $ArtifactsDir    = Join-Path $Root "artifacts"
 $InstallerOut    = Join-Path $ArtifactsDir "installer"
-$UninstallerOut  = Join-Path $ArtifactsDir "uninstaller"
+# Uninstaller is just an intermediate: build.ps1 publishes it, then embeds it
+# into the main installer EXE. Keep it under _intermediate so users don't
+# mistake it for a separate deliverable.
+$UninstallerOut  = Join-Path $ArtifactsDir "_intermediate\uninstaller"
 
 function Write-Step([string]$msg) { Write-Host "==> $msg" -ForegroundColor Cyan }
 function Write-Info([string]$msg) { Write-Host "    $msg" -ForegroundColor DarkGray }
@@ -129,6 +132,17 @@ if (-not $KeepArtifactsRaw) {
 }
 
 $bytes = (Get-Item $finalExe).Length
+
+# Clean up intermediate artifacts so only the deliverable is left.
+$intermediateDir = Join-Path $ArtifactsDir "_intermediate"
+if (Test-Path $intermediateDir) { Remove-Item -Recurse -Force $intermediateDir }
+# Remove pdb / version.json side-cars next to the final exe so the installer/
+# folder contains exactly one file: the installer.
+foreach ($side in @("axiomate-installer.pdb", "version.json")) {
+    $p = Join-Path $InstallerOut $side
+    if (Test-Path $p) { Remove-Item -Force $p }
+}
+
 Write-Host ""
 Write-Host "==============================================" -ForegroundColor Green
 Write-Host (" axiomate-installer  v{0}" -f $installerVersion) -ForegroundColor Green
