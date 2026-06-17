@@ -17,6 +17,18 @@
     }
   },
   "model": {
-    "current": "deepseek-v4-flash"
+    "defaultRoute": "deepseek-v4-flash-main",
+    "routes": {
+      "default-main": {
+        "primary": "deepseek-v4-flash",
+        "fallbackChain": [],
+        "recoveryProfile": "main-agent",
+        "allowActions": [
+          "retry_same_model",
+          "adapt_request"
+        ],
+        "switchModelOn": []
+      }
+    }
   }
 }

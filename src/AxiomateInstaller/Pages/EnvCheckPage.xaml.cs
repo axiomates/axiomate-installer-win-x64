@@ -5,12 +5,19 @@ namespace AxiomateInstaller.Pages;
 
 public partial class EnvCheckPage : WizardPage
 {
+    private bool _checking;
+
     public override string HeaderSubtitleKey => "Env_PageSubtitle";
+    public override bool AllowBack => !_checking;
+    public override bool AllowNext => !_checking;
 
     public EnvCheckPage() { InitializeComponent(); }
 
     public override async void OnEnter(MainWindow host)
     {
+        _checking = true;
+        host.NextBtn.IsEnabled = false;
+        host.LastEnvCheck = null;
         OsText.Text = ArchText.Text = GitText.Text = PyText.Text = Strings.Get("Env_Detecting");
         OsBadge.Text = ArchBadge.Text = "";
         var checker = new EnvironmentChecker(host.Log);
@@ -63,6 +70,8 @@ public partial class EnvCheckPage : WizardPage
             PyInstallChk.IsEnabled  = true;
         }
 
+        _checking = false;
+        host.UpdateChrome(this);
         UpdateMirrorVisibility();
         UpdateWarning(host);
     }

@@ -83,7 +83,7 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Opt_PageSubtitle">Install options</sys:String>
     <sys:String x:Key="Opt_Subtitle">All optional. The axiomate command works fine even with everything unchecked.</sys:String>
     <sys:String x:Key="Opt_ModelChk">Quick model config (DeepSeek official)</sys:String>
-    <sys:String x:Key="Opt_ModelHint">When checked, the next page asks for a model and API key. The installer overwrites ~/.axiomate.json and wipes the existing ~/.axiomate/ directory.</sys:String>
+    <sys:String x:Key="Opt_ModelHint">When checked, the next page asks for a model and API key. The installer overwrites ~/.axiomate.json and wipes the existing ~/.axiomate/ directory. You can skip this and still install; after launching Axiomate, add other models through the first-run guide or by editing ~/.axiomate.json manually.</sys:String>
     <sys:String x:Key="Opt_WorkspaceChk">Create default workspace and shortcuts</sys:String>
     <sys:String x:Key="Opt_WorkspaceHint">Adds Axiomate shortcuts on the desktop and Start menu. Double-click launches axiomate TUI inside the workspace dir — handy for non-CLI users.</sys:String>
     <sys:String x:Key="Opt_WorkspaceLabel">Workspace dir</sys:String>
