@@ -104,7 +104,9 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Model_Item_Flash">deepseek-v4-flash  (lightweight, fast)</sys:String>
     <sys:String x:Key="Model_Lbl_ApiKey">API key</sys:String>
     <sys:String x:Key="Model_ShowKey">Show</sys:String>
-    <sys:String x:Key="Model_Footer">Get your API key at https://platform.deepseek.com. The installer wipes ~/.axiomate/ and writes a minimal ~/.axiomate.json template populated with your API key.</sys:String>
+    <sys:String x:Key="Model_Footer_BeforeLink">Get your API key from the DeepSeek </sys:String>
+    <sys:String x:Key="Model_Footer_Link">official platform</sys:String>
+    <sys:String x:Key="Model_Footer_AfterLink">. After creating an API key, copy and use it; it must not contain * characters.</sys:String>
     <sys:String x:Key="Model_BadKeyTitle">Model configuration</sys:String>
     <sys:String x:Key="Model_BadKeyBody">Please enter the API key.</sys:String>
 

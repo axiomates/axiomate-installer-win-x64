@@ -1,3 +1,5 @@
+using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using AxiomateInstaller.Services;
@@ -34,6 +36,18 @@ public partial class ModelConfigPage : WizardPage
     }
 
     private void KeyBoxPlain_Changed(object sender, TextChangedEventArgs e) { /* mirror handled at toggle time */ }
+
+    private void DeepSeekPlatformLink_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo("https://platform.deepseek.com/api_keys") { UseShellExecute = true });
+        }
+        catch (Exception)
+        {
+            // Non-fatal: user can still continue after reading the link text.
+        }
+    }
 
     public override bool Validate(MainWindow host)
     {

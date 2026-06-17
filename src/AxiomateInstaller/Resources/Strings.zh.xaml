@@ -104,7 +104,9 @@
     <sys:String x:Key="Model_Item_Flash">deepseek-v4-flash  (轻量, 高速度)</sys:String>
     <sys:String x:Key="Model_Lbl_ApiKey">API Key</sys:String>
     <sys:String x:Key="Model_ShowKey">显示</sys:String>
-    <sys:String x:Key="Model_Footer">可在 https://platform.deepseek.com 获取 API Key。安装时会清空 ~/.axiomate/ 目录, 并以最小化的 ~/.axiomate.json 模板 + 您填入的 API Key 覆盖原配置。</sys:String>
+    <sys:String x:Key="Model_Footer_BeforeLink">可在 deepseek </sys:String>
+    <sys:String x:Key="Model_Footer_Link">官方平台</sys:String>
+    <sys:String x:Key="Model_Footer_AfterLink">获取 API Key，创建 API key 后请复制使用，不可包含 * 字符。</sys:String>
     <sys:String x:Key="Model_BadKeyTitle">模型配置</sys:String>
     <sys:String x:Key="Model_BadKeyBody">请填写 API Key。</sys:String>
 

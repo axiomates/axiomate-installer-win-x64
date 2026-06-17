@@ -41,7 +41,13 @@
                     <CheckBox    Grid.Column="2" x:Name="ShowKeyChk" Content="{DynamicResource Model_ShowKey}" Margin="8,0,0,0" VerticalAlignment="Center" Checked="ShowKey_Changed" Unchecked="ShowKey_Changed"/>
                     <TextBox     Grid.Column="1" x:Name="KeyBoxPlain" Padding="8,6" Visibility="Collapsed" TextChanged="KeyBoxPlain_Changed"/>
                 </Grid>
-                <TextBlock Margin="0,12,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Model_Footer}"/>
+                <TextBlock Margin="0,12,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap">
+                    <Run Text="{DynamicResource Model_Footer_BeforeLink}"/>
+                    <Hyperlink Click="DeepSeekPlatformLink_Click" Foreground="#2563EB">
+                        <Run Text="{DynamicResource Model_Footer_Link}"/>
+                    </Hyperlink>
+                    <Run Text="{DynamicResource Model_Footer_AfterLink}"/>
+                </TextBlock>
             </StackPanel>
         </Border>
     </StackPanel>
