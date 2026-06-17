@@ -24,12 +24,13 @@ Wraps the Axiomate Windows agent dist together with bundled Git / Python install
 5. [Project layout](#project-layout)
 6. [Versioning](#versioning)
 7. [Build pipeline](#build-pipeline)
-8. [Model templates](#model-templates)
-9. [Path guard, PATH registration, pip mirror, workspace, uninstaller](#runtime-behaviors)
-10. [Logging & error handling](#logging--error-handling)
-11. [Smoke test plan](#smoke-test-plan)
-12. [Known limitations](#known-limitations)
-13. [Layout reference](#layout-reference)
+8. [Updating bundled Axiomate dist](#updating-bundled-axiomate-dist)
+9. [Model templates](#model-templates)
+10. [Path guard, PATH registration, pip mirror, workspace, uninstaller](#runtime-behaviors)
+11. [Logging & error handling](#logging--error-handling)
+12. [Smoke test plan](#smoke-test-plan)
+13. [Known limitations](#known-limitations)
+14. [Layout reference](#layout-reference)
 
 ---
 
@@ -298,6 +299,55 @@ Embedded resources in `AxiomateInstaller.csproj`:
 <EmbeddedResource Include="Templates\*.json"/>
 <Resource Include="Resources\axiomate-logo.png"/>
 ```
+
+---
+
+## Updating bundled Axiomate dist
+
+The installer embeds a copy of the Axiomate Windows x64 dist. When upstream Axiomate produces a new
+Windows build, the normal update flow is:
+
+```powershell
+# 1. Build / obtain the new upstream dist here:
+#    C:\public\workspace\axiomate\agent\dist
+
+# 2. Rebuild the installer and let build.ps1 sync that dist into embedded resources.
+pwsh build.ps1
+
+# 3. Smoke-test the generated EXE.
+.\artifacts\installer\axiomate-installer-1.0.0.exe
+```
+
+What changes automatically:
+
+- `build.ps1` removes the old `src/AxiomateInstaller/Resources/dist/` directory and copies the new
+  `C:\public\workspace\axiomate\agent\dist\*` into it.
+- The copied dist is embedded by `<EmbeddedResource Include="Resources\dist\**\*" />` during publish.
+- If `version.json` keeps `"axiomateVersion": "auto"`, the displayed bundled Axiomate version is read
+  from the new `dist\axiomate.exe` `FileVersion`.
+- The installer output remains `artifacts/installer/axiomate-installer-<installerVersion>.exe`.
+
+What to edit manually:
+
+- **Only Axiomate dist changed:** usually edit nothing. Run `pwsh build.ps1`, test, then commit the
+  updated generated installer artifact if you are tracking release artifacts elsewhere.
+- **Installer UI / install logic changed:** bump `installerVersion` in `version.json`, rebuild, test,
+  and commit the source change plus `version.json`.
+- **Need to pin a marketing/product version:** replace `"axiomateVersion": "auto"` with a literal value
+  such as `"2026.06.17"`; otherwise leave it as `auto`.
+- **Git / Python payload changed:** replace the EXE under `src/AxiomateInstaller/Resources/`, update
+  `bundledGitVersion` / `bundledPythonVersion` in `version.json`, and update the silent parameters only
+  if the new installer requires different flags.
+
+Use `-SkipDistSync` only when rebuilding after installer-code changes and the bundled Axiomate dist has
+not changed:
+
+```powershell
+pwsh build.ps1 -SkipDistSync
+```
+
+Do **not** use `-SkipDistSync` when the upstream Axiomate dist was updated, or the final installer will
+still embed the previous dist.
 
 ---
 
