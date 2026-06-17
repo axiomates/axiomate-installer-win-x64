@@ -19,7 +19,7 @@
   "model": {
     "defaultRoute": "deepseek-v4-flash-main",
     "routes": {
-      "default-main": {
+      "deepseek-v4-flash-main": {
         "primary": "deepseek-v4-flash",
         "fallbackChain": [],
         "recoveryProfile": "main-agent",
