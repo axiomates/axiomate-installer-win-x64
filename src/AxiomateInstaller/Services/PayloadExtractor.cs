@@ -46,9 +46,12 @@ public sealed class PayloadExtractor
         //   AxiomateInstaller.Resources.Uninstaller.exe
         //   AxiomateInstaller.Resources.dist.<filename>            (flat dist files)
         //   AxiomateInstaller.Resources.dist.<subdir>.<filename>   (rare)
-        string asmName = _asm.GetName().Name ?? "AxiomateInstaller";
-        string prefix = asmName + ".Resources.";
-        string distPrefix = prefix + "dist.";
+        //
+        // MSBuild keys these off RootNamespace, NOT AssemblyName. The two differ
+        // here (AssemblyName=axiomate-installer, RootNamespace=AxiomateInstaller),
+        // so we hard-code the namespace instead of reading it from the assembly.
+        const string prefix = "AxiomateInstaller.Resources.";
+        const string distPrefix = prefix + "dist.";
 
         string? gitPath = null, pyPath = null, uninstPath = null;
         int distCount = 0;

@@ -38,7 +38,10 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{DynamicResource Env_Lbl_Git}" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="1" x:Name="GitText"  Foreground="{StaticResource Muted}" VerticalAlignment="Center"/>
-                        <CheckBox  Grid.Column="2" x:Name="GitInstallChk" Content="{DynamicResource Env_GitInstall}" VerticalAlignment="Center"/>
+                        <Grid       Grid.Column="2">
+                            <CheckBox  x:Name="GitInstallChk" Content="{DynamicResource Env_GitInstall}" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="GitOkBadge"    Text="✓" FontWeight="SemiBold" Foreground="Green" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        </Grid>
                     </Grid>
                     <Grid Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
@@ -48,7 +51,10 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{DynamicResource Env_Lbl_Py}" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="1" x:Name="PyText"  Foreground="{StaticResource Muted}" VerticalAlignment="Center"/>
-                        <CheckBox  Grid.Column="2" x:Name="PyInstallChk"  Content="{DynamicResource Env_PyInstall}" VerticalAlignment="Center" Checked="PyInstallChk_Toggle" Unchecked="PyInstallChk_Toggle"/>
+                        <Grid       Grid.Column="2">
+                            <CheckBox  x:Name="PyInstallChk"  Content="{DynamicResource Env_PyInstall}" VerticalAlignment="Center" Checked="PyInstallChk_Toggle" Unchecked="PyInstallChk_Toggle"/>
+                            <TextBlock x:Name="PyOkBadge"     Text="✓" FontWeight="SemiBold" Foreground="Green" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        </Grid>
                     </Grid>
 
                     <Border x:Name="MirrorBlock" Margin="0,12,0,0" Padding="12" Background="#F0F5F6" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="4" Visibility="Collapsed">

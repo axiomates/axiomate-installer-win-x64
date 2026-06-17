@@ -27,6 +27,7 @@ public sealed class InstallEngine
         var deployer  = new AxiomateDeployer(_log);
         var pathReg   = new PathRegistrar(_log);
         var pipMirror = new PipMirrorWriter(_log);
+        var winTuner  = new WindowsSettingsTuner(_log);
         var workspace = new WorkspaceCreator(_log);
         var shortcut  = new ShortcutManager(_log);
         var configW   = new ConfigWriter(_log);
@@ -66,6 +67,9 @@ public sealed class InstallEngine
             Report("Step_Path");
             pathReg.EnsureInPath(opt.InstallDir);
 
+            Report("Step_WinTune");
+            await winTuner.ApplyAsync();
+
             if (opt.QuickModelConfig)
             {
                 Report("Step_Model");
@@ -104,7 +108,7 @@ public sealed class InstallEngine
             n++;
             if (opt.ConfigurePipMirror) n++;
         }
-        n += 2; // deploy + path
+        n += 3; // deploy + path + win-tune
         if (opt.QuickModelConfig) n++;
         if (opt.CreateWorkspace) n++;
         n += 1; // uninstall registrar

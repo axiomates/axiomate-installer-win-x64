@@ -26,14 +26,42 @@ public partial class EnvCheckPage : WizardPage
         ArchBadge.Foreground = result.IsX64 ? System.Windows.Media.Brushes.Green : System.Windows.Media.Brushes.Crimson;
 
         GitText.Text = result.GitVersionDisplay ?? Strings.Get("Env_GitNotFound");
-        GitInstallChk.IsChecked = !result.GitOk;
-        GitInstallChk.IsEnabled = !result.GitOk;
-        if (result.GitOk) GitInstallChk.Content = Strings.Format("Env_GitInstalled_Format", result.GitVersionDisplay ?? "");
+        if (result.GitOk)
+        {
+            // Git already meets the bar — show a green tick instead of an unchecked
+            // greyed-out box, which previously read as "you forgot to tick it".
+            GitInstallChk.Visibility = System.Windows.Visibility.Collapsed;
+            GitOkBadge.Visibility    = System.Windows.Visibility.Visible;
+            GitInstallChk.IsChecked  = false;
+        }
+        else
+        {
+            // Git is required by axiomate so the bundled install isn't optional.
+            // The box stays checked and locked — opting out would dead-end the wizard.
+            GitInstallChk.Visibility = System.Windows.Visibility.Visible;
+            GitInstallChk.Content    = Strings.Get("Env_GitInstallRequired");
+            GitOkBadge.Visibility    = System.Windows.Visibility.Collapsed;
+            GitInstallChk.IsChecked  = true;
+            GitInstallChk.IsEnabled  = false;
+        }
 
         PyText.Text = result.PythonVersionDisplay ?? Strings.Get("Env_PyNotFound");
-        PyInstallChk.IsChecked = !result.PythonOk;
-        PyInstallChk.IsEnabled = !result.PythonOk;
-        if (result.PythonOk) PyInstallChk.Content = Strings.Format("Env_PyInstalled_Format", result.PythonVersionDisplay ?? "");
+        if (result.PythonOk)
+        {
+            PyInstallChk.Visibility = System.Windows.Visibility.Collapsed;
+            PyOkBadge.Visibility    = System.Windows.Visibility.Visible;
+            PyInstallChk.IsChecked  = false;
+        }
+        else
+        {
+            // Python is optional. Pre-check the box but let the user opt out — many
+            // axiomate workflows don't need Python at all.
+            PyInstallChk.Visibility = System.Windows.Visibility.Visible;
+            PyInstallChk.Content    = Strings.Get("Env_PyInstall");
+            PyOkBadge.Visibility    = System.Windows.Visibility.Collapsed;
+            PyInstallChk.IsChecked  = true;
+            PyInstallChk.IsEnabled  = true;
+        }
 
         UpdateMirrorVisibility();
         UpdateWarning(host);
@@ -78,15 +106,12 @@ public partial class EnvCheckPage : WizardPage
         var r = host.LastEnvCheck;
         if (!r.IsSupportedOs || !r.IsX64) return false;
 
+        // Git is required: if missing, GitInstallChk is locked-checked so this branch
+        // is defensive; we never expect to hit it. Python is opt-in — no validation
+        // when the user unchecks it.
         if (!r.GitOk && GitInstallChk.IsChecked != true)
         {
             MessageBox.Show(Strings.Get("Env_Block_GitBody"), Strings.Get("Env_Block_GitTitle"),
-                MessageBoxButton.OK, MessageBoxImage.Warning);
-            return false;
-        }
-        if (!r.PythonOk && PyInstallChk.IsChecked != true)
-        {
-            MessageBox.Show(Strings.Get("Env_Block_PyBody"), Strings.Get("Env_Block_PyTitle"),
                 MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }

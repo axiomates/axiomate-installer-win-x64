@@ -19,7 +19,7 @@ public sealed class InstallOptions
     public bool QuickModelConfig { get; set; }
     public bool CreateWorkspace  { get; set; }
     public string WorkspaceDir   { get; set; } =
-        Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\AxiomateWorkspace");
+        Environment.ExpandEnvironmentVariables(@"%USERPROFILE%\axiomate-workspace");
 
     // Model-config page choices
     public ModelChoice ModelChoice { get; set; } = ModelChoice.DeepseekV4Pro;

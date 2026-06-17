@@ -1,10 +1,13 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 
 namespace AxiomateInstaller.Services;
 
@@ -34,7 +37,82 @@ public sealed class EnvironmentChecker
     public const int MinPyMinor     = 12;
 
     private readonly Logger _log;
-    public EnvironmentChecker(Logger log) { _log = log; }
+    private readonly string _searchPath;
+
+    public EnvironmentChecker(Logger log)
+    {
+        _log = log;
+        _searchPath = BuildSearchPath();
+    }
+
+    /// <summary>
+    /// Build a PATH that merges machine + current user + the original (non-elevated)
+    /// user's HKCU PATH. The installer runs elevated, so its inherited Path may not
+    /// include user-installed Git / Python. We probe HKCU as well so per-user installs
+    /// don't get falsely flagged as "not found".
+    /// </summary>
+    private string BuildSearchPath()
+    {
+        var parts = new List<string>();
+
+        // 1. Process PATH (already merged HKLM + the user that elevated us, in most cases).
+        string current = Environment.GetEnvironmentVariable("PATH") ?? "";
+        parts.AddRange(current.Split(';', StringSplitOptions.RemoveEmptyEntries));
+
+        // 2. Explicit HKCU\Environment Path. Reading the registry directly bypasses the
+        // "elevated process inherits LocalSystem env" gotcha on some boxes.
+        try
+        {
+            using var key = Registry.CurrentUser.OpenSubKey("Environment");
+            if (key?.GetValue("Path") is string hkcuPath && !string.IsNullOrEmpty(hkcuPath))
+            {
+                foreach (string p in Environment.ExpandEnvironmentVariables(hkcuPath)
+                                    .Split(';', StringSplitOptions.RemoveEmptyEntries))
+                {
+                    parts.Add(p);
+                }
+            }
+        }
+        catch (Exception ex) { _log.Warn($"Could not read HKCU Path: {ex.Message}"); }
+
+        // 3. Common per-user install locations the user might have used.
+        string profile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+        if (!string.IsNullOrEmpty(profile))
+        {
+            parts.Add(Path.Combine(profile, "AppData", "Local", "Programs", "Git", "cmd"));
+            parts.Add(Path.Combine(profile, "AppData", "Local", "Programs", "Git", "bin"));
+            parts.Add(Path.Combine(profile, "AppData", "Local", "Programs", "Python", "Python312"));
+            parts.Add(Path.Combine(profile, "AppData", "Local", "Programs", "Python", "Python313"));
+        }
+        // 4. Standard Git for Windows machine paths.
+        parts.Add(@"C:\Program Files\Git\cmd");
+        parts.Add(@"C:\Program Files\Git\bin");
+        parts.Add(@"C:\Program Files (x86)\Git\cmd");
+
+        // De-dupe while preserving order.
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var dedup = new List<string>(parts.Count);
+        foreach (var p in parts)
+        {
+            string n = p.Trim().TrimEnd('\\');
+            if (n.Length > 0 && seen.Add(n)) dedup.Add(n);
+        }
+        return string.Join(';', dedup);
+    }
+
+    /// <summary>Resolves an executable by walking the merged search path manually.</summary>
+    private string? ResolveExecutable(string nameWithoutExt)
+    {
+        foreach (string dir in _searchPath.Split(';', StringSplitOptions.RemoveEmptyEntries))
+        {
+            foreach (string ext in new[] { ".exe", ".cmd", ".bat" })
+            {
+                string candidate = Path.Combine(dir, nameWithoutExt + ext);
+                if (File.Exists(candidate)) return candidate;
+            }
+        }
+        return null;
+    }
 
     public async Task<EnvCheckResult> RunAsync()
     {
@@ -66,8 +144,15 @@ public sealed class EnvironmentChecker
     {
         try
         {
-            string? raw = await RunCaptureAsync("git", "--version", timeoutMs: 5000);
-            if (string.IsNullOrWhiteSpace(raw)) { _log.Info("Git check: not found"); return (false, null); }
+            string? exe = ResolveExecutable("git");
+            if (exe is null)
+            {
+                _log.Info("Git check: not found on the merged search path (HKLM + HKCU + common dirs)");
+                return (false, null);
+            }
+            _log.Info($"Git check: probing {exe}");
+            string? raw = await RunCaptureAsync(exe, "--version", timeoutMs: 5000);
+            if (string.IsNullOrWhiteSpace(raw)) { _log.Info("Git check: probe returned empty output"); return (false, null); }
             var m = Regex.Match(raw, @"git version (\d+)\.(\d+)(?:\.(\d+))?");
             if (!m.Success) { _log.Info($"Git check: unparseable -> {raw.Trim()}"); return (false, raw.Trim()); }
             int major = int.Parse(m.Groups[1].Value);
@@ -86,28 +171,45 @@ public sealed class EnvironmentChecker
 
     private async Task<(bool, string?)> CheckPythonAsync()
     {
-        // Try py -3.12, then python, then python3.
-        string?[] probes = { "py:-3.12 --version", "python:--version", "python3:--version" };
-        foreach (var probe in probes)
+        // Try py.exe -3.12 first (it's HKLM and uses its own version-resolving DB),
+        // then python(.exe) on the merged PATH.
+        string? py = ResolveExecutable("py");
+        if (py is not null)
         {
-            if (probe is null) continue;
-            int idx = probe.IndexOf(':');
-            string exe  = probe[..idx];
-            string args = probe[(idx + 1)..];
-            string? raw = await RunCaptureAsync(exe, args, timeoutMs: 5000);
-            if (string.IsNullOrWhiteSpace(raw)) continue;
-            var m = Regex.Match(raw, @"Python (\d+)\.(\d+)\.(\d+)");
-            if (!m.Success) continue;
-            int major = int.Parse(m.Groups[1].Value);
-            int minor = int.Parse(m.Groups[2].Value);
-            int patch = int.Parse(m.Groups[3].Value);
-            bool ok = major > MinPyMajor || (major == MinPyMajor && minor >= MinPyMinor);
-            string disp = $"Python {major}.{minor}.{patch} (via {exe} {args})";
-            _log.Info($"Python check: {disp} -> {(ok ? "OK" : $"too old (need >= {MinPyMajor}.{MinPyMinor})")}");
-            return (ok, disp);
+            string? raw = await RunCaptureAsync(py, "-3.12 --version", timeoutMs: 5000);
+            var parsed = TryParsePython(raw);
+            if (parsed is { } p1)
+            {
+                _log.Info($"Python check: {p1.disp} -> {(p1.ok ? "OK" : "too old")}");
+                return (p1.ok, p1.disp);
+            }
+        }
+        foreach (string name in new[] { "python", "python3" })
+        {
+            string? exe = ResolveExecutable(name);
+            if (exe is null) continue;
+            string? raw = await RunCaptureAsync(exe, "--version", timeoutMs: 5000);
+            var parsed = TryParsePython(raw);
+            if (parsed is { } p2)
+            {
+                _log.Info($"Python check: {p2.disp} -> {(p2.ok ? "OK" : "too old")}");
+                return (p2.ok, p2.disp);
+            }
         }
         _log.Info("Python check: not found");
         return (false, null);
+    }
+
+    private static (bool ok, string disp)? TryParsePython(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return null;
+        var m = Regex.Match(raw, @"Python (\d+)\.(\d+)\.(\d+)");
+        if (!m.Success) return null;
+        int major = int.Parse(m.Groups[1].Value);
+        int minor = int.Parse(m.Groups[2].Value);
+        int patch = int.Parse(m.Groups[3].Value);
+        bool ok = major > MinPyMajor || (major == MinPyMajor && minor >= MinPyMinor);
+        return (ok, $"Python {major}.{minor}.{patch}");
     }
 
     private static async Task<string?> RunCaptureAsync(string exe, string args, int timeoutMs)

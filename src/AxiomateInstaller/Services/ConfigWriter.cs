@@ -48,8 +48,8 @@ public sealed class ConfigWriter
     private static string LoadTemplate(string fileName)
     {
         Assembly asm = typeof(ConfigWriter).Assembly;
-        string asmName = asm.GetName().Name ?? "AxiomateInstaller";
-        string resourceName = $"{asmName}.Templates.{fileName}";
+        // RootNamespace, not AssemblyName — see PayloadExtractor for the same caveat.
+        string resourceName = $"AxiomateInstaller.Templates.{fileName}";
         using Stream? s = asm.GetManifestResourceStream(resourceName)
             ?? throw new InstallStepException(Strings.Format("Err_Cfg_TmplMissing_Format", fileName));
         using var sr = new StreamReader(s);

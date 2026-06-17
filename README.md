@@ -398,7 +398,7 @@ touch their existing pip configuration.
 
 When the workspace option is checked:
 
-1. Create the workspace dir (default `%USERPROFILE%\AxiomateWorkspace`).
+1. Create the workspace dir (default `%USERPROFILE%\axiomate-workspace`).
 2. Write `<workspace>\launch-axiomate.cmd`:
 
    ```bat
@@ -551,7 +551,7 @@ C:\Program Files\Python312\          ← only when bundled Python ran
 C:\Users\Public\Desktop\Axiomate.lnk
 C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Axiomate.lnk
 
-%USERPROFILE%\AxiomateWorkspace\     ← when workspace option chosen
+%USERPROFILE%\axiomate-workspace\     ← when workspace option chosen
   launch-axiomate.cmd
 %USERPROFILE%\.axiomate.json         ← when quick model config chosen
 %USERPROFILE%\.axiomate\             ← created by axiomate on first run

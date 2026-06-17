@@ -20,10 +20,11 @@
     <sys:String x:Key="Welcome_PageSubtitle">欢迎</sys:String>
     <sys:String x:Key="Welcome_TasksTitle">安装器将完成以下事情:</sys:String>
     <sys:String x:Key="Welcome_Task1">• 检查 Windows 11 / x64 / Git / Python 环境</sys:String>
-    <sys:String x:Key="Welcome_Task2">• 缺失时使用内置 Git 2.54 与 Python 3.12 静默安装</sys:String>
+    <sys:String x:Key="Welcome_Task2">• 缺失时使用内置 Git 2.54 与 Python 3.12 静默安装 (Git 必装, Python 可选)</sys:String>
     <sys:String x:Key="Welcome_Task3">• 释放 Axiomate 到您选择的目录, 并把它加入系统 PATH</sys:String>
-    <sys:String x:Key="Welcome_Task4">• 可选: 自动配置 DeepSeek 模型与 API Key</sys:String>
-    <sys:String x:Key="Welcome_Task5">• 可选: 创建工作区与桌面/开始菜单快捷方式</sys:String>
+    <sys:String x:Key="Welcome_Task4">• 启用 PowerShell 脚本执行 (RemoteSigned) 与 Windows 开发人员模式</sys:String>
+    <sys:String x:Key="Welcome_Task5">• 可选: 自动配置 DeepSeek 模型与 API Key</sys:String>
+    <sys:String x:Key="Welcome_Task6">• 可选: 创建工作区与桌面/开始菜单快捷方式</sys:String>
     <sys:String x:Key="Welcome_Footer">安装过程需要管理员权限。点击「下一步」继续。</sys:String>
     <sys:String x:Key="Welcome_LangLabel">语言 / Language</sys:String>
     <sys:String x:Key="Welcome_LangZh">中文</sys:String>
@@ -39,7 +40,8 @@
     <sys:String x:Key="Env_Lbl_Git">Git</sys:String>
     <sys:String x:Key="Env_Lbl_Py">Python</sys:String>
     <sys:String x:Key="Env_GitInstall">使用内置 Git 2.54 安装</sys:String>
-    <sys:String x:Key="Env_PyInstall">使用内置 Python 3.12 安装</sys:String>
+    <sys:String x:Key="Env_GitInstallRequired">使用内置 Git 2.54 安装 (必装)</sys:String>
+    <sys:String x:Key="Env_PyInstall">使用内置 Python 3.12 安装 (可选)</sys:String>
     <sys:String x:Key="Env_GitInstalled_Format">已安装 ({0})</sys:String>
     <sys:String x:Key="Env_PyInstalled_Format">已安装 ({0})</sys:String>
     <sys:String x:Key="Env_GitNotFound">未检测到 Git</sys:String>
@@ -127,6 +129,7 @@
     <sys:String x:Key="Step_PipMirror">配置 pip 镜像源</sys:String>
     <sys:String x:Key="Step_Deploy">部署 Axiomate 到目标目录</sys:String>
     <sys:String x:Key="Step_Path">注册系统 PATH</sys:String>
+    <sys:String x:Key="Step_WinTune">启用 PowerShell 脚本执行与开发人员模式</sys:String>
     <sys:String x:Key="Step_Model">写入 Axiomate 模型配置</sys:String>
     <sys:String x:Key="Step_Workspace">创建工作区与快捷方式</sys:String>
     <sys:String x:Key="Step_Uninst">注册卸载器</sys:String>

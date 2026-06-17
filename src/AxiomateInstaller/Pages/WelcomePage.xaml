@@ -27,7 +27,8 @@
                         <Run Text="{DynamicResource Welcome_Task2}"/><LineBreak/>
                         <Run Text="{DynamicResource Welcome_Task3}"/><LineBreak/>
                         <Run Text="{DynamicResource Welcome_Task4}"/><LineBreak/>
-                        <Run Text="{DynamicResource Welcome_Task5}"/>
+                        <Run Text="{DynamicResource Welcome_Task5}"/><LineBreak/>
+                        <Run Text="{DynamicResource Welcome_Task6}"/>
                     </TextBlock>
                 </StackPanel>
             </Border>
