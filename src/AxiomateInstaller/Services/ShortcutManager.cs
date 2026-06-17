@@ -19,7 +19,8 @@ public sealed class ShortcutManager
         string workingDirectory,
         string description,
         string? iconLocation = null,
-        int iconIndex = 0)
+        int iconIndex = 0,
+        string? arguments = null)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(lnkPath)!);
 
@@ -34,6 +35,8 @@ public sealed class ShortcutManager
             sl.SetPath(targetPath);
             sl.SetWorkingDirectory(workingDirectory);
             sl.SetDescription(description);
+            if (!string.IsNullOrEmpty(arguments))
+                sl.SetArguments(arguments);
             if (!string.IsNullOrEmpty(iconLocation))
                 sl.SetIconLocation(iconLocation, iconIndex);
 

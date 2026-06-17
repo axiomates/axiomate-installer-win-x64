@@ -23,6 +23,11 @@ public partial class App : System.Windows.Application
     public static int Main(string[] args)
     {
         bool quiet = args.Any(a => string.Equals(a, "/quiet", StringComparison.OrdinalIgnoreCase));
+        if (args.Length >= 4 && string.Equals(args[0], "--delete-install-dir", StringComparison.OrdinalIgnoreCase))
+        {
+            return RunDeleteHelper(args);
+        }
+
         try { _zh = string.Equals(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName, "zh",
                                    StringComparison.OrdinalIgnoreCase); } catch { _zh = false; }
 
@@ -70,6 +75,32 @@ public partial class App : System.Windows.Application
                 MessageBox.Show($"{T("FailBody")}\n{ex.Message}",
                     T("FailTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            return 1;
+        }
+    }
+
+    private static int RunDeleteHelper(string[] args)
+    {
+        try
+        {
+            string installDir = args[1];
+            if (!int.TryParse(args[2], out int parentPid)) return 1;
+            string helperExe = args[3];
+
+            try
+            {
+                using var parent = Process.GetProcessById(parentPid);
+                if (!parent.WaitForExit(30000)) return 1;
+            }
+            catch { }
+
+            EnsureSafeInstallDirForDeletion(installDir);
+            Directory.Delete(installDir, recursive: true);
+            TryDeleteSelf(helperExe);
+            return 0;
+        }
+        catch
+        {
             return 1;
         }
     }
@@ -230,15 +261,28 @@ public partial class App : System.Windows.Application
     private static void ScheduleSelfDelete(string installDir, string ownExe)
     {
         if (string.IsNullOrEmpty(installDir)) return;
-        var psi = new ProcessStartInfo
+        string helperDir = Path.Combine(Path.GetTempPath(), "axiomate-installer");
+        Directory.CreateDirectory(helperDir);
+        string helperExe = Path.Combine(helperDir, $"axiomate-uninstall-delete-{Guid.NewGuid():N}.exe");
+        File.Copy(ownExe, helperExe, overwrite: true);
+
+        var psi = new ProcessStartInfo(helperExe)
         {
-            FileName = "cmd.exe",
-            Arguments = $"/c ping -n 3 127.0.0.1 >nul & rd /s /q \"{installDir}\"",
             CreateNoWindow = true,
             UseShellExecute = false,
             WindowStyle = ProcessWindowStyle.Hidden
         };
+        psi.ArgumentList.Add("--delete-install-dir");
+        psi.ArgumentList.Add(installDir);
+        psi.ArgumentList.Add(Environment.ProcessId.ToString(CultureInfo.InvariantCulture));
+        psi.ArgumentList.Add(helperExe);
         Process.Start(psi);
+    }
+
+    private static void TryDeleteSelf(string helperExe)
+    {
+        try { MoveFileEx(helperExe, null, MOVEFILE_DELAY_UNTIL_REBOOT); }
+        catch { }
     }
 
     private static void LogIgnore(string msg, Exception ex)
@@ -269,6 +313,11 @@ public partial class App : System.Windows.Application
         [Out] StringBuilder lpszFilePath,
         uint cchFilePath,
         uint dwFlags);
+
+    private const int MOVEFILE_DELAY_UNTIL_REBOOT = 0x00000004;
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    private static extern bool MoveFileEx(string lpExistingFileName, string? lpNewFileName, int dwFlags);
 
     [DllImport("user32.dll", CharSet = CharSet.Auto)]
     private static extern IntPtr SendMessageTimeout(

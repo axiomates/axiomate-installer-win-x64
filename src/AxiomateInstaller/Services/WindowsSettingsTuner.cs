@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.Win32;
 
@@ -24,50 +23,16 @@ public sealed class WindowsSettingsTuner
     private readonly Logger _log;
     public WindowsSettingsTuner(Logger log) { _log = log; }
 
-    public async Task ApplyAsync()
+    public Task ApplyAsync()
     {
-        await SetPowerShellExecutionPolicyAsync();
+        SetPowerShellExecutionPolicy();
         EnableDeveloperMode();
+        return Task.CompletedTask;
     }
 
-    /// <summary>Set execution policy to RemoteSigned. Windows Settings' developer-page
-    /// PowerShell toggle is user-facing, so write CurrentUser as well as LocalMachine.</summary>
-    private async Task SetPowerShellExecutionPolicyAsync()
+    /// <summary>Set execution policy to RemoteSigned via registry APIs instead of invoking powershell.exe.</summary>
+    private void SetPowerShellExecutionPolicy()
     {
-        try
-        {
-            var psi = new ProcessStartInfo("powershell.exe",
-                "-NoProfile -ExecutionPolicy Bypass -Command " +
-                "\"Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine -Force; " +
-                "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force; " +
-                "Get-ExecutionPolicy -List\"")
-            {
-                UseShellExecute = false,
-                CreateNoWindow = true,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-            };
-            using var p = Process.Start(psi);
-            if (p is null)
-            {
-                _log.Warn("PowerShell ExecutionPolicy: could not launch powershell.exe; skipping.");
-                return;
-            }
-            string stdout = await p.StandardOutput.ReadToEndAsync();
-            string stderr = await p.StandardError.ReadToEndAsync();
-            await p.WaitForExitAsync();
-            if (!string.IsNullOrWhiteSpace(stdout)) _log.Info("[ps stdout] " + stdout.Trim());
-            if (!string.IsNullOrWhiteSpace(stderr)) _log.Info("[ps stderr] " + stderr.Trim());
-            if (p.ExitCode == 0)
-                _log.Info("PowerShell ExecutionPolicy: set to RemoteSigned (LocalMachine + CurrentUser).");
-            else
-                _log.Warn($"PowerShell ExecutionPolicy: powershell.exe exited with {p.ExitCode}.");
-        }
-        catch (Exception ex)
-        {
-            _log.Warn($"PowerShell ExecutionPolicy: {ex.Message}");
-        }
-
         WritePowerShellExecutionPolicyRegistryFallback();
     }
 

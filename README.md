@@ -81,8 +81,8 @@ Outputs on the user's machine after a successful run:
 - Apps & features entry under `HKLM\...\Uninstall\Axiomate`.
 - Optional: `~/.axiomate.json` overwritten with the chosen DeepSeek template
   (and `~/.axiomate/` wiped).
-- Optional: workspace dir with `launch-axiomate.cmd`; `Axiomate.lnk` on
-  `C:\Users\Public\Desktop` and `C:\ProgramData\Microsoft\Windows\Start Menu\Programs`.
+- Optional: workspace dir plus `Axiomate.lnk` on `C:\Users\Public\Desktop` and
+  `C:\ProgramData\Microsoft\Windows\Start Menu\Programs`; shortcuts launch through Windows Terminal, not cmd.
 - Optional: `<PythonTargetDir>\pip.ini` containing the chosen mirror.
 
 ---
@@ -190,7 +190,8 @@ axiomate-installer-win-x64/
     │   │   ├── AxiomateDeployer.cs          ← force-clean target, copy dist, write installation-manifest.json
     │   │   ├── PathRegistrar.cs             ← HKLM Path + WM_SETTINGCHANGE
     │   │   ├── PipMirrorWriter.cs           ← <PythonTargetDir>\pip.ini
-    │   │   ├── WorkspaceCreator.cs          ← <workspace>\launch-axiomate.cmd
+    │   │   ├── WorkspaceCreator.cs          ← creates the resolved workspace dir via C#
+    │   │   ├── AxiomateLauncher.cs          ← Windows Terminal launch helper, no cmd script
     │   │   ├── ShortcutManager.cs           ← IShellLinkW COM .lnk creation
     │   │   ├── ConfigWriter.cs              ← deletes ~/.axiomate/, writes ~/.axiomate.json from template
     │   │   ├── UninstallRegistrar.cs        ← stages Uninstaller.exe + HKLM\...\Uninstall\Axiomate
@@ -209,8 +210,8 @@ axiomate-installer-win-x64/
         ├── AxiomateUninstaller.csproj
         ├── app.manifest                     ← admin
         └── App.cs                           ← single-file: read registry InstallLocation, prompt,
-                                                clean PATH, delete shortcuts, drop registry, schedule
-                                                self-delete via cmd /c ping ... & rd /s /q "<dir>"
+                                                clean PATH, delete shortcuts, drop registry, then
+                                                spawn a copied helper EXE that deletes via C# Directory.Delete
 ```
 
 `bin/`, `obj/`, `artifacts/`, `Resources/dist/` and `Resources/Uninstaller.exe` are gitignored.
@@ -456,26 +457,17 @@ When the workspace option is checked, the wizard and install engine reject any w
 the same as the install directory or where either directory contains the other. This is mandatory because
 the install directory is wiped during deployment while workspace is user data.
 
-1. Default workspace path is `%USERPROFILE%\axiomate-workspace`; it is intentionally left as an
-   environment-variable path so the launcher expands it for the user who actually clicks the shortcut,
-   not the elevated installer account.
-2. Write `<install-dir>\launch-axiomate.cmd`:
-
-   ```bat
-   @echo off
-   set "AXIOMATE_WORKSPACE=%USERPROFILE%\axiomate-workspace"
-   if not exist "%AXIOMATE_WORKSPACE%" mkdir "%AXIOMATE_WORKSPACE%"
-   cd /D "%AXIOMATE_WORKSPACE%"
-   axiomate "%AXIOMATE_WORKSPACE%" %*
-   ```
-
+1. Default workspace path is `%USERPROFILE%\axiomate-workspace`; it is resolved with the captured
+   target user profile, not the elevated installer account.
+2. Create the resolved workspace directory directly from C#.
 3. Create two `.lnk` files (per-machine paths since this is admin-installed):
 
    - `C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Axiomate.lnk`
    - `C:\Users\Public\Desktop\Axiomate.lnk`
 
-   Both target `<install-dir>\launch-axiomate.cmd`, set `WorkingDirectory` to `<install-dir>`, and
-   pull the icon from `<install-dir>\axiomate.exe,0`.
+   Both target Windows Terminal (`wt.exe`) with arguments equivalent to:
+   `wt -d "<workspace>" "<install-dir>\axiomate.exe" "<workspace>"`. The shortcut working directory is
+   the workspace and the icon is pulled from `<install-dir>\axiomate.exe,0`. No `.cmd` launcher is generated.
 
 `.lnk` creation goes through the `IShellLinkW` + `IPersistFile` COM interfaces directly, no
 `WshShell` dependency.
@@ -511,9 +503,9 @@ Uninstall flow:
 4. Remove install dir from HKLM PATH; broadcast `WM_SETTINGCHANGE`.
 5. Delete shortcuts at the per-machine desktop and start menu paths.
 6. `DeleteSubKeyTree` on the Uninstall registry entry.
-7. Self-delete: spawn `cmd.exe /c ping -n 3 127.0.0.1 >nul & rd /s /q "<install-dir>"` so the
-   running uninstaller can exit before its own folder is wiped. (Failures here are best-effort —
-   user can manually rmdir.)
+7. Self-delete: copy the uninstaller EXE to `%TEMP%\axiomate-installer\...exe`, start it with
+   `ProcessStartInfo.ArgumentList`, wait for the parent process to exit, validate the install dir again,
+   then delete via C# `Directory.Delete`. No `cmd.exe`, shell metacharacters, or command-line path quoting.
 
 User data preserved on purpose: `~/.axiomate.json`, `~/.axiomate/`, the workspace dir.
 
@@ -615,8 +607,7 @@ C:\Program Files\Python312\          ← only when bundled Python ran
 C:\Users\Public\Desktop\Axiomate.lnk
 C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Axiomate.lnk
 
-%USERPROFILE%\axiomate-workspace\     ← when workspace option chosen
-  launch-axiomate.cmd
+%USERPROFILE%\axiomate-workspace\     ← when workspace option chosen; no launcher script
 %USERPROFILE%\.axiomate.json         ← when quick model config chosen
 %USERPROFILE%\.axiomate\             ← created by axiomate on first run
 

@@ -74,7 +74,12 @@ public partial class ProgressPage : WizardPage
             MessageBoxImage.Error);
         if (res == MessageBoxResult.Yes)
         {
-            try { Process.Start(new ProcessStartInfo("notepad.exe", $"\"{log}\"") { UseShellExecute = true }); }
+            try
+            {
+                var psi = new ProcessStartInfo("notepad.exe") { UseShellExecute = true };
+                psi.ArgumentList.Add(log);
+                Process.Start(psi);
+            }
             catch { }
         }
         host.CancelBtn.IsEnabled = true;

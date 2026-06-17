@@ -78,12 +78,12 @@ public sealed class InstallEngine
                 configW.Write(opt.ModelChoice, opt.ApiKey);
             }
 
-            string? launcherCmd = null;
             if (opt.CreateWorkspace)
             {
                 Report("Step_Workspace");
-                launcherCmd = workspace.CreateWorkspaceLauncher(opt.InstallDir, opt.WorkspaceDir);
-                CreateShortcuts(shortcut, opt, launcherCmd);
+                string userProfile = UserProfileResolver.GetUserProfile(_log);
+                string resolvedWorkspace = workspace.CreateWorkspace(opt.WorkspaceDir, userProfile);
+                CreateShortcuts(shortcut, opt, resolvedWorkspace);
             }
 
             Report("Step_Uninst");
@@ -127,9 +127,11 @@ public sealed class InstallEngine
         return n;
     }
 
-    private void CreateShortcuts(ShortcutManager sm, InstallOptions opt, string launcherCmd)
+    private void CreateShortcuts(ShortcutManager sm, InstallOptions opt, string workspaceDir)
     {
         string axiomateExe = Path.Combine(opt.InstallDir, "axiomate.exe");
+        string wtExe = AxiomateLauncher.ResolveWindowsTerminal();
+        string wtArgs = AxiomateLauncher.BuildWindowsTerminalArguments(axiomateExe, workspaceDir);
         string description = "Axiomate AI agent CLI";
 
         // Per-machine shortcuts.
@@ -140,17 +142,19 @@ public sealed class InstallEngine
 
         sm.Create(
             Path.Combine(startMenuDir, "Axiomate.lnk"),
-            launcherCmd,
-            opt.InstallDir,
+            wtExe,
+            workspaceDir,
             description,
-            axiomateExe);
+            axiomateExe,
+            arguments: wtArgs);
 
         sm.Create(
             Path.Combine(desktopDir, "Axiomate.lnk"),
-            launcherCmd,
-            opt.InstallDir,
+            wtExe,
+            workspaceDir,
             description,
-            axiomateExe);
+            axiomateExe,
+            arguments: wtArgs);
     }
 }
 

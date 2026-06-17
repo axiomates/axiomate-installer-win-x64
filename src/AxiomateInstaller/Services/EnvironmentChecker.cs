@@ -149,7 +149,7 @@ public sealed class EnvironmentChecker
                 return (false, null);
             }
             _log.Info($"Git check: probing {exe}");
-            string? raw = await RunCaptureAsync(exe, "--version", timeoutMs: 5000);
+            string? raw = await RunCaptureAsync(exe, new[] { "--version" }, timeoutMs: 5000);
             if (string.IsNullOrWhiteSpace(raw)) { _log.Info("Git check: probe returned empty output"); return (false, null); }
             var m = Regex.Match(raw, @"git version (\d+)\.(\d+)(?:\.(\d+))?");
             if (!m.Success) { _log.Info($"Git check: unparseable -> {raw.Trim()}"); return (false, raw.Trim()); }
@@ -174,7 +174,7 @@ public sealed class EnvironmentChecker
         string? py = ResolveExecutable("py");
         if (py is not null)
         {
-            string? raw = await RunCaptureAsync(py, "-3.12 --version", timeoutMs: 5000);
+            string? raw = await RunCaptureAsync(py, new[] { "-3.12", "--version" }, timeoutMs: 5000);
             var parsed = TryParsePython(raw);
             if (parsed is { } p1)
             {
@@ -186,7 +186,7 @@ public sealed class EnvironmentChecker
         {
             string? exe = ResolveExecutable(name);
             if (exe is null) continue;
-            string? raw = await RunCaptureAsync(exe, "--version", timeoutMs: 5000);
+            string? raw = await RunCaptureAsync(exe, new[] { "--version" }, timeoutMs: 5000);
             var parsed = TryParsePython(raw);
             if (parsed is { } p2)
             {
@@ -210,17 +210,18 @@ public sealed class EnvironmentChecker
         return (ok, $"Python {major}.{minor}.{patch}");
     }
 
-    private static async Task<string?> RunCaptureAsync(string exe, string args, int timeoutMs)
+    private static async Task<string?> RunCaptureAsync(string exe, string[] args, int timeoutMs)
     {
         try
         {
-            var psi = new ProcessStartInfo(exe, args)
+            var psi = new ProcessStartInfo(exe)
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true
             };
+            foreach (string arg in args) psi.ArgumentList.Add(arg);
             using var p = Process.Start(psi);
             if (p is null) return null;
             string stdout = await p.StandardOutput.ReadToEndAsync();

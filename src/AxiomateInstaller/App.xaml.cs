@@ -1,6 +1,5 @@
 using System;
 using System.Diagnostics;
-using System.IO;
 using System.Security.Principal;
 using System.Threading.Tasks;
 using System.Windows;
@@ -56,8 +55,12 @@ public partial class App : Application
         {
             UseShellExecute = true,
             Verb = "runas",
-            Arguments = $"--elevated --target-user-sid {QuoteArg(sid)} --target-user-profile {QuoteArg(profile)}"
         };
+        psi.ArgumentList.Add("--elevated");
+        psi.ArgumentList.Add("--target-user-sid");
+        psi.ArgumentList.Add(sid);
+        psi.ArgumentList.Add("--target-user-profile");
+        psi.ArgumentList.Add(profile);
         Process.Start(psi);
     }
 
@@ -68,11 +71,6 @@ public partial class App : Application
             if (string.Equals(args[i], name, StringComparison.OrdinalIgnoreCase)) return args[i + 1];
         }
         return null;
-    }
-
-    private static string QuoteArg(string value)
-    {
-        return "\"" + value.Replace("\"", "\\\"") + "\"";
     }
 
     private static void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

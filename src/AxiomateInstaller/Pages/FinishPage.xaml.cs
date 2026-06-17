@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using System;
 using System.IO;
 using System.Windows;
 using AxiomateInstaller.Services;
@@ -12,7 +12,6 @@ public partial class FinishPage : WizardPage
     public override bool AllowNext   => false;
     public override bool AllowCancel => false;
 
-    private string _launcherCmd = "";
 
     public FinishPage() { InitializeComponent(); }
 
@@ -22,9 +21,15 @@ public partial class FinishPage : WizardPage
 
         if (host.Options.CreateWorkspace)
         {
-            _launcherCmd = Path.Combine(host.Options.InstallDir, "launch-axiomate.cmd");
             HintText.Text = Strings.Get("Finish_HintWithWorkspace");
-            LaunchBtn.IsEnabled = File.Exists(_launcherCmd);
+            string desktopShortcut = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonDesktopDirectory),
+                "Axiomate.lnk");
+            string startMenuShortcut = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu),
+                "Programs",
+                "Axiomate.lnk");
+            LaunchBtn.IsEnabled = File.Exists(desktopShortcut) || File.Exists(startMenuShortcut);
             LaunchBtn.Visibility = Visibility.Visible;
         }
         else
@@ -39,7 +44,7 @@ public partial class FinishPage : WizardPage
     {
         try
         {
-            Process.Start(new ProcessStartInfo(_launcherCmd) { UseShellExecute = true });
+            AxiomateLauncher.LaunchUnelevatedFromShortcut();
             ((MainWindow)Window.GetWindow(this)!).Close();
         }
         catch { }
