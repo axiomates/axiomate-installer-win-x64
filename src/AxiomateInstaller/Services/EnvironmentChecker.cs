@@ -127,7 +127,8 @@ public sealed class EnvironmentChecker
     {
         var v = Environment.OSVersion.Version;
         bool ok = v.Major >= 10 && v.Build >= MinWin11Build;
-        string display = $"Windows {v.Major}.{v.Minor} (build {v.Build})";
+        string family = v.Major == 10 && v.Build >= MinWin11Build ? "Windows 11" : $"Windows {v.Major}.{v.Minor}";
+        string display = $"{family} (build {v.Build})";
         _log.Info($"OS check: {display} -> {(ok ? "OK" : $"FAIL (need Windows 11 build {MinWin11Build}+)")}");
         return (ok, display);
     }

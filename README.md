@@ -570,7 +570,9 @@ Run on a clean Windows 11 VM and on a working dev box:
 - **No auto-update** path — installer is a fixed offline bundle.
 - **Per-machine only**. No HKCU / `%LocalAppData%\Programs` mode.
 - **Win11 + x64 only**. The OS GUID in `app.manifest` covers Win10/11 but `EnvironmentChecker`
-  enforces build 22000+. arm64 and x86 are blocked deliberately.
+  enforces build 22000+. Windows 11 still reports kernel version `10.0`, so the UI labels builds
+  `>= 22000` as Windows 11 instead of relying on the major/minor version text. arm64 and x86 are
+  blocked deliberately.
 - **WPF runtime size**. The single-file EXE is ~278 MB. Most of that is the bundled axiomate dist
   (165 MB) + Git (62 MB) + Python (26 MB); WPF + .NET runtime account for the rest.
 - **Uninstaller is .NET 8 self-contained** (~70 MB) — same single-file approach as the installer
