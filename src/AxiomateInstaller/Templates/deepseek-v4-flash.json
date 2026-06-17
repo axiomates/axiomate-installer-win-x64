@@ -8,7 +8,8 @@
       "maxOutputTokens": 384000,
       "supportsImages": false,
       "thinking": {
-        "enabled": false
+        "enabled": true,
+        "effort": "high"
       },
       "baseUrl": "https://api.deepseek.com",
       "apiKey": "{{API_KEY}}",
