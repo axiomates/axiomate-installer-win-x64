@@ -1,0 +1,183 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    <!-- chrome -->
+    <sys:String x:Key="App_Title">Axiomate Installer</sys:String>
+    <sys:String x:Key="App_HeaderTitle">Axiomate Installer</sys:String>
+    <sys:String x:Key="Btn_Back">Back</sys:String>
+    <sys:String x:Key="Btn_Next">Next</sys:String>
+    <sys:String x:Key="Btn_Cancel">Cancel</sys:String>
+    <sys:String x:Key="Btn_Browse">Browse...</sys:String>
+    <sys:String x:Key="Btn_Finish">Finish</sys:String>
+    <sys:String x:Key="Footer_About">About</sys:String>
+    <sys:String x:Key="Confirm_ExitTitle">Exit Axiomate Installer</sys:String>
+    <sys:String x:Key="Confirm_ExitBody">Are you sure you want to quit the installer?</sys:String>
+    <sys:String x:Key="About_Title">About</sys:String>
+
+    <!-- welcome -->
+    <sys:String x:Key="Welcome_Subtitle_Format">Installer version {0} · ships Axiomate {1}. The next step will check your environment.</sys:String>
+    <sys:String x:Key="Welcome_Header">Welcome to Axiomate</sys:String>
+    <sys:String x:Key="Welcome_PageSubtitle">Welcome</sys:String>
+    <sys:String x:Key="Welcome_TasksTitle">The installer will:</sys:String>
+    <sys:String x:Key="Welcome_Task1">• Check Windows 11 / x64 / Git / Python prerequisites</sys:String>
+    <sys:String x:Key="Welcome_Task2">• Silently install bundled Git 2.54 and Python 3.12 if missing</sys:String>
+    <sys:String x:Key="Welcome_Task3">• Deploy Axiomate to your chosen directory and register it on PATH</sys:String>
+    <sys:String x:Key="Welcome_Task4">• Optional: configure DeepSeek model + API key</sys:String>
+    <sys:String x:Key="Welcome_Task5">• Optional: create a workspace folder and desktop / Start menu shortcuts</sys:String>
+    <sys:String x:Key="Welcome_Footer">Administrator rights are required. Click "Next" to continue.</sys:String>
+    <sys:String x:Key="Welcome_LangLabel">Language</sys:String>
+    <sys:String x:Key="Welcome_LangZh">中文</sys:String>
+    <sys:String x:Key="Welcome_LangEn">English</sys:String>
+
+    <!-- env check -->
+    <sys:String x:Key="Env_Header">Environment check</sys:String>
+    <sys:String x:Key="Env_PageSubtitle">Environment check</sys:String>
+    <sys:String x:Key="Env_Subtitle">Confirm your Windows version and whether Git / Python are ready.</sys:String>
+    <sys:String x:Key="Env_Detecting">Detecting...</sys:String>
+    <sys:String x:Key="Env_Lbl_Os">OS</sys:String>
+    <sys:String x:Key="Env_Lbl_Arch">Architecture</sys:String>
+    <sys:String x:Key="Env_Lbl_Git">Git</sys:String>
+    <sys:String x:Key="Env_Lbl_Py">Python</sys:String>
+    <sys:String x:Key="Env_GitInstall">Install bundled Git 2.54</sys:String>
+    <sys:String x:Key="Env_PyInstall">Install bundled Python 3.12</sys:String>
+    <sys:String x:Key="Env_GitInstalled_Format">Already installed ({0})</sys:String>
+    <sys:String x:Key="Env_PyInstalled_Format">Already installed ({0})</sys:String>
+    <sys:String x:Key="Env_GitNotFound">Git not detected</sys:String>
+    <sys:String x:Key="Env_PyNotFound">Python not detected</sys:String>
+    <sys:String x:Key="Env_Mirror_Box_Header">Configure pip mirror (recommended for fast downloads in CN)</sys:String>
+    <sys:String x:Key="Env_Mirror_Tsinghua">Tsinghua TUNA  ·  pypi.tuna.tsinghua.edu.cn</sys:String>
+    <sys:String x:Key="Env_Mirror_Aliyun">Aliyun         ·  mirrors.aliyun.com</sys:String>
+    <sys:String x:Key="Env_Warn_NeedWin11">Windows 11 (build 22000) or higher is required. Cannot continue.</sys:String>
+    <sys:String x:Key="Env_Warn_NeedX64">64-bit (x64) Windows is required. Cannot continue.</sys:String>
+    <sys:String x:Key="Env_Block_GitTitle">Environment check</sys:String>
+    <sys:String x:Key="Env_Block_GitBody">Git does not meet the requirement and you unchecked the bundled install. Tick the box or install Git yourself first.</sys:String>
+    <sys:String x:Key="Env_Block_PyTitle">Environment check</sys:String>
+    <sys:String x:Key="Env_Block_PyBody">Python does not meet the requirement and you unchecked the bundled install. Tick the box or install Python yourself first.</sys:String>
+
+    <!-- install path -->
+    <sys:String x:Key="Path_Header">Install location</sys:String>
+    <sys:String x:Key="Path_PageSubtitle">Choose install location</sys:String>
+    <sys:String x:Key="Path_Subtitle">All Axiomate binaries will be deployed here, and the directory added to system PATH.</sys:String>
+    <sys:String x:Key="Path_Lbl_Target">Target directory</sys:String>
+    <sys:String x:Key="Path_Hint_Empty">Directory available.</sys:String>
+    <sys:String x:Key="Path_Hint_NonEmpty">Note: this directory is not empty. It will be wiped during install.</sys:String>
+    <sys:String x:Key="Path_FooterNote">Note: when the target directory is non-empty the installer will wipe it after a confirmation prompt.</sys:String>
+    <sys:String x:Key="Path_BadTitle">Directory unavailable</sys:String>
+    <sys:String x:Key="Path_ConfirmWipeTitle">Confirm wipe</sys:String>
+    <sys:String x:Key="Path_ConfirmWipeBody_Format">Directory "{0}" is not empty.
+The installer will wipe it before deploying. Continue?</sys:String>
+    <sys:String x:Key="Path_PickerTitle">Choose Axiomate install directory</sys:String>
+
+    <!-- DirGuard -->
+    <sys:String x:Key="DG_Empty">Please enter an install path.</sys:String>
+    <sys:String x:Key="DG_Unparseable_Format">Path could not be parsed: {0}</sys:String>
+    <sys:String x:Key="DG_Root">Cannot install directly under a drive root.</sys:String>
+    <sys:String x:Key="DG_Invalid">Path contains invalid characters or is not absolute.</sys:String>
+    <sys:String x:Key="DG_Reserved_Format">Cannot install into a system / user reserved directory: {0}</sys:String>
+    <sys:String x:Key="DG_NoLeaf">Please pick a sub-directory rather than the drive root.</sys:String>
+
+    <!-- options -->
+    <sys:String x:Key="Opt_Header">Install options</sys:String>
+    <sys:String x:Key="Opt_PageSubtitle">Install options</sys:String>
+    <sys:String x:Key="Opt_Subtitle">All optional. The axiomate command works fine even with everything unchecked.</sys:String>
+    <sys:String x:Key="Opt_ModelChk">Quick model config (DeepSeek official)</sys:String>
+    <sys:String x:Key="Opt_ModelHint">When checked, the next page asks for a model and API key. The installer overwrites ~/.axiomate.json and wipes the existing ~/.axiomate/ directory.</sys:String>
+    <sys:String x:Key="Opt_WorkspaceChk">Create default workspace and shortcuts</sys:String>
+    <sys:String x:Key="Opt_WorkspaceHint">Adds Axiomate shortcuts on the desktop and Start menu. Double-click launches axiomate TUI inside the workspace dir — handy for non-CLI users.</sys:String>
+    <sys:String x:Key="Opt_WorkspaceLabel">Workspace dir</sys:String>
+    <sys:String x:Key="Opt_FooterNote">Note: PATH registration is always performed and cannot be disabled.</sys:String>
+    <sys:String x:Key="Opt_PickerTitle">Choose Axiomate workspace directory</sys:String>
+    <sys:String x:Key="Opt_BadWorkspaceTitle">Workspace</sys:String>
+    <sys:String x:Key="Opt_BadWorkspaceBody_Empty">Please fill in the workspace directory.</sys:String>
+    <sys:String x:Key="Opt_BadWorkspaceBody_Invalid">Workspace path is invalid.</sys:String>
+
+    <!-- model -->
+    <sys:String x:Key="Model_Header">Model configuration</sys:String>
+    <sys:String x:Key="Model_PageSubtitle">Model configuration</sys:String>
+    <sys:String x:Key="Model_Subtitle">Pick the default model and paste your API key.</sys:String>
+    <sys:String x:Key="Model_Lbl_Site">Provider</sys:String>
+    <sys:String x:Key="Model_SiteDeepseek">DeepSeek official  ·  api.deepseek.com</sys:String>
+    <sys:String x:Key="Model_Lbl_Model">Model</sys:String>
+    <sys:String x:Key="Model_Item_Pro">deepseek-v4-pro    (high quality, strong reasoning)</sys:String>
+    <sys:String x:Key="Model_Item_Flash">deepseek-v4-flash  (lightweight, fast)</sys:String>
+    <sys:String x:Key="Model_Lbl_ApiKey">API key</sys:String>
+    <sys:String x:Key="Model_ShowKey">Show</sys:String>
+    <sys:String x:Key="Model_Footer">Get your API key at https://platform.deepseek.com. The installer wipes ~/.axiomate/ and writes a minimal ~/.axiomate.json template populated with your API key.</sys:String>
+    <sys:String x:Key="Model_BadKeyTitle">Model configuration</sys:String>
+    <sys:String x:Key="Model_BadKeyBody">Please enter the API key.</sys:String>
+
+    <!-- progress -->
+    <sys:String x:Key="Progress_Header">Installing</sys:String>
+    <sys:String x:Key="Progress_PageSubtitle">Installing</sys:String>
+    <sys:String x:Key="Progress_Step_Format">Step {0}/{1} : {2}</sys:String>
+    <sys:String x:Key="Progress_Done">Install complete!</sys:String>
+    <sys:String x:Key="Progress_Failed">Install failed</sys:String>
+    <sys:String x:Key="Progress_FailDialogTitle">Axiomate install failed</sys:String>
+    <sys:String x:Key="Progress_FailDialogBody_Format">{0}
+
+Detailed log: {1}
+
+Click "Yes" to open the log file.</sys:String>
+    <sys:String x:Key="Progress_UnexpectedFailure_Format">Unexpected error: {0}</sys:String>
+
+    <!-- progress step titles -->
+    <sys:String x:Key="Step_Extract">Extracting installer payload</sys:String>
+    <sys:String x:Key="Step_GitInstall">Installing Git for Windows</sys:String>
+    <sys:String x:Key="Step_PyInstall">Installing Python 3.12</sys:String>
+    <sys:String x:Key="Step_PipMirror">Configuring pip mirror</sys:String>
+    <sys:String x:Key="Step_Deploy">Deploying Axiomate to the target directory</sys:String>
+    <sys:String x:Key="Step_Path">Registering on system PATH</sys:String>
+    <sys:String x:Key="Step_Model">Writing Axiomate model config</sys:String>
+    <sys:String x:Key="Step_Workspace">Creating workspace and shortcuts</sys:String>
+    <sys:String x:Key="Step_Uninst">Registering uninstaller</sys:String>
+
+    <!-- finish -->
+    <sys:String x:Key="Finish_Header">Install complete</sys:String>
+    <sys:String x:Key="Finish_PageSubtitle">Install complete</sys:String>
+    <sys:String x:Key="Finish_Detail_Format">Axiomate installed at {0}. System PATH has been updated.</sys:String>
+    <sys:String x:Key="Finish_NextStepTitle">Next steps</sys:String>
+    <sys:String x:Key="Finish_HintWithWorkspace">Desktop and Start menu shortcuts have been created. Double-click to launch the Axiomate TUI inside the workspace.
+If a shortcut isn't usable, run "axiomate" inside any new terminal.</sys:String>
+    <sys:String x:Key="Finish_HintNoWorkspace">Open a fresh terminal so the new PATH takes effect, then run "axiomate".
+On first launch axiomate auto-generates the model routing config.</sys:String>
+    <sys:String x:Key="Finish_LaunchBtn">Launch Axiomate</sys:String>
+
+    <!-- engine errors -->
+    <sys:String x:Key="Err_Distmissing_Format">Internal error: dist directory missing at {0}</sys:String>
+    <sys:String x:Key="Err_GitFail_Format">Git install failed (exit code {0}). See log for details.</sys:String>
+    <sys:String x:Key="Err_PyCancel">Python install was cancelled by the user.</sys:String>
+    <sys:String x:Key="Err_PyFatal">Python install hit a fatal error (exit code 1603). Possibly target dir locked, low disk space, or permission issues.</sys:String>
+    <sys:String x:Key="Err_PyFail_Format">Python install failed (exit code {0}). See log for details.</sys:String>
+    <sys:String x:Key="Err_StartProc_Format">Could not start process: {0}</sys:String>
+    <sys:String x:Key="Err_Reg_PathOpenFail">Cannot open HKLM Environment registry key (admin privileges required).</sys:String>
+    <sys:String x:Key="Err_Reg_UninstFail">Cannot create HKLM Uninstall\Axiomate registry key.</sys:String>
+    <sys:String x:Key="Err_Cfg_NoHome">Cannot resolve user home directory.</sys:String>
+    <sys:String x:Key="Err_Cfg_TmplMissing_Format">Bundled template missing: {0}</sys:String>
+    <sys:String x:Key="Err_Lnk_NoCom">Cannot reach the IShellLink COM interface.</sys:String>
+    <sys:String x:Key="Err_Lnk_NoInst">Cannot create an IShellLink instance.</sys:String>
+
+    <!-- payload extractor -->
+    <sys:String x:Key="Err_Pl_GitMissing">Git installer payload missing from embedded resources.</sys:String>
+    <sys:String x:Key="Err_Pl_PyMissing">Python installer payload missing from embedded resources.</sys:String>
+    <sys:String x:Key="Err_Pl_UninstMissing">Uninstaller payload missing from embedded resources.</sys:String>
+    <sys:String x:Key="Err_Pl_DistMissing">Axiomate dist payload missing from embedded resources. Run build.ps1 first.</sys:String>
+    <sys:String x:Key="Err_Pl_ResourceMissing_Format">Embedded resource missing: {0}</sys:String>
+
+    <!-- generic dialogs -->
+    <sys:String x:Key="Dlg_Err_DispatcherTitle">UI thread exception</sys:String>
+    <sys:String x:Key="Dlg_Err_DomainTitle">App domain exception</sys:String>
+    <sys:String x:Key="Dlg_Err_TaskTitle">Background task exception</sys:String>
+    <sys:String x:Key="Dlg_Err_Body_Format">{0}: {1}
+
+Details have been written to the log; the dialog references the path.</sys:String>
+    <sys:String x:Key="Dlg_Err_TitleSuffix">Axiomate Installer</sys:String>
+
+    <!-- about -->
+    <sys:String x:Key="About_Body_Format">Axiomate Installer
+Installer version: {0}
+Axiomate:          {1}
+Bundled Git:       {2}
+Bundled Python:    {3}
+
+Website: https://axiomate.net</sys:String>
+</ResourceDictionary>

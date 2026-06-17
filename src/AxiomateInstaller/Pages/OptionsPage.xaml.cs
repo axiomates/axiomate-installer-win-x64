@@ -1,12 +1,13 @@
 using System;
 using System.IO;
 using System.Windows;
+using AxiomateInstaller.Services;
 
 namespace AxiomateInstaller.Pages;
 
 public partial class OptionsPage : WizardPage
 {
-    public override string HeaderSubtitle => "安装选项";
+    public override string HeaderSubtitleKey => "Opt_PageSubtitle";
 
     public OptionsPage() { InitializeComponent(); }
 
@@ -30,7 +31,7 @@ public partial class OptionsPage : WizardPage
     {
         var dlg = new Microsoft.Win32.OpenFolderDialog
         {
-            Title = "选择 Axiomate 工作区目录",
+            Title = Strings.Get("Opt_PickerTitle"),
             InitialDirectory = Directory.Exists(WorkspacePathBox.Text)
                 ? WorkspacePathBox.Text
                 : Environment.GetFolderPath(Environment.SpecialFolder.UserProfile)
@@ -44,11 +45,17 @@ public partial class OptionsPage : WizardPage
         string p = WorkspacePathBox.Text.Trim();
         if (string.IsNullOrWhiteSpace(p))
         {
-            MessageBox.Show("请填写工作区目录。", "工作区", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(Strings.Get("Opt_BadWorkspaceBody_Empty"), Strings.Get("Opt_BadWorkspaceTitle"),
+                MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
         try { Path.GetFullPath(p); }
-        catch { MessageBox.Show("工作区路径不合法。", "工作区", MessageBoxButton.OK, MessageBoxImage.Warning); return false; }
+        catch
+        {
+            MessageBox.Show(Strings.Get("Opt_BadWorkspaceBody_Invalid"), Strings.Get("Opt_BadWorkspaceTitle"),
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return false;
+        }
         return true;
     }
 
@@ -61,7 +68,6 @@ public partial class OptionsPage : WizardPage
 
     public override int NextIndex(MainWindow host, int current)
     {
-        // Skip ModelConfigPage when not requested.
         return host.Options.QuickModelConfig ? current + 1 : current + 2;
     }
 }

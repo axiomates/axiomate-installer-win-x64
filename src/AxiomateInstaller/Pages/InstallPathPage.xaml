@@ -4,27 +4,25 @@
       xmlns:pages="clr-namespace:AxiomateInstaller.Pages"
       Background="Transparent">
     <StackPanel Margin="6,12">
-        <TextBlock Text="安装位置" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
-        <TextBlock Text="所有 Axiomate 二进制将释放到此目录，并被注册到系统 PATH。" Foreground="{StaticResource Muted}" Margin="0,4,0,16"/>
+        <TextBlock Text="{DynamicResource Path_Header}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
+        <TextBlock Text="{DynamicResource Path_Subtitle}" Foreground="{StaticResource Muted}" Margin="0,4,0,16"/>
 
         <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="6" Padding="18">
             <StackPanel>
-                <TextBlock Text="目标目录" Foreground="{StaticResource Text}" Margin="0,0,0,6"/>
+                <TextBlock Text="{DynamicResource Path_Lbl_Target}" Foreground="{StaticResource Text}" Margin="0,0,0,6"/>
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" x:Name="PathBox" Padding="8,6" FontSize="14"/>
-                    <Button  Grid.Column="1" Content="浏览..." Style="{StaticResource SecondaryButton}" Margin="8,0,0,0" Click="Browse_Click"/>
+                    <Button  Grid.Column="1" Content="{DynamicResource Btn_Browse}" Style="{StaticResource SecondaryButton}" Margin="8,0,0,0" Click="Browse_Click"/>
                 </Grid>
                 <TextBlock x:Name="HintText" Margin="0,8,0,0" TextWrapping="Wrap" Foreground="{StaticResource Muted}"/>
                 <TextBlock x:Name="WarnText" Margin="0,4,0,0" TextWrapping="Wrap" Foreground="{StaticResource Danger}"/>
             </StackPanel>
         </Border>
 
-        <TextBlock Margin="0,12,0,0" TextWrapping="Wrap" Foreground="{StaticResource Muted}">
-            注意: 如果目标目录非空，安装器在用户确认后会先清空该目录再写入。
-        </TextBlock>
+        <TextBlock Text="{DynamicResource Path_FooterNote}" Margin="0,12,0,0" TextWrapping="Wrap" Foreground="{StaticResource Muted}"/>
     </StackPanel>
 </pages:WizardPage>

@@ -4,39 +4,33 @@
       xmlns:pages="clr-namespace:AxiomateInstaller.Pages"
       Background="Transparent">
     <StackPanel Margin="6,12">
-        <TextBlock Text="安装选项" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
-        <TextBlock Text="这些选项可以省略；不勾选时也能正常使用 axiomate 命令。" Foreground="{StaticResource Muted}" Margin="0,4,0,16"/>
+        <TextBlock Text="{DynamicResource Opt_Header}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
+        <TextBlock Text="{DynamicResource Opt_Subtitle}" Foreground="{StaticResource Muted}" Margin="0,4,0,16"/>
 
         <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="6" Padding="18" Margin="0,0,0,10">
             <StackPanel>
-                <CheckBox x:Name="ModelChk" Content="快速模型配置 (DeepSeek 官方)" Foreground="{StaticResource Text}" FontWeight="SemiBold"/>
-                <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap">
-                    勾选后下一步可以选择模型并填入 API Key, 安装时会自动覆盖 ~/.axiomate.json 并清空 ~/.axiomate/ 目录。
-                </TextBlock>
+                <CheckBox x:Name="ModelChk" Content="{DynamicResource Opt_ModelChk}" Foreground="{StaticResource Text}" FontWeight="SemiBold"/>
+                <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Opt_ModelHint}"/>
             </StackPanel>
         </Border>
 
         <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="6" Padding="18">
             <StackPanel>
-                <CheckBox x:Name="WorkspaceChk" Content="创建默认工作区与快捷方式" Foreground="{StaticResource Text}" FontWeight="SemiBold" Checked="WorkspaceChk_Toggle" Unchecked="WorkspaceChk_Toggle"/>
-                <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap">
-                    勾选后将在桌面与开始菜单创建 Axiomate 快捷方式, 双击直接以工作区目录为当前目录启动 axiomate TUI, 适合非命令行用户。
-                </TextBlock>
+                <CheckBox x:Name="WorkspaceChk" Content="{DynamicResource Opt_WorkspaceChk}" Foreground="{StaticResource Text}" FontWeight="SemiBold" Checked="WorkspaceChk_Toggle" Unchecked="WorkspaceChk_Toggle"/>
+                <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Opt_WorkspaceHint}"/>
                 <Grid Margin="22,12,0,0" x:Name="WorkspacePathGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="工作区目录" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="0" Text="{DynamicResource Opt_WorkspaceLabel}" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
                     <TextBox   Grid.Column="1" x:Name="WorkspacePathBox" Padding="6,4"/>
-                    <Button    Grid.Column="2" Content="浏览..." Style="{StaticResource SecondaryButton}" Margin="8,0,0,0" Click="Browse_Click"/>
+                    <Button    Grid.Column="2" Content="{DynamicResource Btn_Browse}" Style="{StaticResource SecondaryButton}" Margin="8,0,0,0" Click="Browse_Click"/>
                 </Grid>
             </StackPanel>
         </Border>
 
-        <TextBlock Margin="0,14,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap">
-            注: 注册到系统 PATH 是默认行为, 不可关闭。
-        </TextBlock>
+        <TextBlock Text="{DynamicResource Opt_FooterNote}" Margin="0,14,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
     </StackPanel>
 </pages:WizardPage>

@@ -11,7 +11,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Grid.Row="0" Text="正在安装" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
+        <TextBlock Grid.Row="0" Text="{DynamicResource Progress_Header}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
         <TextBlock Grid.Row="1" x:Name="StepText" Margin="0,8,0,8" Foreground="{StaticResource Muted}"/>
         <ProgressBar Grid.Row="2" x:Name="Bar" Height="8" Minimum="0" Maximum="100" Value="0" Foreground="{StaticResource BrandPrimary}"/>
 

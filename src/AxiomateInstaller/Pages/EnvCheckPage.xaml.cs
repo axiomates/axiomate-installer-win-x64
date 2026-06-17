@@ -5,13 +5,13 @@ namespace AxiomateInstaller.Pages;
 
 public partial class EnvCheckPage : WizardPage
 {
-    public override string HeaderSubtitle => "环境检查";
+    public override string HeaderSubtitleKey => "Env_PageSubtitle";
 
     public EnvCheckPage() { InitializeComponent(); }
 
     public override async void OnEnter(MainWindow host)
     {
-        OsText.Text = ArchText.Text = GitText.Text = PyText.Text = "正在检测...";
+        OsText.Text = ArchText.Text = GitText.Text = PyText.Text = Strings.Get("Env_Detecting");
         OsBadge.Text = ArchBadge.Text = "";
         var checker = new EnvironmentChecker(host.Log);
         var result = await checker.RunAsync();
@@ -25,24 +25,21 @@ public partial class EnvCheckPage : WizardPage
         ArchBadge.Text = result.IsX64 ? "✓" : "✗";
         ArchBadge.Foreground = result.IsX64 ? System.Windows.Media.Brushes.Green : System.Windows.Media.Brushes.Crimson;
 
-        GitText.Text = result.GitVersionDisplay ?? "未检测到 Git";
+        GitText.Text = result.GitVersionDisplay ?? Strings.Get("Env_GitNotFound");
         GitInstallChk.IsChecked = !result.GitOk;
         GitInstallChk.IsEnabled = !result.GitOk;
-        if (result.GitOk) GitInstallChk.Content = $"已安装 ({result.GitVersionDisplay})";
+        if (result.GitOk) GitInstallChk.Content = Strings.Format("Env_GitInstalled_Format", result.GitVersionDisplay ?? "");
 
-        PyText.Text = result.PythonVersionDisplay ?? "未检测到 Python";
+        PyText.Text = result.PythonVersionDisplay ?? Strings.Get("Env_PyNotFound");
         PyInstallChk.IsChecked = !result.PythonOk;
         PyInstallChk.IsEnabled = !result.PythonOk;
-        if (result.PythonOk) PyInstallChk.Content = $"已安装 ({result.PythonVersionDisplay})";
+        if (result.PythonOk) PyInstallChk.Content = Strings.Format("Env_PyInstalled_Format", result.PythonVersionDisplay ?? "");
 
         UpdateMirrorVisibility();
         UpdateWarning(host);
     }
 
-    private void PyInstallChk_Toggle(object sender, RoutedEventArgs e)
-    {
-        UpdateMirrorVisibility();
-    }
+    private void PyInstallChk_Toggle(object sender, RoutedEventArgs e) => UpdateMirrorVisibility();
 
     private void MirrorEnable_Toggle(object sender, RoutedEventArgs e)
     {
@@ -61,13 +58,13 @@ public partial class EnvCheckPage : WizardPage
         var r = host.LastEnvCheck;
         if (!r.IsSupportedOs)
         {
-            WarningText.Text = "需要 Windows 11 (build 22000) 或更高版本。无法继续。";
+            WarningText.Text = Strings.Get("Env_Warn_NeedWin11");
             host.NextBtn.IsEnabled = false;
             return;
         }
         if (!r.IsX64)
         {
-            WarningText.Text = "需要 64 位 (x64) Windows。无法继续。";
+            WarningText.Text = Strings.Get("Env_Warn_NeedX64");
             host.NextBtn.IsEnabled = false;
             return;
         }
@@ -81,17 +78,16 @@ public partial class EnvCheckPage : WizardPage
         var r = host.LastEnvCheck;
         if (!r.IsSupportedOs || !r.IsX64) return false;
 
-        // If user unchecked auto-install but Git/Python are missing, block.
         if (!r.GitOk && GitInstallChk.IsChecked != true)
         {
-            MessageBox.Show("Git 未达到要求，且您取消了内置 Git 安装。请勾选或先自行安装。",
-                "环境检查", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(Strings.Get("Env_Block_GitBody"), Strings.Get("Env_Block_GitTitle"),
+                MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
         if (!r.PythonOk && PyInstallChk.IsChecked != true)
         {
-            MessageBox.Show("Python 未达到要求，且您取消了内置 Python 安装。请勾选或先自行安装。",
-                "环境检查", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(Strings.Get("Env_Block_PyBody"), Strings.Get("Env_Block_PyTitle"),
+                MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
         return true;

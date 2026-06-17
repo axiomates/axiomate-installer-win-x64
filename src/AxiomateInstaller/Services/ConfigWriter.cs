@@ -19,7 +19,7 @@ public sealed class ConfigWriter
     public void Write(ModelChoice choice, string apiKey)
     {
         string home = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        if (string.IsNullOrEmpty(home)) throw new InstallStepException("无法解析用户 Home 目录。");
+        if (string.IsNullOrEmpty(home)) throw new InstallStepException(Strings.Get("Err_Cfg_NoHome"));
 
         string axiomateDir = Path.Combine(home, ".axiomate");
         string configPath  = Path.Combine(home, ".axiomate.json");
@@ -51,7 +51,7 @@ public sealed class ConfigWriter
         string asmName = asm.GetName().Name ?? "AxiomateInstaller";
         string resourceName = $"{asmName}.Templates.{fileName}";
         using Stream? s = asm.GetManifestResourceStream(resourceName)
-            ?? throw new InstallStepException($"找不到内置模板：{fileName}");
+            ?? throw new InstallStepException(Strings.Format("Err_Cfg_TmplMissing_Format", fileName));
         using var sr = new StreamReader(s);
         return sr.ReadToEnd();
     }

@@ -80,10 +80,10 @@ public sealed class PayloadExtractor
             WriteResource(resName, outPath);
         }
 
-        if (gitPath is null) throw new InvalidOperationException("Git installer payload missing from embedded resources.");
-        if (pyPath  is null) throw new InvalidOperationException("Python installer payload missing from embedded resources.");
-        if (uninstPath is null) throw new InvalidOperationException("Uninstaller payload missing from embedded resources.");
-        if (distCount == 0) throw new InvalidOperationException("Axiomate dist payload missing from embedded resources. Run build.ps1 first.");
+        if (gitPath is null) throw new InvalidOperationException(Strings.Get("Err_Pl_GitMissing"));
+        if (pyPath  is null) throw new InvalidOperationException(Strings.Get("Err_Pl_PyMissing"));
+        if (uninstPath is null) throw new InvalidOperationException(Strings.Get("Err_Pl_UninstMissing"));
+        if (distCount == 0) throw new InvalidOperationException(Strings.Get("Err_Pl_DistMissing"));
 
         _log.Info($"Extracted dist: {distCount} files, {distBytes:N0} bytes");
         return new ExtractedPayload
@@ -99,7 +99,7 @@ public sealed class PayloadExtractor
     private long WriteResource(string resName, string outPath)
     {
         using Stream? src = _asm.GetManifestResourceStream(resName)
-            ?? throw new InvalidOperationException($"Embedded resource missing: {resName}");
+            ?? throw new InvalidOperationException(Strings.Format("Err_Pl_ResourceMissing_Format", resName));
         Directory.CreateDirectory(Path.GetDirectoryName(outPath)!);
         using var dst = File.Create(outPath);
         src.CopyTo(dst);

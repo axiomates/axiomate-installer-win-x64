@@ -5,8 +5,8 @@
       Background="Transparent">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="6,12">
-            <TextBlock Text="环境检查" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
-            <TextBlock Text="确认 Windows 版本与 Git/Python 是否就绪。" Foreground="{StaticResource Muted}" Margin="0,4,0,16"/>
+            <TextBlock Text="{DynamicResource Env_Header}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
+            <TextBlock Text="{DynamicResource Env_Subtitle}" Foreground="{StaticResource Muted}" Margin="0,4,0,16"/>
 
             <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="6" Padding="18">
                 <StackPanel>
@@ -16,7 +16,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="操作系统" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Env_Lbl_Os}" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="1" x:Name="OsText"  Foreground="{StaticResource Muted}" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="2" x:Name="OsBadge" FontWeight="SemiBold" VerticalAlignment="Center"/>
                     </Grid>
@@ -26,7 +26,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="架构" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Env_Lbl_Arch}" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="1" x:Name="ArchText"  Foreground="{StaticResource Muted}" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="2" x:Name="ArchBadge" FontWeight="SemiBold" VerticalAlignment="Center"/>
                     </Grid>
@@ -36,9 +36,9 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Git" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Env_Lbl_Git}" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="1" x:Name="GitText"  Foreground="{StaticResource Muted}" VerticalAlignment="Center"/>
-                        <CheckBox  Grid.Column="2" x:Name="GitInstallChk" Content="使用内置 Git 2.54 安装" VerticalAlignment="Center"/>
+                        <CheckBox  Grid.Column="2" x:Name="GitInstallChk" Content="{DynamicResource Env_GitInstall}" VerticalAlignment="Center"/>
                     </Grid>
                     <Grid Margin="0,8,0,0">
                         <Grid.ColumnDefinitions>
@@ -46,18 +46,17 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Text="Python" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Env_Lbl_Py}" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="1" x:Name="PyText"  Foreground="{StaticResource Muted}" VerticalAlignment="Center"/>
-                        <CheckBox  Grid.Column="2" x:Name="PyInstallChk"  Content="使用内置 Python 3.12 安装" VerticalAlignment="Center" Checked="PyInstallChk_Toggle" Unchecked="PyInstallChk_Toggle"/>
+                        <CheckBox  Grid.Column="2" x:Name="PyInstallChk"  Content="{DynamicResource Env_PyInstall}" VerticalAlignment="Center" Checked="PyInstallChk_Toggle" Unchecked="PyInstallChk_Toggle"/>
                     </Grid>
 
-                    <!-- pip mirror block — only visible when PyInstallChk is checked -->
                     <Border x:Name="MirrorBlock" Margin="0,12,0,0" Padding="12" Background="#F0F5F6" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="4" Visibility="Collapsed">
                         <StackPanel>
-                            <CheckBox x:Name="MirrorEnableChk" Content="配置 pip 镜像源 (推荐, 国内网络下载更快)" IsChecked="True" Foreground="{StaticResource Text}" Checked="MirrorEnable_Toggle" Unchecked="MirrorEnable_Toggle"/>
+                            <CheckBox x:Name="MirrorEnableChk" Content="{DynamicResource Env_Mirror_Box_Header}" IsChecked="True" Foreground="{StaticResource Text}" Checked="MirrorEnable_Toggle" Unchecked="MirrorEnable_Toggle"/>
                             <StackPanel x:Name="MirrorOptionsPanel" Margin="22,8,0,0">
-                                <RadioButton x:Name="MirrorTsinghua" GroupName="Mirror" Content="清华大学 TUNA  ·  pypi.tuna.tsinghua.edu.cn" IsChecked="True" Margin="0,2"/>
-                                <RadioButton x:Name="MirrorAliyun"   GroupName="Mirror" Content="阿里云           ·  mirrors.aliyun.com"           Margin="0,2"/>
+                                <RadioButton x:Name="MirrorTsinghua" GroupName="Mirror" Content="{DynamicResource Env_Mirror_Tsinghua}" IsChecked="True" Margin="0,2"/>
+                                <RadioButton x:Name="MirrorAliyun"   GroupName="Mirror" Content="{DynamicResource Env_Mirror_Aliyun}"   Margin="0,2"/>
                             </StackPanel>
                         </StackPanel>
                     </Border>

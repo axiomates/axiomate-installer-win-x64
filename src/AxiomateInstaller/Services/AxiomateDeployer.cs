@@ -19,7 +19,7 @@ public sealed class AxiomateDeployer
     public async Task<DeployManifest> DeployAsync(string distDir, string installDir, string axiomateVersion, string installerVersion)
     {
         if (!Directory.Exists(distDir))
-            throw new InstallStepException($"内部错误：dist 目录不存在 {distDir}");
+            throw new InstallStepException(Strings.Format("Err_Distmissing_Format", distDir));
 
         // Force clean the install dir.
         await Task.Run(() =>

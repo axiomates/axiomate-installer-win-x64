@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -15,39 +16,33 @@ namespace AxiomateUninstaller;
 
 public partial class App : System.Windows.Application
 {
+    private static bool _zh;
+
     [STAThread]
     public static int Main(string[] args)
     {
         bool quiet = args.Any(a => string.Equals(a, "/quiet", StringComparison.OrdinalIgnoreCase));
+        try { _zh = string.Equals(CultureInfo.CurrentUICulture.TwoLetterISOLanguageName, "zh",
+                                   StringComparison.OrdinalIgnoreCase); } catch { _zh = false; }
+
         try
         {
-            // Detect install location.
             string installDir = ResolveInstallDir();
             if (string.IsNullOrEmpty(installDir) || !Directory.Exists(installDir))
             {
-                if (!quiet) MessageBox.Show("找不到 Axiomate 安装目录，可能已被手动删除。", "卸载 Axiomate",
+                if (!quiet) MessageBox.Show(T("MissingDirBody"), T("Title"),
                     MessageBoxButton.OK, MessageBoxImage.Warning);
-                // Still try to clean registry.
             }
 
             if (!quiet)
             {
-                var res = MessageBox.Show(
-                    "确认卸载 Axiomate？\n\n" +
-                    "您的 ~/.axiomate.json 配置文件以及 ~/.axiomate/ 目录将被保留。",
-                    "卸载 Axiomate",
-                    MessageBoxButton.OKCancel,
-                    MessageBoxImage.Question);
+                var res = MessageBox.Show(T("ConfirmBody"), T("Title"),
+                    MessageBoxButton.OKCancel, MessageBoxImage.Question);
                 if (res != MessageBoxResult.OK) return 0;
             }
 
-            // 1. Remove PATH entry.
             try { RemoveFromPath(installDir); } catch (Exception ex) { LogIgnore("PATH cleanup failed", ex); }
-
-            // 2. Remove shortcuts.
             try { RemoveShortcuts(); } catch (Exception ex) { LogIgnore("shortcut cleanup failed", ex); }
-
-            // 3. Remove Apps & features registry.
             try
             {
                 Registry.LocalMachine.DeleteSubKeyTree(
@@ -56,14 +51,13 @@ public partial class App : System.Windows.Application
             }
             catch (Exception ex) { LogIgnore("registry cleanup failed", ex); }
 
-            // 4. Schedule self + dir removal.
             string ownExe = Process.GetCurrentProcess().MainModule!.FileName!;
             ScheduleSelfDelete(installDir, ownExe);
 
             if (!quiet)
             {
-                MessageBox.Show("Axiomate 已卸载。",
-                    "卸载完成", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show(T("DoneBody"), T("DoneTitle"),
+                    MessageBoxButton.OK, MessageBoxImage.Information);
             }
             return 0;
         }
@@ -71,16 +65,41 @@ public partial class App : System.Windows.Application
         {
             if (!quiet)
             {
-                MessageBox.Show($"卸载过程中遇到错误：\n{ex.Message}",
-                    "卸载失败", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"{T("FailBody")}\n{ex.Message}",
+                    T("FailTitle"), MessageBoxButton.OK, MessageBoxImage.Error);
             }
             return 1;
         }
     }
 
+    private static string T(string key) => _zh ? Zh(key) : En(key);
+
+    private static string Zh(string key) => key switch
+    {
+        "Title"          => "卸载 Axiomate",
+        "MissingDirBody" => "找不到 Axiomate 安装目录, 可能已被手动删除。",
+        "ConfirmBody"    => "确认卸载 Axiomate？\n\n您的 ~/.axiomate.json 配置文件以及 ~/.axiomate/ 目录将被保留。",
+        "DoneTitle"      => "卸载完成",
+        "DoneBody"       => "Axiomate 已卸载。",
+        "FailTitle"      => "卸载失败",
+        "FailBody"       => "卸载过程中遇到错误:",
+        _                => key
+    };
+
+    private static string En(string key) => key switch
+    {
+        "Title"          => "Uninstall Axiomate",
+        "MissingDirBody" => "Cannot find the Axiomate install directory; it may have been deleted manually.",
+        "ConfirmBody"    => "Confirm uninstalling Axiomate?\n\nYour ~/.axiomate.json file and ~/.axiomate/ directory will be preserved.",
+        "DoneTitle"      => "Uninstall complete",
+        "DoneBody"       => "Axiomate has been uninstalled.",
+        "FailTitle"      => "Uninstall failed",
+        "FailBody"       => "An error occurred during uninstall:",
+        _                => key
+    };
+
     private static string ResolveInstallDir()
     {
-        // First try the registry value the installer wrote.
         try
         {
             using var key = Registry.LocalMachine.OpenSubKey(
@@ -89,7 +108,6 @@ public partial class App : System.Windows.Application
                 return s;
         }
         catch { }
-        // Fall back to the directory the uninstaller is running from.
         return Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName ?? "") ?? "";
     }
 
@@ -108,7 +126,6 @@ public partial class App : System.Windows.Application
             .ToList();
         key.SetValue("Path", string.Join(';', entries), RegistryValueKind.ExpandString);
 
-        // Broadcast.
         try
         {
             IntPtr HWND_BROADCAST = (IntPtr)0xFFFF;
@@ -137,8 +154,6 @@ public partial class App : System.Windows.Application
 
     private static void ScheduleSelfDelete(string installDir, string ownExe)
     {
-        // Use cmd.exe to wait a couple of seconds then nuke the install dir
-        // (which contains Uninstaller.exe itself).
         if (string.IsNullOrEmpty(installDir)) return;
         var psi = new ProcessStartInfo
         {

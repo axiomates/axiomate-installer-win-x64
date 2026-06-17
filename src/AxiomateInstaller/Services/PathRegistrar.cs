@@ -19,7 +19,7 @@ public sealed class PathRegistrar
     public void EnsureInPath(string dir)
     {
         using var key = Registry.LocalMachine.OpenSubKey(EnvKey, writable: true)
-            ?? throw new InstallStepException("无法打开注册表项 HKLM Environment（需要管理员权限）。");
+            ?? throw new InstallStepException(Strings.Get("Err_Reg_PathOpenFail"));
 
         // Read raw path value as ExpandString to avoid expanding %SystemRoot% etc.
         string current = "";

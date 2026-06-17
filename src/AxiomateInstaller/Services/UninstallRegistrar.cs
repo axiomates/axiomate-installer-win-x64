@@ -28,7 +28,7 @@ public sealed class UninstallRegistrar
         _log.Info($"Uninstaller staged: {uninstallerDest}");
 
         using var key = Registry.LocalMachine.CreateSubKey(UninstallKey, writable: true)
-            ?? throw new InstallStepException("无法创建注册表项 Uninstall\\Axiomate。");
+            ?? throw new InstallStepException(Strings.Get("Err_Reg_UninstFail"));
 
         key.SetValue("DisplayName", "Axiomate");
         key.SetValue("DisplayVersion", axiomateVersion);

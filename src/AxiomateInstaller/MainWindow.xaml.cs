@@ -13,6 +13,7 @@ public partial class MainWindow : System.Windows.Window
     public Logger Log { get; }
     public InstallOptions Options { get; } = new();
     public EnvCheckResult? LastEnvCheck { get; set; }
+    public bool LanguageLocked { get; set; }
 
     private readonly List<WizardPage> _pages = new();
     private int _index;
@@ -21,12 +22,11 @@ public partial class MainWindow : System.Windows.Window
     {
         Version = VersionInfo.Load();
         Log = new Logger(Version.InstallerVersion);
+        Log.Info($"UI language at startup: {Strings.Current}");
         InitializeComponent();
-        Title = $"Axiomate Installer {Version.InstallerVersion}";
         VersionBadge.Text = $"v{Version.InstallerVersion}  ·  Axiomate {Version.AxiomateVersion}";
         Closed += (_, _) => Log.Dispose();
 
-        // Build wizard pages.
         _pages.Add(new WelcomePage());
         _pages.Add(new EnvCheckPage());
         _pages.Add(new InstallPathPage());
@@ -50,13 +50,16 @@ public partial class MainWindow : System.Windows.Window
 
     public void GoNext()
     {
-        // The page validates first.
         var page = _pages[_index];
         if (!page.Validate(this)) return;
         page.OnLeave(this);
 
+        // The Welcome page is the only place language can change. Once we leave it,
+        // the language is locked for the rest of the wizard so dialogs/log don't drift.
+        if (page is WelcomePage) LanguageLocked = true;
+
         int next = page.NextIndex(this, _index);
-        if (next == _index) return; // page handles its own transition (e.g. progress runs)
+        if (next == _index) return;
         ShowPage(next);
     }
 
@@ -72,16 +75,16 @@ public partial class MainWindow : System.Windows.Window
     {
         BackBtn.IsEnabled   = page.AllowBack;
         NextBtn.IsEnabled   = page.AllowNext;
-        NextBtn.Content     = page.NextLabel;
+        NextBtn.Content     = Strings.Get(page.NextLabelKey);
         CancelBtn.IsEnabled = page.AllowCancel;
-        HeaderSubtitle.Text = page.HeaderSubtitle;
+        HeaderSubtitle.Text = Strings.Get(page.HeaderSubtitleKey);
     }
 
     private void NextBtn_Click(object sender, RoutedEventArgs e)   => GoNext();
     private void BackBtn_Click(object sender, RoutedEventArgs e)   => GoBack();
     private void CancelBtn_Click(object sender, RoutedEventArgs e)
     {
-        if (MessageBox.Show("确定要退出安装器吗？", "退出 Axiomate Installer",
+        if (MessageBox.Show(Strings.Get("Confirm_ExitBody"), Strings.Get("Confirm_ExitTitle"),
                 MessageBoxButton.OKCancel, MessageBoxImage.Question) == MessageBoxResult.OK)
         {
             Close();
@@ -90,13 +93,19 @@ public partial class MainWindow : System.Windows.Window
 
     private void AboutLink_Click(object sender, System.Windows.RoutedEventArgs e)
     {
-        string body =
-            $"Axiomate Installer\n" +
-            $"安装器版本: {Version.InstallerVersion}\n" +
-            $"Axiomate:    {Version.AxiomateVersion}\n" +
-            $"内置 Git:    {Version.BundledGitVersion}\n" +
-            $"内置 Python: {Version.BundledPythonVersion}\n\n" +
-            $"官网: https://axiomate.net";
-        MessageBox.Show(body, "关于", MessageBoxButton.OK, MessageBoxImage.Information);
+        string body = Strings.Format("About_Body_Format",
+            Version.InstallerVersion, Version.AxiomateVersion,
+            Version.BundledGitVersion, Version.BundledPythonVersion);
+        MessageBox.Show(body, Strings.Get("About_Title"), MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    /// <summary>Welcome page calls this when the user picks a language.</summary>
+    public void RefreshAfterLanguageChange()
+    {
+        // Re-apply chrome strings so already-bound DynamicResource refresh and explicit
+        // text values pull from the new dictionary.
+        UpdateChrome(_pages[_index]);
+        // Re-enter the current page so its dynamic-content code-behind also refreshes.
+        _pages[_index].OnEnter(this);
     }
 }

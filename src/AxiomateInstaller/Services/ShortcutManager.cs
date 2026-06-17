@@ -24,9 +24,9 @@ public sealed class ShortcutManager
         Directory.CreateDirectory(Path.GetDirectoryName(lnkPath)!);
 
         Type? shellLinkType = Type.GetTypeFromCLSID(new Guid("00021401-0000-0000-C000-000000000046"));
-        if (shellLinkType is null) throw new InstallStepException("无法访问 IShellLink COM 接口。");
+        if (shellLinkType is null) throw new InstallStepException(Strings.Get("Err_Lnk_NoCom"));
         object? shellLink = Activator.CreateInstance(shellLinkType);
-        if (shellLink is null) throw new InstallStepException("无法创建 IShellLink 实例。");
+        if (shellLink is null) throw new InstallStepException(Strings.Get("Err_Lnk_NoInst"));
 
         try
         {

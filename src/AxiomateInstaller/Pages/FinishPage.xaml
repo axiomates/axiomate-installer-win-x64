@@ -4,19 +4,19 @@
       xmlns:pages="clr-namespace:AxiomateInstaller.Pages"
       Background="Transparent">
     <StackPanel Margin="6,12">
-        <TextBlock Text="安装完成" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
+        <TextBlock Text="{DynamicResource Finish_Header}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
         <TextBlock x:Name="DetailText" Margin="0,8,0,16" TextWrapping="Wrap" Foreground="{StaticResource Muted}"/>
 
         <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="6" Padding="18">
             <StackPanel>
-                <TextBlock Text="下一步建议" FontWeight="SemiBold" Foreground="{StaticResource Text}" Margin="0,0,0,6"/>
+                <TextBlock Text="{DynamicResource Finish_NextStepTitle}" FontWeight="SemiBold" Foreground="{StaticResource Text}" Margin="0,0,0,6"/>
                 <TextBlock x:Name="HintText" TextWrapping="Wrap" Foreground="{StaticResource Text}" LineHeight="22"/>
             </StackPanel>
         </Border>
 
         <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
-            <Button x:Name="LaunchBtn" Content="启动 Axiomate" Style="{StaticResource PrimaryButton}" Click="Launch_Click" IsEnabled="False"/>
-            <Button x:Name="CloseBtn"  Content="完成" Margin="8,0,0,0" Style="{StaticResource SecondaryButton}" Click="Close_Click"/>
+            <Button x:Name="LaunchBtn" Content="{DynamicResource Finish_LaunchBtn}" Style="{StaticResource PrimaryButton}" Click="Launch_Click" IsEnabled="False"/>
+            <Button x:Name="CloseBtn"  Content="{DynamicResource Btn_Finish}" Margin="8,0,0,0" Style="{StaticResource SecondaryButton}" Click="Close_Click"/>
         </StackPanel>
     </StackPanel>
 </pages:WizardPage>

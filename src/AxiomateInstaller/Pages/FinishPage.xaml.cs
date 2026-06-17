@@ -1,12 +1,13 @@
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using AxiomateInstaller.Services;
 
 namespace AxiomateInstaller.Pages;
 
 public partial class FinishPage : WizardPage
 {
-    public override string HeaderSubtitle => "安装完成";
+    public override string HeaderSubtitleKey => "Finish_PageSubtitle";
     public override bool AllowBack   => false;
     public override bool AllowNext   => false;
     public override bool AllowCancel => false;
@@ -17,22 +18,18 @@ public partial class FinishPage : WizardPage
 
     public override void OnEnter(MainWindow host)
     {
-        DetailText.Text = $"Axiomate 已安装到 {host.Options.InstallDir}。系统 PATH 已更新。";
+        DetailText.Text = Strings.Format("Finish_Detail_Format", host.Options.InstallDir);
 
         if (host.Options.CreateWorkspace)
         {
             _launcherCmd = Path.Combine(host.Options.WorkspaceDir, "launch-axiomate.cmd");
-            HintText.Text =
-                "桌面与开始菜单已创建 Axiomate 快捷方式。" +
-                "双击即可在工作区目录打开 Axiomate TUI。\n" +
-                "若快捷方式不可用, 可在新终端中输入 axiomate 启动。";
+            HintText.Text = Strings.Get("Finish_HintWithWorkspace");
             LaunchBtn.IsEnabled = File.Exists(_launcherCmd);
+            LaunchBtn.Visibility = Visibility.Visible;
         }
         else
         {
-            HintText.Text =
-                "请重新打开终端窗口让 PATH 生效, 然后输入 axiomate 即可启动。\n" +
-                "首次启动时, axiomate 将自动生成模型路由配置。";
+            HintText.Text = Strings.Get("Finish_HintNoWorkspace");
             LaunchBtn.IsEnabled = false;
             LaunchBtn.Visibility = Visibility.Collapsed;
         }
@@ -42,14 +39,10 @@ public partial class FinishPage : WizardPage
     {
         try
         {
-            var psi = new ProcessStartInfo(_launcherCmd) { UseShellExecute = true };
-            Process.Start(psi);
+            Process.Start(new ProcessStartInfo(_launcherCmd) { UseShellExecute = true });
             ((MainWindow)Window.GetWindow(this)!).Close();
         }
-        catch
-        {
-            // ignore
-        }
+        catch { }
     }
 
     private void Close_Click(object sender, RoutedEventArgs e)

@@ -38,49 +38,49 @@ public sealed class InstallEngine
 
         try
         {
-            Report("正在解压安装资源");
+            Report("Step_Extract");
             payload = extractor.Extract();
 
             if (opt.NeedsGitInstall)
             {
-                Report("正在安装 Git for Windows");
+                Report("Step_GitInstall");
                 await runner.RunGitAsync(payload.GitInstaller);
             }
 
             if (opt.NeedsPythonInstall)
             {
-                Report("正在安装 Python 3.12");
+                Report("Step_PyInstall");
                 await runner.RunPythonAsync(payload.PythonInstaller, opt.PythonInstallDir);
 
                 if (opt.ConfigurePipMirror)
                 {
-                    Report("配置 pip 镜像源");
+                    Report("Step_PipMirror");
                     pipMirror.Write(opt.PythonInstallDir, opt.PipMirrorChoice);
                 }
             }
 
-            Report("部署 Axiomate 到目标目录");
+            Report("Step_Deploy");
             DeployManifest manifest = await deployer.DeployAsync(
                 payload.DistDir, opt.InstallDir, _version.AxiomateVersion, _version.InstallerVersion);
 
-            Report("注册系统 PATH");
+            Report("Step_Path");
             pathReg.EnsureInPath(opt.InstallDir);
 
             if (opt.QuickModelConfig)
             {
-                Report("写入 Axiomate 模型配置");
+                Report("Step_Model");
                 configW.Write(opt.ModelChoice, opt.ApiKey);
             }
 
             string? launcherCmd = null;
             if (opt.CreateWorkspace)
             {
-                Report("创建工作区与快捷方式");
+                Report("Step_Workspace");
                 launcherCmd = workspace.CreateWorkspaceLauncher(opt.WorkspaceDir);
                 CreateShortcuts(shortcut, opt, launcherCmd);
             }
 
-            Report("注册卸载器");
+            Report("Step_Uninst");
             uninstReg.Register(
                 opt.InstallDir,
                 payload.UninstallerExe,
@@ -138,4 +138,10 @@ public sealed class InstallEngine
     }
 }
 
-public sealed record InstallProgress(int CurrentStep, int TotalSteps, string Title);
+public sealed record InstallProgress(int CurrentStep, int TotalSteps, string TitleKey)
+{
+    public string Title => Strings.Get(TitleKey);
+
+    /// <summary>The localized title resolved at call time so it always matches the active language.</summary>
+    public string LocalizedTitle() => Strings.Get(TitleKey);
+}

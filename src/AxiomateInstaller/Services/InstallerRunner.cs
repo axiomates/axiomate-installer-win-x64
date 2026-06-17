@@ -68,7 +68,7 @@ public sealed class InstallerRunner
             _log.Info("Git installer succeeded.");
             return;
         }
-        throw new InstallStepException($"Git 安装失败（退出码 {code}）。请检查日志了解详情。");
+        throw new InstallStepException(Strings.Format("Err_GitFail_Format", code));
     }
 
     public async Task RunPythonAsync(string installerPath, string targetDir)
@@ -82,11 +82,11 @@ public sealed class InstallerRunner
                 _log.Info("Python installer succeeded.");
                 return;
             case 1602:
-                throw new InstallStepException("用户取消了 Python 安装。");
+                throw new InstallStepException(Strings.Get("Err_PyCancel"));
             case 1603:
-                throw new InstallStepException("Python 安装时遇到致命错误（退出码 1603）。可能因为目标目录被占用、磁盘空间不足或权限问题。");
+                throw new InstallStepException(Strings.Get("Err_PyFatal"));
             default:
-                throw new InstallStepException($"Python 安装失败（退出码 {code}）。请检查日志了解详情。");
+                throw new InstallStepException(Strings.Format("Err_PyFail_Format", code));
         }
     }
 
@@ -100,7 +100,7 @@ public sealed class InstallerRunner
             RedirectStandardError = true,
         };
         using var p = Process.Start(psi)
-            ?? throw new InstallStepException($"无法启动进程：{exe}");
+            ?? throw new InstallStepException(Strings.Format("Err_StartProc_Format", exe));
 
         var so = p.StandardOutput.ReadToEndAsync();
         var se = p.StandardError.ReadToEndAsync();

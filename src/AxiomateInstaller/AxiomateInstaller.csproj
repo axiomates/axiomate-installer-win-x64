@@ -33,6 +33,8 @@
     <EmbeddedResource Include="Resources\dist\**\*" Condition="Exists('Resources\dist')" />
     <EmbeddedResource Include="Templates\*.json" />
     <Resource Include="Resources\axiomate-logo.png" />
+    <!-- Resources\Strings.zh.xaml and Strings.en.xaml are picked up automatically as Page
+         items by the WindowsDesktop SDK; loaded at runtime via pack:// in Strings.cs. -->
   </ItemGroup>
 
   <ItemGroup>

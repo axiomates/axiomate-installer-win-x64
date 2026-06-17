@@ -6,7 +6,7 @@ namespace AxiomateInstaller.Pages;
 
 public partial class InstallPathPage : WizardPage
 {
-    public override string HeaderSubtitle => "选择安装位置";
+    public override string HeaderSubtitleKey => "Path_PageSubtitle";
 
     public InstallPathPage() { InitializeComponent(); }
 
@@ -28,21 +28,18 @@ public partial class InstallPathPage : WizardPage
         }
         WarnText.Text = "";
         HintText.Text = DirGuard.DirectoryHasContent(PathBox.Text)
-            ? "提示: 该目录非空，安装时会被清空。"
-            : "目录可用。";
+            ? Strings.Get("Path_Hint_NonEmpty")
+            : Strings.Get("Path_Hint_Empty");
     }
 
     private void Browse_Click(object sender, RoutedEventArgs e)
     {
         var dlg = new Microsoft.Win32.OpenFolderDialog
         {
-            Title = "选择 Axiomate 安装目录",
+            Title = Strings.Get("Path_PickerTitle"),
             InitialDirectory = Directory.Exists(PathBox.Text) ? PathBox.Text : @"C:\Program Files"
         };
-        if (dlg.ShowDialog() == true)
-        {
-            PathBox.Text = dlg.FolderName;
-        }
+        if (dlg.ShowDialog() == true) PathBox.Text = dlg.FolderName;
     }
 
     public override bool Validate(MainWindow host)
@@ -50,14 +47,15 @@ public partial class InstallPathPage : WizardPage
         var eval = DirGuard.Evaluate(PathBox.Text);
         if (!eval.Ok)
         {
-            MessageBox.Show(eval.Reason, "目录不可用", MessageBoxButton.OK, MessageBoxImage.Warning);
+            MessageBox.Show(eval.Reason, Strings.Get("Path_BadTitle"),
+                MessageBoxButton.OK, MessageBoxImage.Warning);
             return false;
         }
         if (DirGuard.DirectoryHasContent(PathBox.Text))
         {
             var res = MessageBox.Show(
-                $"目录 \"{PathBox.Text}\" 非空。\n安装器将清空该目录后再写入。继续？",
-                "确认清空",
+                Strings.Format("Path_ConfirmWipeBody_Format", PathBox.Text),
+                Strings.Get("Path_ConfirmWipeTitle"),
                 MessageBoxButton.OKCancel,
                 MessageBoxImage.Warning);
             if (res != MessageBoxResult.OK) return false;
