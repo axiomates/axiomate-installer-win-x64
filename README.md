@@ -466,8 +466,9 @@ the install directory is wiped during deployment while workspace is user data.
    - `C:\Users\Public\Desktop\Axiomate.lnk`
 
    Both target Windows Terminal (`wt.exe`) with arguments equivalent to:
-   `wt -d "<workspace>" "<install-dir>\axiomate.exe" "<workspace>"`. The shortcut working directory is
-   the workspace and the icon is pulled from `<install-dir>\axiomate.exe,0`. No `.cmd` launcher is generated.
+   `wt -d "<workspace>" "<install-dir>\axiomate.exe"`. The shortcut working directory is the workspace,
+   so Axiomate starts there without receiving the workspace path as a prompt argument. The icon is pulled
+   from `<install-dir>\axiomate.exe,0`. No `.cmd` launcher is generated.
 
 `.lnk` creation goes through the `IShellLinkW` + `IPersistFile` COM interfaces directly, no
 `WshShell` dependency.

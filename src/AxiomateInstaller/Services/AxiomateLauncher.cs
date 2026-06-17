@@ -21,7 +21,7 @@ public static class AxiomateLauncher
 
     public static string BuildWindowsTerminalArguments(string axiomateExe, string workspaceDir)
     {
-        return $"-d {QuoteArg(workspaceDir)} {QuoteArg(axiomateExe)} {QuoteArg(workspaceDir)}";
+        return $"-d {QuoteArg(workspaceDir)} {QuoteArg(axiomateExe)}";
     }
 
     public static void LaunchUnelevatedFromShortcut()
