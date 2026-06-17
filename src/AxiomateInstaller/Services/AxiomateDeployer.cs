@@ -21,6 +21,9 @@ public sealed class AxiomateDeployer
         if (!Directory.Exists(distDir))
             throw new InstallStepException(Strings.Format("Err_Distmissing_Format", distDir));
 
+        var installEval = DirGuard.Evaluate(installDir);
+        if (!installEval.Ok) throw new InstallStepException(installEval.Reason ?? Strings.Get("Path_BadTitle"));
+
         // Force clean the install dir.
         await Task.Run(() =>
         {

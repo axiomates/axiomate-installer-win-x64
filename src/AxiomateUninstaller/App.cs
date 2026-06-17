@@ -51,6 +51,7 @@ public partial class App : System.Windows.Application
             }
             catch (Exception ex) { LogIgnore("registry cleanup failed", ex); }
 
+            EnsureSafeInstallDirForDeletion(installDir);
             string ownExe = Process.GetCurrentProcess().MainModule!.FileName!;
             ScheduleSelfDelete(installDir, ownExe);
 
@@ -149,6 +150,42 @@ public partial class App : System.Windows.Application
         })
         {
             try { if (File.Exists(p)) File.Delete(p); } catch { }
+        }
+    }
+
+    private static void EnsureSafeInstallDirForDeletion(string installDir)
+    {
+        string full = Path.GetFullPath(installDir).TrimEnd('\\', '/');
+        string root = Path.GetPathRoot(full)?.TrimEnd('\\', '/') ?? "";
+        string userProfile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile).TrimEnd('\\', '/');
+        string[] forbidden =
+        {
+            root,
+            Environment.GetFolderPath(Environment.SpecialFolder.Windows).TrimEnd('\\', '/'),
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles).TrimEnd('\\', '/'),
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86).TrimEnd('\\', '/'),
+            userProfile,
+            Path.Combine(userProfile, "Desktop"),
+            Path.Combine(userProfile, "Documents"),
+            Path.Combine(userProfile, "Downloads"),
+            Path.GetTempPath().TrimEnd('\\', '/'),
+        };
+
+        foreach (string forbiddenPath in forbidden)
+        {
+            if (!string.IsNullOrWhiteSpace(forbiddenPath) &&
+                string.Equals(full, Path.GetFullPath(forbiddenPath).TrimEnd('\\', '/'), StringComparison.OrdinalIgnoreCase))
+            {
+                throw new InvalidOperationException($"Refusing to delete unsafe install directory: {full}");
+            }
+        }
+
+        bool hasManifest = File.Exists(Path.Combine(full, "installation-manifest.json"));
+        bool hasAxiomateExe = File.Exists(Path.Combine(full, "axiomate.exe"));
+        bool hasUninstaller = File.Exists(Path.Combine(full, "Uninstaller.exe"));
+        if (!hasManifest || !hasAxiomateExe || !hasUninstaller)
+        {
+            throw new InvalidOperationException($"Refusing to delete unverified install directory: {full}");
         }
     }
 

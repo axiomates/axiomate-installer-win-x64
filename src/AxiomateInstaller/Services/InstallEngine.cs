@@ -103,6 +103,9 @@ public sealed class InstallEngine
 
     private void ValidateFinalOptions(InstallOptions opt)
     {
+        var installEval = DirGuard.Evaluate(opt.InstallDir);
+        if (!installEval.Ok) throw new InstallStepException(installEval.Reason ?? Strings.Get("Path_BadTitle"));
+
         if (!opt.CreateWorkspace) return;
         string userProfile = UserProfileResolver.GetUserProfile(_log);
         WorkspacePathGuard.EnsureSeparateFromInstallDir(opt.WorkspaceDir, opt.InstallDir, userProfile);

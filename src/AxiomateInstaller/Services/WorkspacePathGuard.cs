@@ -10,9 +10,17 @@ public static class WorkspacePathGuard
         string resolved = path.Trim();
         if (!string.IsNullOrWhiteSpace(userProfile))
         {
-            resolved = resolved.Replace("%USERPROFILE%", userProfile, StringComparison.OrdinalIgnoreCase);
+            string root = Path.GetPathRoot(userProfile)?.TrimEnd('\\') ?? "";
+            string leaf = userProfile.Length > root.Length ? userProfile[root.Length..].TrimStart('\\') : "";
+            resolved = resolved.Replace("%USERPROFILE%", userProfile, StringComparison.OrdinalIgnoreCase)
+                               .Replace("%HOMEDRIVE%", root, StringComparison.OrdinalIgnoreCase)
+                               .Replace("%HOMEPATH%", "\\" + leaf, StringComparison.OrdinalIgnoreCase)
+                               .Replace("%LOCALAPPDATA%", Path.Combine(userProfile, "AppData", "Local"), StringComparison.OrdinalIgnoreCase)
+                               .Replace("%APPDATA%", Path.Combine(userProfile, "AppData", "Roaming"), StringComparison.OrdinalIgnoreCase);
         }
         resolved = Environment.ExpandEnvironmentVariables(resolved);
+        if (resolved.Contains('%')) throw new InstallStepException(Strings.Get("Opt_BadWorkspaceBody_Invalid"));
+        if (!Path.IsPathRooted(resolved)) throw new InstallStepException(Strings.Get("Opt_BadWorkspaceBody_Invalid"));
         return Normalize(resolved);
     }
 
