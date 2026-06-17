@@ -1,0 +1,22 @@
+{
+  "models": {
+    "deepseek-v4-pro": {
+      "model": "deepseek-v4-pro",
+      "name": "DeepSeek V4 Pro",
+      "protocol": "openai-chat",
+      "contextWindow": 1000000,
+      "maxOutputTokens": 384000,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": true,
+        "effort": "high"
+      },
+      "baseUrl": "https://api.deepseek.com",
+      "apiKey": "{{API_KEY}}",
+      "modelTemplate": "openai-chat-deepseek-v4p"
+    }
+  },
+  "model": {
+    "current": "deepseek-v4-pro"
+  }
+}

@@ -1,0 +1,27 @@
+<pages:WizardPage x:Class="AxiomateInstaller.Pages.WelcomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:pages="clr-namespace:AxiomateInstaller.Pages"
+      Background="Transparent">
+    <Grid>
+        <StackPanel Margin="6,12">
+            <TextBlock Text="欢迎使用 Axiomate" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
+            <TextBlock x:Name="SubtitleText" Margin="0,6,0,18" Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
+            <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="6" Padding="18">
+                <StackPanel>
+                    <TextBlock Text="安装器将完成以下事情:" FontWeight="SemiBold" Foreground="{StaticResource Text}" Margin="0,0,0,8"/>
+                    <TextBlock Foreground="{StaticResource Text}" TextWrapping="Wrap" LineHeight="22">
+                        <Run Text="• 检查 Windows 11 / x64 / Git / Python 环境"/><LineBreak/>
+                        <Run Text="• 缺失时使用内置 Git 2.54 与 Python 3.12 静默安装"/><LineBreak/>
+                        <Run Text="• 释放 Axiomate 到您选择的目录，并把它加入系统 PATH"/><LineBreak/>
+                        <Run Text="• 可选: 自动配置 DeepSeek 模型与 API Key"/><LineBreak/>
+                        <Run Text="• 可选: 创建工作区与桌面/开始菜单快捷方式"/>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+            <TextBlock Margin="0,18,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap">
+                安装过程需要管理员权限。点击「下一步」继续。
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</pages:WizardPage>

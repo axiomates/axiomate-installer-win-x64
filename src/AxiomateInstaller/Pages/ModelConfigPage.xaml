@@ -1,0 +1,50 @@
+<pages:WizardPage x:Class="AxiomateInstaller.Pages.ModelConfigPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:pages="clr-namespace:AxiomateInstaller.Pages"
+      Background="Transparent">
+    <StackPanel Margin="6,12">
+        <TextBlock Text="模型配置" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
+        <TextBlock Text="选择默认模型并填入 API Key。" Foreground="{StaticResource Muted}" Margin="0,4,0,16"/>
+
+        <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="6" Padding="18">
+            <StackPanel>
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="模型站点" VerticalAlignment="Center" Foreground="{StaticResource Text}"/>
+                    <ComboBox  Grid.Column="1" x:Name="SiteCombo" SelectedIndex="0">
+                        <ComboBoxItem Content="DeepSeek 官方  ·  api.deepseek.com"/>
+                    </ComboBox>
+                </Grid>
+                <Grid Margin="0,0,0,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="模型" VerticalAlignment="Center" Foreground="{StaticResource Text}"/>
+                    <ComboBox  Grid.Column="1" x:Name="ModelCombo" SelectedIndex="0">
+                        <ComboBoxItem Content="deepseek-v4-pro    (高质量, 强推理)"   Tag="DeepseekV4Pro"/>
+                        <ComboBoxItem Content="deepseek-v4-flash  (轻量, 高速度)"     Tag="DeepseekV4Flash"/>
+                    </ComboBox>
+                </Grid>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="API Key" VerticalAlignment="Center" Foreground="{StaticResource Text}"/>
+                    <PasswordBox Grid.Column="1" x:Name="KeyBox" Padding="8,6"/>
+                    <CheckBox    Grid.Column="2" x:Name="ShowKeyChk" Content="显示" Margin="8,0,0,0" VerticalAlignment="Center" Checked="ShowKey_Changed" Unchecked="ShowKey_Changed"/>
+                    <TextBox     Grid.Column="1" x:Name="KeyBoxPlain" Padding="8,6" Visibility="Collapsed" TextChanged="KeyBoxPlain_Changed"/>
+                </Grid>
+                <TextBlock Margin="0,12,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap">
+                    可在 https://platform.deepseek.com 获取 API Key。安装时会清空 ~/.axiomate/ 目录, 并以最小化的 ~/.axiomate.json 模板 + 您填入的 API Key 覆盖原配置。
+                </TextBlock>
+            </StackPanel>
+        </Border>
+    </StackPanel>
+</pages:WizardPage>

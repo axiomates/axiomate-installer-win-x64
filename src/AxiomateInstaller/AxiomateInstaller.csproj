@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <PublishSingleFile>true</PublishSingleFile>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <IncludeAllContentInSingleFile>true</IncludeAllContentInSingleFile>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+    <AssemblyName>axiomate-installer</AssemblyName>
+    <RootNamespace>AxiomateInstaller</RootNamespace>
+    <!-- versions injected by build.ps1; defaults below let dotnet build work standalone -->
+    <Version Condition="'$(Version)' == ''">1.0.0</Version>
+    <FileVersion Condition="'$(FileVersion)' == ''">1.0.0.0</FileVersion>
+    <InformationalVersion Condition="'$(InformationalVersion)' == ''">1.0.0+axiomate.dev</InformationalVersion>
+    <Company>Axiomate</Company>
+    <Product>Axiomate Installer</Product>
+    <Copyright>Copyright (c) Axiomate</Copyright>
+    <PackageProjectUrl>https://axiomate.net</PackageProjectUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Git-2.54.0-64-bit.exe" />
+    <EmbeddedResource Include="Resources\python-3.12.10-amd64.exe" />
+    <EmbeddedResource Include="Resources\Uninstaller.exe" Condition="Exists('Resources\Uninstaller.exe')" />
+    <EmbeddedResource Include="Resources\dist\**\*" Condition="Exists('Resources\dist')" />
+    <EmbeddedResource Include="Templates\*.json" />
+    <Resource Include="Resources\axiomate-logo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\version.json" Link="version.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
