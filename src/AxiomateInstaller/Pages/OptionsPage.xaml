@@ -11,6 +11,8 @@
             <StackPanel>
                 <CheckBox x:Name="ModelChk" Content="{DynamicResource Opt_ModelChk}" Foreground="{StaticResource Text}" FontWeight="SemiBold"/>
                 <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Opt_ModelHint}"/>
+                <CheckBox x:Name="BypassPermChk" Content="{DynamicResource Opt_BypassPermChk}" Foreground="{StaticResource Text}" FontWeight="SemiBold" Margin="0,14,0,0"/>
+                <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Opt_BypassPermHint}"/>
             </StackPanel>
         </Border>
 

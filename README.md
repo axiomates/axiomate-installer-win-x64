@@ -69,8 +69,9 @@ End-user view, double-clicking the EXE on a clean Windows 11 box:
 4. Pick install dir (default `C:\Program Files\Axiomate`). Path is validated against a blacklist.
 5. Optional: workspace + desktop / start-menu shortcuts.
 6. Optional: quick model config — pick DeepSeek model, paste API key.
-7. Progress page runs the steps in order, streaming a log to the screen.
-8. Finish page; one-click launch when workspace was chosen.
+7. Optional: enable bypass permission mode by writing `permissions.defaultMode = "bypassPermissions"` to `~/.axiomate/settings.json`.
+8. Progress page runs the steps in order, streaming a log to the screen.
+9. Finish page; one-click launch when workspace was chosen.
 
 Outputs on the user's machine after a successful run:
 
@@ -96,7 +97,7 @@ Page index in `MainWindow._pages`:
 | 0 | Welcome | `Pages/WelcomePage.xaml(.cs)` | Shows installer + axiomate version, brief feature list. Back disabled. |
 | 1 | Env check | `Pages/EnvCheckPage.xaml(.cs)` | OS / arch / Git / Python detection; pip-mirror block appears only if Python install is checked. Blocks Next on Win10 / arm64. |
 | 2 | Install path | `Pages/InstallPathPage.xaml(.cs)` | `DirGuard` validation; folder picker; force-empty confirmation when target is non-empty. |
-| 3 | Options | `Pages/OptionsPage.xaml(.cs)` | Two checkboxes (quick model config, workspace+shortcuts). PATH registration is mandatory and not exposed. |
+| 3 | Options | `Pages/OptionsPage.xaml(.cs)` | Optional quick model config, bypass permission mode, workspace+shortcuts. PATH registration is mandatory and not exposed. |
 | 4 | Model config | `Pages/ModelConfigPage.xaml(.cs)` | Site = DeepSeek (only option in v1), model = `deepseek-v4-pro` / `deepseek-v4-flash`, masked API-key input with "show" toggle. **Skipped automatically** when option not picked (`OptionsPage.NextIndex` jumps +2). |
 | 5 | Progress | `Pages/ProgressPage.xaml(.cs)` | Drives `InstallEngine`. Streams `Logger` lines into a ScrollViewer; updates `ProgressBar`. On failure: turns red and pops a dialog with the log path + "open in Notepad" choice. |
 | 6 | Finish | `Pages/FinishPage.xaml(.cs)` | Summary + optional "launch Axiomate" button (only when workspace launcher exists). |
@@ -236,7 +237,7 @@ Single source: `version.json` at the repo root.
 `axiomateVersion: "auto"` tells `build.ps1` to read the first three numeric segments from
 `dist\axiomate.exe` `FileVersion` (for example `0.6.12`) and append `axiomateBuildNumber` as the
 fourth segment (for example `0.6.12.23`). Commit hashes or other suffixes from upstream file metadata
-are intentionally stripped. After a successful build, `axiomateBuildNumber` is incremented for the next build.
+are intentionally stripped. Keep `axiomateBuildNumber` equal to the bundled package build number.
 You can also pin a literal value like `"0.6.12.23"`.
 
 `build.ps1` injects:
@@ -330,7 +331,7 @@ What changes automatically:
 - The copied dist is embedded by `<EmbeddedResource Include="Resources\dist\**\*" />` during publish.
 - If `version.json` keeps `"axiomateVersion": "auto"`, the displayed bundled Axiomate version is
   `major.minor.patch.<axiomateBuildNumber>` from the new `dist\axiomate.exe`; commit/hash suffixes are stripped.
-  `axiomateBuildNumber` increments after each successful build.
+  Update `axiomateBuildNumber` when producing a new package build.
 - The installer output remains `artifacts/installer/axiomate-installer-<installerVersion>.exe`.
 
 What to edit manually:
@@ -396,6 +397,26 @@ recursively deletes `~/.axiomate/` first, then writes the template to `~/.axioma
 user does **not** check that box, neither file is touched.
 
 There are no routes / fallbacks / auxiliary blocks — Axiomate fills those in on first launch.
+
+### Bypass permission option (`Services/SettingsWriter.cs`)
+
+The install options page also has an opt-in checkbox for bypass permission mode. It is off by default.
+When checked, the installer runs this step **after** quick model config, so if quick model config deletes
+`~/.axiomate/`, the settings file is recreated afterwards.
+
+`SettingsWriter` reads the target user's `~/.axiomate/settings.json` as JSON, preserves existing fields,
+and updates/adds only:
+
+```json
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  }
+}
+```
+
+If `settings.json` does not exist, it is created. If parsing fails, the invalid file is backed up as
+`settings.json.invalid-<timestamp>.bak`, then the minimal permissions JSON above is written.
 
 ---
 

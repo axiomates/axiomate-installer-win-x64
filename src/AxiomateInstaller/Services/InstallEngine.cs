@@ -31,6 +31,7 @@ public sealed class InstallEngine
         var workspace = new WorkspaceCreator(_log);
         var shortcut  = new ShortcutManager(_log);
         var configW   = new ConfigWriter(_log);
+        var settingsW = new SettingsWriter(_log);
         var uninstReg = new UninstallRegistrar(_log);
 
         int totalSteps = ComputeStepCount(opt);
@@ -78,6 +79,12 @@ public sealed class InstallEngine
                 configW.Write(opt.ModelChoice, opt.ApiKey);
             }
 
+            if (opt.EnableBypassPermissions)
+            {
+                Report("Step_BypassPerm");
+                settingsW.EnableBypassPermissions();
+            }
+
             if (opt.CreateWorkspace)
             {
                 Report("Step_Workspace");
@@ -122,6 +129,7 @@ public sealed class InstallEngine
         }
         n += 3; // deploy + path + win-tune
         if (opt.QuickModelConfig) n++;
+        if (opt.EnableBypassPermissions) n++;
         if (opt.CreateWorkspace) n++;
         n += 1; // uninstall registrar
         return n;

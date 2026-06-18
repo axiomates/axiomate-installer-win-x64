@@ -13,8 +13,9 @@ public partial class OptionsPage : WizardPage
 
     public override void OnEnter(MainWindow host)
     {
-        ModelChk.IsChecked     = host.Options.QuickModelConfig;
-        WorkspaceChk.IsChecked = host.Options.CreateWorkspace;
+        ModelChk.IsChecked      = host.Options.QuickModelConfig;
+        BypassPermChk.IsChecked = host.Options.EnableBypassPermissions;
+        WorkspaceChk.IsChecked  = host.Options.CreateWorkspace;
         WorkspacePathBox.Text  = host.Options.WorkspaceDir;
         UpdateWorkspaceEnabled();
     }
@@ -75,6 +76,7 @@ public partial class OptionsPage : WizardPage
     public override void OnLeave(MainWindow host)
     {
         host.Options.QuickModelConfig = ModelChk.IsChecked == true;
+        host.Options.EnableBypassPermissions = BypassPermChk.IsChecked == true;
         host.Options.CreateWorkspace  = WorkspaceChk.IsChecked == true;
         host.Options.WorkspaceDir     = WorkspacePathBox.Text.Trim().TrimEnd('\\');
     }

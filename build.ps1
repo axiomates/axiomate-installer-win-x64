@@ -149,13 +149,6 @@ foreach ($side in @("axiomate-installer.pdb", "version.json")) {
     if (Test-Path $p) { Remove-Item -Force $p }
 }
 
-if ([string]$ver.axiomateVersion -eq "auto") {
-    $ver.axiomateBuildNumber = $axiomateBuildNumber + 1
-    $json = ($ver | ConvertTo-Json -Depth 8) + "`n"
-    [System.IO.File]::WriteAllText($VersionFile, $json.Replace("`r`n", "`n"), [System.Text.UTF8Encoding]::new($false))
-    Write-Info "axiomateBuildNumber incremented to $($ver.axiomateBuildNumber) for next build"
-}
-
 Write-Host ""
 Write-Host "==============================================" -ForegroundColor Green
 Write-Host (" axiomate-installer  v{0}" -f $installerVersion) -ForegroundColor Green

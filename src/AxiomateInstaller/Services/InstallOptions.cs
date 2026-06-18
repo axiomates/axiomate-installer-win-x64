@@ -17,6 +17,7 @@ public sealed class InstallOptions
 
     // Options page choices
     public bool QuickModelConfig { get; set; }
+    public bool EnableBypassPermissions { get; set; }
     public bool CreateWorkspace  { get; set; }
     public string WorkspaceDir   { get; set; } = @"%USERPROFILE%\axiomate-workspace";
 
