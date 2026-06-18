@@ -23,9 +23,9 @@
     <sys:String x:Key="Welcome_Task2">• 缺失时使用内置 Git 2.54 与 Python 3.12 静默安装 (Git 必装, Python 可选)</sys:String>
     <sys:String x:Key="Welcome_Task3">• 释放 Axiomate 到您选择的目录, 并把它加入系统 PATH</sys:String>
     <sys:String x:Key="Welcome_Task4">• 启用 PowerShell 脚本执行 (RemoteSigned) 与 Windows 开发人员模式</sys:String>
-    <sys:String x:Key="Welcome_Task5">• 可选: 自动配置 DeepSeek 模型与 API Key</sys:String>
+    <sys:String x:Key="Welcome_Task5">• 可选: 快速配置常见模型</sys:String>
     <sys:String x:Key="Welcome_Task6">• 可选: 创建工作区与桌面/开始菜单快捷方式</sys:String>
-    <sys:String x:Key="Welcome_Footer">安装过程需要管理员权限。点击「下一步」继续。</sys:String>
+    <sys:String x:Key="Welcome_Footer">点击「下一步」继续。</sys:String>
     <sys:String x:Key="Welcome_LangLabel">语言 / Language</sys:String>
     <sys:String x:Key="Welcome_LangZh">中文</sys:String>
     <sys:String x:Key="Welcome_LangEn">English</sys:String>

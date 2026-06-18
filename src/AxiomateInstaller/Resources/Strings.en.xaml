@@ -23,9 +23,9 @@
     <sys:String x:Key="Welcome_Task2">• Silently install bundled Git 2.54 (required) and Python 3.12 (optional) when missing</sys:String>
     <sys:String x:Key="Welcome_Task3">• Deploy Axiomate to your chosen directory and register it on PATH</sys:String>
     <sys:String x:Key="Welcome_Task4">• Enable PowerShell script execution (RemoteSigned) and Windows Developer Mode</sys:String>
-    <sys:String x:Key="Welcome_Task5">• Optional: configure DeepSeek model + API key</sys:String>
+    <sys:String x:Key="Welcome_Task5">• Optional: quick setup for common models</sys:String>
     <sys:String x:Key="Welcome_Task6">• Optional: create a workspace folder and desktop / Start menu shortcuts</sys:String>
-    <sys:String x:Key="Welcome_Footer">Administrator rights are required. Click "Next" to continue.</sys:String>
+    <sys:String x:Key="Welcome_Footer">Click "Next" to continue.</sys:String>
     <sys:String x:Key="Welcome_LangLabel">Language</sys:String>
     <sys:String x:Key="Welcome_LangZh">中文</sys:String>
     <sys:String x:Key="Welcome_LangEn">English</sys:String>
