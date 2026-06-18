@@ -227,13 +227,17 @@ Single source: `version.json` at the repo root.
 {
   "installerVersion": "1.0.0",
   "axiomateVersion": "auto",
+  "axiomateBuildNumber": 24,
   "bundledGitVersion": "2.54.0",
   "bundledPythonVersion": "3.12.10"
 }
 ```
 
-`axiomateVersion: "auto"` tells `build.ps1` to read it from `dist\axiomate.exe` `FileVersion`
-(currently `0.6.12.0`). You can also pin a literal value like `"2026.06.17"`.
+`axiomateVersion: "auto"` tells `build.ps1` to read the first three numeric segments from
+`dist\axiomate.exe` `FileVersion` (for example `0.6.12`) and append `axiomateBuildNumber` as the
+fourth segment (for example `0.6.12.23`). Commit hashes or other suffixes from upstream file metadata
+are intentionally stripped. After a successful build, `axiomateBuildNumber` is incremented for the next build.
+You can also pin a literal value like `"0.6.12.23"`.
 
 `build.ps1` injects:
 
@@ -247,7 +251,7 @@ These appear in the EXE's Win32 version resource:
 
 ```
 FileVersion     : 1.0.0.0
-ProductVersion  : 1.0.0+axiomate.0.6.12.0
+ProductVersion  : 1.0.0+axiomate.0.6.12.23
 ProductName     : Axiomate Installer
 CompanyName     : Axiomate
 ```
@@ -255,7 +259,7 @@ CompanyName     : Axiomate
 UI / log usage:
 
 - Window title: `Axiomate Installer 1.0.0`.
-- Header badge: `v1.0.0  ·  Axiomate 0.6.12.0`.
+- Header badge: `v1.0.0  ·  Axiomate 0.6.12.23`.
 - About dialog: 4 versions (installer / axiomate / bundled Git / bundled Python).
 - Apps & features `DisplayVersion` = `axiomateVersion`; `Comments` = `Installer <installerVersion>`.
 - Log file: `%TEMP%\axiomate-installer\install-<installerVersion>-<yyyyMMdd-HHmmss>.log`.
@@ -271,7 +275,7 @@ UI / log usage:
 |---|---|
 | 1 | Read `version.json`. |
 | 2 | Sync `C:\public\workspace\axiomate\agent\dist\*` → `src/AxiomateInstaller/Resources/dist/` (skip with `-SkipDistSync`). |
-| 3 | If `axiomateVersion == "auto"`, resolve from `dist\axiomate.exe` FileVersion. |
+| 3 | If `axiomateVersion == "auto"`, resolve `major.minor.patch.<axiomateBuildNumber>` from `dist\axiomate.exe`, stripping hash suffixes. |
 | 4 | Verify `Git-2.54.0-64-bit.exe` and `python-3.12.10-amd64.exe` exist under `Resources/`. |
 | 5 | `dotnet publish` AxiomateUninstaller → `artifacts/_intermediate/uninstaller/`, copy resulting EXE to `Resources/Uninstaller.exe`. |
 | 6 | `dotnet publish` AxiomateInstaller → `artifacts/installer/`. |
@@ -324,8 +328,9 @@ What changes automatically:
 - `build.ps1` removes the old `src/AxiomateInstaller/Resources/dist/` directory and copies the new
   `C:\public\workspace\axiomate\agent\dist\*` into it.
 - The copied dist is embedded by `<EmbeddedResource Include="Resources\dist\**\*" />` during publish.
-- If `version.json` keeps `"axiomateVersion": "auto"`, the displayed bundled Axiomate version is read
-  from the new `dist\axiomate.exe` `FileVersion`.
+- If `version.json` keeps `"axiomateVersion": "auto"`, the displayed bundled Axiomate version is
+  `major.minor.patch.<axiomateBuildNumber>` from the new `dist\axiomate.exe`; commit/hash suffixes are stripped.
+  `axiomateBuildNumber` increments after each successful build.
 - The installer output remains `artifacts/installer/axiomate-installer-<installerVersion>.exe`.
 
 What to edit manually:
@@ -335,7 +340,7 @@ What to edit manually:
 - **Installer UI / install logic changed:** bump `installerVersion` in `version.json`, rebuild, test,
   and commit the source change plus `version.json`.
 - **Need to pin a marketing/product version:** replace `"axiomateVersion": "auto"` with a literal value
-  such as `"2026.06.17"`; otherwise leave it as `auto`.
+  such as `"0.6.12.23"`; otherwise leave it as `auto`.
 - **Git / Python payload changed:** replace the EXE under `src/AxiomateInstaller/Resources/`, update
   `bundledGitVersion` / `bundledPythonVersion` in `version.json`, and update the silent parameters only
   if the new installer requires different flags.
@@ -617,7 +622,7 @@ HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\Path
 
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Axiomate
   DisplayName = Axiomate
-  DisplayVersion = 0.6.12.0
+  DisplayVersion = 0.6.12.23
   ...
 
 %TEMP%\axiomate-installer\

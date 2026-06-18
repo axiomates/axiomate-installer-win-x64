@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace AxiomateInstaller.Services;
 
@@ -40,7 +41,7 @@ public sealed class VersionInfo
         int plus = installer.IndexOf('+');
         string installerSemver = plus > 0 ? installer[..plus] : installer;
         string axiomateFromMeta = plus > 0 && installer.Length > plus + 10
-            ? installer[(plus + "+axiomate.".Length)..]
+            ? CleanVersion(installer[(plus + "+axiomate.".Length)..])
             : "unknown";
 
         // Fallback: try version.json next to the EXE in dev builds.
@@ -58,7 +59,7 @@ public sealed class VersionInfo
                 if (root.TryGetProperty("axiomateVersion", out var av) && av.ValueKind == JsonValueKind.String)
                 {
                     string s = av.GetString() ?? "";
-                    if (!string.IsNullOrWhiteSpace(s) && s != "auto") axiomate = s;
+                    if (!string.IsNullOrWhiteSpace(s) && s != "auto") axiomate = CleanVersion(s);
                 }
                 if (root.TryGetProperty("bundledGitVersion", out var gv) && gv.ValueKind == JsonValueKind.String)
                     git = gv.GetString() ?? git;
@@ -69,5 +70,11 @@ public sealed class VersionInfo
         catch { /* fallback values are fine */ }
 
         return new VersionInfo(installerSemver, axiomate, git, py);
+    }
+
+    private static string CleanVersion(string raw)
+    {
+        var m = Regex.Match(raw, @"^(\d+\.\d+\.\d+\.\d+)");
+        return m.Success ? m.Groups[1].Value : raw;
     }
 }

@@ -45,9 +45,11 @@ if (-not (Test-Path $VersionFile)) { throw "version.json missing at $VersionFile
 $ver = Get-Content -Raw -Encoding UTF8 $VersionFile | ConvertFrom-Json
 $installerVersion = [string]$ver.installerVersion
 $axiomateVersion  = [string]$ver.axiomateVersion
+$axiomateBuildNumber = if ($null -ne $ver.axiomateBuildNumber) { [int]$ver.axiomateBuildNumber } else { 0 }
 if ([string]::IsNullOrWhiteSpace($installerVersion)) { throw "installerVersion missing in version.json" }
 Write-Info "installerVersion = $installerVersion"
 Write-Info "axiomateVersion  = $axiomateVersion (raw)"
+Write-Info "axiomateBuildNumber = $axiomateBuildNumber"
 
 # ---------- 2. Sync axiomate dist ----------
 if (-not $SkipDistSync) {
@@ -64,15 +66,19 @@ if (-not $SkipDistSync) {
     Write-Step "SkipDistSync = true (using existing $DistDest)"
 }
 
-# resolve "auto" axiomate version from axiomate.exe FileVersion
+# resolve "auto" axiomate version from axiomate.exe FileVersion.
+# Axiomate's file version may include a commit suffix (for example 0.6.12.0.<hash>).
+# The installer displays/publishes only major.minor.patch.<localBuildNumber>.
 if ($axiomateVersion -eq "auto") {
     $axiomateExe = Join-Path $DistDest "axiomate.exe"
     if (Test-Path $axiomateExe) {
         $fv = (Get-Item $axiomateExe).VersionInfo.FileVersion
-        if ([string]::IsNullOrWhiteSpace($fv)) { $fv = "unknown" }
-        $axiomateVersion = $fv
+        if ([string]::IsNullOrWhiteSpace($fv)) { throw "Cannot resolve axiomate version: FileVersion is empty" }
+        $m = [regex]::Match($fv, '^(\d+)\.(\d+)\.(\d+)')
+        if (-not $m.Success) { throw "Cannot parse axiomate FileVersion '$fv' as major.minor.patch" }
+        $axiomateVersion = "{0}.{1}.{2}.{3}" -f $m.Groups[1].Value, $m.Groups[2].Value, $m.Groups[3].Value, $axiomateBuildNumber
     } else {
-        $axiomateVersion = "unknown"
+        throw "Cannot resolve axiomate version: $axiomateExe missing"
     }
     Write-Info "axiomateVersion (resolved) = $axiomateVersion"
 }
@@ -141,6 +147,13 @@ if (Test-Path $intermediateDir) { Remove-Item -Recurse -Force $intermediateDir }
 foreach ($side in @("axiomate-installer.pdb", "version.json")) {
     $p = Join-Path $InstallerOut $side
     if (Test-Path $p) { Remove-Item -Force $p }
+}
+
+if ([string]$ver.axiomateVersion -eq "auto") {
+    $ver.axiomateBuildNumber = $axiomateBuildNumber + 1
+    $json = ($ver | ConvertTo-Json -Depth 8) + "`n"
+    [System.IO.File]::WriteAllText($VersionFile, $json.Replace("`r`n", "`n"), [System.Text.UTF8Encoding]::new($false))
+    Write-Info "axiomateBuildNumber incremented to $($ver.axiomateBuildNumber) for next build"
 }
 
 Write-Host ""
