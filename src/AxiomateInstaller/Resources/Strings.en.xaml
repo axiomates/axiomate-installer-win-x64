@@ -84,7 +84,7 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Opt_Subtitle">All optional. Axiomate works even if you skip them.</sys:String>
     <sys:String x:Key="Opt_ModelChk">Quick model config</sys:String>
     <sys:String x:Key="Opt_ModelHint">Optional. Writes ~/.axiomate.json after you choose a primary model and API key. You can skip this and configure models later.</sys:String>
-    <sys:String x:Key="Opt_BypassPermChk">Enable bypass permissions</sys:String>
+    <sys:String x:Key="Opt_BypassPermChk">Enable bypass permissionss</sys:String>
     <sys:String x:Key="Opt_BypassPermHint">Optional. Lets AI run code without asking each time. Off by default.</sys:String>
     <sys:String x:Key="Opt_WorkspaceChk">Create workspace shortcuts</sys:String>
     <sys:String x:Key="Opt_WorkspaceHint">Adds Desktop and Start menu shortcuts that open Axiomate in the workspace.</sys:String>
@@ -137,7 +137,7 @@ Click "Yes" to open the log file.</sys:String>
     <sys:String x:Key="Step_Path">Registering on system PATH</sys:String>
     <sys:String x:Key="Step_WinTune">Enabling PowerShell scripts and Developer Mode</sys:String>
     <sys:String x:Key="Step_Model">Writing Axiomate model config</sys:String>
-    <sys:String x:Key="Step_BypassPerm">Writing bypass permission setting</sys:String>
+    <sys:String x:Key="Step_BypassPerm">Writing bypass permissions setting</sys:String>
     <sys:String x:Key="Step_Workspace">Creating workspace and shortcuts</sys:String>
     <sys:String x:Key="Step_Uninst">Registering uninstaller</sys:String>
 

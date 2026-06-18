@@ -84,7 +84,7 @@
     <sys:String x:Key="Opt_Subtitle">这些选项可以省略；不勾选时也能正常使用 axiomate 命令。</sys:String>
     <sys:String x:Key="Opt_ModelChk">快速模型配置</sys:String>
     <sys:String x:Key="Opt_ModelHint">勾选后下一步可以选择模型并填入 API Key, 安装时会自动覆盖 ~/.axiomate.json 并清空 ~/.axiomate/ 目录。不勾选也可以继续安装；启动 Axiomate 后可按首次引导添加模型, 或手动编辑 ~/.axiomate.json 添加其他模型。</sys:String>
-    <sys:String x:Key="Opt_BypassPermChk">默认开启 bypass permission 模式</sys:String>
+    <sys:String x:Key="Opt_BypassPermChk">默认开启 bypass permissions 模式</sys:String>
     <sys:String x:Key="Opt_BypassPermHint">关闭时 Axiomate 会按默认权限策略询问确认；开启后会写入 ~/.axiomate/settings.json，让 AI 可以不再逐次询问权限而自动执行代码。默认关闭。</sys:String>
     <sys:String x:Key="Opt_WorkspaceChk">创建默认工作区与快捷方式</sys:String>
     <sys:String x:Key="Opt_WorkspaceHint">勾选后将在桌面与开始菜单创建 Axiomate 快捷方式, 双击直接以工作区目录为当前目录启动 axiomate TUI, 适合非命令行用户。</sys:String>
@@ -137,7 +137,7 @@
     <sys:String x:Key="Step_Path">注册系统 PATH</sys:String>
     <sys:String x:Key="Step_WinTune">启用 PowerShell 脚本执行与开发人员模式</sys:String>
     <sys:String x:Key="Step_Model">写入 Axiomate 模型配置</sys:String>
-    <sys:String x:Key="Step_BypassPerm">写入 bypass permission 权限配置</sys:String>
+    <sys:String x:Key="Step_BypassPerm">写入 bypass permissions 权限配置</sys:String>
     <sys:String x:Key="Step_Workspace">创建工作区与快捷方式</sys:String>
     <sys:String x:Key="Step_Uninst">注册卸载器</sys:String>
 

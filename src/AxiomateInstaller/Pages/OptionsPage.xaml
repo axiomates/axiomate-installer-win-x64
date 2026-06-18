@@ -3,36 +3,42 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:pages="clr-namespace:AxiomateInstaller.Pages"
       Background="Transparent">
-    <StackPanel Margin="6,12">
-        <TextBlock Text="{DynamicResource Opt_Header}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
-        <TextBlock Text="{DynamicResource Opt_Subtitle}" Foreground="{StaticResource Muted}" Margin="0,4,0,16"/>
+    <ScrollViewer x:Name="OptionsScroll"
+                  Background="Transparent"
+                  VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled"
+                  PreviewMouseLeftButtonDown="OptionsScroll_MouseLeftButtonDown"
+                  PreviewMouseMove="OptionsScroll_MouseMove"
+                  PreviewMouseLeftButtonUp="OptionsScroll_MouseLeftButtonUp"
+                  LostMouseCapture="OptionsScroll_LostMouseCapture">
+        <StackPanel Margin="6,12">
+            <TextBlock Text="{DynamicResource Opt_Header}" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource Text}"/>
+            <TextBlock Text="{DynamicResource Opt_Subtitle}" Foreground="{StaticResource Muted}" Margin="0,4,0,16"/>
 
-        <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="6" Padding="18" Margin="0,0,0,10">
-            <StackPanel>
-                <CheckBox x:Name="ModelChk" Content="{DynamicResource Opt_ModelChk}" Foreground="{StaticResource Text}" FontWeight="SemiBold"/>
-                <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Opt_ModelHint}"/>
-                <CheckBox x:Name="BypassPermChk" Content="{DynamicResource Opt_BypassPermChk}" Foreground="{StaticResource Text}" FontWeight="SemiBold" Margin="0,14,0,0"/>
-                <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Opt_BypassPermHint}"/>
-            </StackPanel>
-        </Border>
+            <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="6" Padding="18">
+                <StackPanel>
+                    <CheckBox x:Name="ModelChk" Content="{DynamicResource Opt_ModelChk}" Foreground="{StaticResource Text}" FontWeight="SemiBold"/>
+                    <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Opt_ModelHint}"/>
 
-        <Border Background="{StaticResource Panel}" BorderBrush="{StaticResource Line}" BorderThickness="1" CornerRadius="6" Padding="18">
-            <StackPanel>
-                <CheckBox x:Name="WorkspaceChk" Content="{DynamicResource Opt_WorkspaceChk}" Foreground="{StaticResource Text}" FontWeight="SemiBold" Checked="WorkspaceChk_Toggle" Unchecked="WorkspaceChk_Toggle"/>
-                <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Opt_WorkspaceHint}"/>
-                <Grid Margin="22,12,0,0" x:Name="WorkspacePathGrid">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="{DynamicResource Opt_WorkspaceLabel}" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
-                    <TextBox   Grid.Column="1" x:Name="WorkspacePathBox" Padding="6,4"/>
-                    <Button    Grid.Column="2" Content="{DynamicResource Btn_Browse}" Style="{StaticResource SecondaryButton}" Margin="8,0,0,0" Click="Browse_Click"/>
-                </Grid>
-            </StackPanel>
-        </Border>
+                    <CheckBox x:Name="BypassPermChk" Content="{DynamicResource Opt_BypassPermChk}" Foreground="{StaticResource Text}" FontWeight="SemiBold" Margin="0,14,0,0"/>
+                    <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Opt_BypassPermHint}"/>
 
-        <TextBlock Text="{DynamicResource Opt_FooterNote}" Margin="0,14,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
-    </StackPanel>
+                    <CheckBox x:Name="WorkspaceChk" Content="{DynamicResource Opt_WorkspaceChk}" Foreground="{StaticResource Text}" FontWeight="SemiBold" Margin="0,14,0,0" Checked="WorkspaceChk_Toggle" Unchecked="WorkspaceChk_Toggle"/>
+                    <TextBlock Margin="22,4,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap" Text="{DynamicResource Opt_WorkspaceHint}"/>
+                    <Grid Margin="22,12,0,0" x:Name="WorkspacePathGrid">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Opt_WorkspaceLabel}" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
+                        <TextBox   Grid.Column="1" x:Name="WorkspacePathBox" Padding="6,4"/>
+                        <Button    Grid.Column="2" Content="{DynamicResource Btn_Browse}" Style="{StaticResource SecondaryButton}" Margin="8,0,0,0" Click="Browse_Click"/>
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="{DynamicResource Opt_FooterNote}" Margin="0,14,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
+        </StackPanel>
+    </ScrollViewer>
 </pages:WizardPage>

@@ -16,8 +16,8 @@ public partial class WelcomePage : WizardPage
         _suppress = true;
         if (Strings.Current == UiLang.Zh) LangZh.IsChecked = true;
         else                              LangEn.IsChecked = true;
-        // Once the user advances past Welcome, the radio buttons are locked.
-        LangZh.IsEnabled = LangEn.IsEnabled = !host.LanguageLocked;
+        // Language switching is allowed whenever the user is on Welcome.
+        LangZh.IsEnabled = LangEn.IsEnabled = true;
         _suppress = false;
 
         SubtitleText.Text = Strings.Format("Welcome_Subtitle_Format",

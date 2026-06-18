@@ -54,9 +54,6 @@ public partial class MainWindow : System.Windows.Window
         if (!page.Validate(this)) return;
         page.OnLeave(this);
 
-        // The Welcome page is the only place language can change. Once we leave it,
-        // the language is locked for the rest of the wizard so dialogs/log don't drift.
-        if (page is WelcomePage) LanguageLocked = true;
 
         int next = page.NextIndex(this, _index);
         if (next == _index) return;
