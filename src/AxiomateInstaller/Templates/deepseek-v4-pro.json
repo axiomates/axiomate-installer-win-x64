@@ -46,6 +46,7 @@
           "switch_model"
         ],
         "switchModelOn": [
+          "rate_limit",
           "overloaded",
           "timeout",
           "connection",
@@ -62,13 +63,26 @@
       "recoveryProfile": "auxiliary-judge",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
-      "switchModelOn": [],
+      "switchModelOn": [
+        "rate_limit",
+        "overloaded",
+        "timeout",
+        "connection",
+        "server_error",
+        "malformed_response",
+        "responses_null_output",
+        "model_not_found",
+        "content_policy_blocked"
+      ],
       "failure": "fail_open",
       "timeoutMs": 30000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "promptSuggestion": {
       "recoveryProfile": "auxiliary-fast",
@@ -84,13 +98,16 @@
       "timeoutMs": 8000,
       "maxOutputTokens": 96,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "sessionSearchSummary": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -98,18 +115,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_original",
       "timeoutMs": 30000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "memdirRelevance": {
       "recoveryProfile": "auxiliary-quality",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -117,17 +138,21 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_null",
       "timeoutMs": 30000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "tokenCounting": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
-        "retry_same_model"
+        "retry_same_model",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -137,13 +162,16 @@
       "failure": "return_null",
       "timeoutMs": 15000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "awaySummary": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -151,18 +179,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_null",
       "timeoutMs": 30000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "toolUseSummary": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -170,18 +202,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_null",
       "timeoutMs": 15000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "sessionTitle": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -189,18 +225,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_null",
       "timeoutMs": 15000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "conversationRename": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -208,18 +248,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_null",
       "timeoutMs": 15000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "webFetchSummary": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -227,18 +271,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_original",
       "timeoutMs": 30000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "permissionExplainer": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -246,18 +294,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_null",
       "timeoutMs": 15000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "hookPrompt": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -265,18 +317,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_null",
       "timeoutMs": 30000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "hookAgent": {
       "recoveryProfile": "auxiliary-quality",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "rate_limit",
@@ -286,18 +342,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "propagate_error",
       "timeoutMs": 45000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "skillImprovement": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -305,18 +365,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_null",
       "timeoutMs": 30000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "mcpDateTimeParse": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -324,18 +388,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_null",
       "timeoutMs": 15000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "shellPrefix": {
       "recoveryProfile": "auxiliary-fast",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "timeout",
@@ -343,12 +411,15 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "return_null",
       "timeoutMs": 15000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "verifyConnection": {
       "recoveryProfile": "auxiliary-fast",
@@ -359,13 +430,16 @@
       "failure": "propagate_error",
       "timeoutMs": 15000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "compact": {
       "recoveryProfile": "auxiliary-quality",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "rate_limit",
@@ -375,18 +449,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "propagate_error",
       "timeoutMs": 45000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "sideQuestion": {
       "recoveryProfile": "auxiliary-quality",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "rate_limit",
@@ -396,18 +474,22 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "propagate_error",
       "timeoutMs": 45000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     },
     "forkedAgent": {
       "recoveryProfile": "auxiliary-quality",
       "allowActions": [
         "retry_same_model",
-        "adapt_request"
+        "adapt_request",
+        "switch_model"
       ],
       "switchModelOn": [
         "rate_limit",
@@ -417,12 +499,15 @@
         "server_error",
         "malformed_response",
         "responses_null_output",
-        "model_not_found"
+        "model_not_found",
+        "content_policy_blocked"
       ],
       "failure": "propagate_error",
       "timeoutMs": 45000,
       "primary": "deepseek-v4-flash",
-      "fallbackChain": []
+      "fallbackChain": [
+        "deepseek-v4-pro"
+      ]
     }
   }
 }
