@@ -12,6 +12,8 @@ public partial class InstallPathPage : WizardPage
 
     public override void OnEnter(MainWindow host)
     {
+        if (host.Options.InstallDir.Contains("%USERPROFILE%"))
+            host.Options.InstallDir = WorkspacePathGuard.ResolveForUser(host.Options.InstallDir, UserProfileResolver.GetUserProfile(host.Log));
         PathBox.Text = host.Options.InstallDir;
         UpdateHint();
         PathBox.TextChanged += (_, _) => UpdateHint();
@@ -37,7 +39,7 @@ public partial class InstallPathPage : WizardPage
         var dlg = new Microsoft.Win32.OpenFolderDialog
         {
             Title = Strings.Get("Path_PickerTitle"),
-            InitialDirectory = Directory.Exists(PathBox.Text) ? PathBox.Text : @"C:\Program Files"
+            InitialDirectory = Directory.Exists(PathBox.Text) ? PathBox.Text : UserProfileResolver.GetUserProfile()
         };
         if (dlg.ShowDialog() == true) PathBox.Text = dlg.FolderName;
     }

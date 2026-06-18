@@ -9,6 +9,7 @@
     <sys:String x:Key="Btn_Cancel">取消</sys:String>
     <sys:String x:Key="Btn_Browse">浏览...</sys:String>
     <sys:String x:Key="Btn_Finish">完成</sys:String>
+    <sys:String x:Key="Btn_StartInstall">开始安装</sys:String>
     <sys:String x:Key="Footer_About">关于</sys:String>
     <sys:String x:Key="Confirm_ExitTitle">退出 Axiomate Installer</sys:String>
     <sys:String x:Key="Confirm_ExitBody">确定要退出安装器吗？</sys:String>
@@ -59,11 +60,11 @@
     <!-- install path -->
     <sys:String x:Key="Path_Header">安装位置</sys:String>
     <sys:String x:Key="Path_PageSubtitle">选择安装位置</sys:String>
-    <sys:String x:Key="Path_Subtitle">所有 Axiomate 二进制将释放到此目录, 并被注册到系统 PATH。</sys:String>
+    <sys:String x:Key="Path_Subtitle">安装前会先清空目标目录。请选择普通用户可写目录。</sys:String>
     <sys:String x:Key="Path_Lbl_Target">目标目录</sys:String>
     <sys:String x:Key="Path_Hint_Empty">目录可用。</sys:String>
     <sys:String x:Key="Path_Hint_NonEmpty">提示: 该目录非空, 安装时会被清空。</sys:String>
-    <sys:String x:Key="Path_FooterNote">注意: 如果目标目录非空, 安装器在用户确认后会先清空该目录再写入。</sys:String>
+    <sys:String x:Key="Path_FooterNote">注意: 安装器会清空目标目录后再写入。为避免破坏系统稳定性, Windows / Program Files / ProgramData 等关键目录及其子目录都会被禁止选择。</sys:String>
     <sys:String x:Key="Path_BadTitle">目录不可用</sys:String>
     <sys:String x:Key="Path_ConfirmWipeTitle">确认清空</sys:String>
     <sys:String x:Key="Path_ConfirmWipeBody_Format">目录 "{0}" 非空。
@@ -75,7 +76,8 @@
     <sys:String x:Key="DG_Unparseable_Format">路径无法解析: {0}</sys:String>
     <sys:String x:Key="DG_Root">不能直接安装到驱动器根目录。</sys:String>
     <sys:String x:Key="DG_Invalid">路径包含非法字符或不是绝对路径。</sys:String>
-    <sys:String x:Key="DG_Reserved_Format">不能安装到系统/用户保留目录: {0}</sys:String>
+    <sys:String x:Key="DG_Reserved_Format">不能安装到用户保留目录: {0}</sys:String>
+    <sys:String x:Key="DG_Protected_Format">不能安装到受保护目录或其子目录下。安装前会清空目标目录, 选择此类位置可能破坏系统稳定性: {0}</sys:String>
     <sys:String x:Key="DG_NoLeaf">请提供具体的子目录, 不要直接装在根目录。</sys:String>
 
     <!-- options -->
@@ -85,9 +87,9 @@
     <sys:String x:Key="Opt_ModelChk">快速模型配置</sys:String>
     <sys:String x:Key="Opt_ModelHint">勾选后下一步可以选择模型并填入 API Key, 安装时会自动覆盖 ~/.axiomate.json 并清空 ~/.axiomate/ 目录。不勾选也可以继续安装；启动 Axiomate 后可按首次引导添加模型, 或手动编辑 ~/.axiomate.json 添加其他模型。</sys:String>
     <sys:String x:Key="Opt_BypassPermChk">默认开启 bypass permissions 模式</sys:String>
-    <sys:String x:Key="Opt_BypassPermHint">关闭时 Axiomate 会按默认权限策略询问确认；开启后会写入 ~/.axiomate/settings.json，让 AI 可以不再逐次询问权限而自动执行代码。默认关闭。</sys:String>
+    <sys:String x:Key="Opt_BypassPermHint">关闭时 Axiomate 会按默认权限策略询问确认；开启后会写入 ~/.axiomate/settings.json，让 AI 可以不再逐次询问权限而自动执行代码。</sys:String>
     <sys:String x:Key="Opt_WorkspaceChk">创建默认工作区与快捷方式</sys:String>
-    <sys:String x:Key="Opt_WorkspaceHint">勾选后将在桌面与开始菜单创建 Axiomate 快捷方式, 双击直接以工作区目录为当前目录启动 axiomate TUI, 适合非命令行用户。</sys:String>
+    <sys:String x:Key="Opt_WorkspaceHint">勾选后将在桌面与开始菜单创建 Axiomate 快捷方式, 双击直接以工作区目录为当前目录启动 Axiomate TUI, 适合初次接触此类软件的用户。</sys:String>
     <sys:String x:Key="Opt_WorkspaceLabel">工作区目录</sys:String>
     <sys:String x:Key="Opt_FooterNote">注: 注册到系统 PATH 是默认行为, 不可关闭。</sys:String>
     <sys:String x:Key="Opt_PickerTitle">选择 Axiomate 工作区目录</sys:String>
@@ -148,8 +150,7 @@
     <sys:String x:Key="Finish_NextStepTitle">下一步建议</sys:String>
     <sys:String x:Key="Finish_HintWithWorkspace">桌面与开始菜单已创建 Axiomate 快捷方式。双击即可在工作区目录打开 Axiomate TUI。
 若快捷方式不可用, 可在新终端中输入 axiomate 启动。</sys:String>
-    <sys:String x:Key="Finish_HintNoWorkspace">请重新打开终端窗口让 PATH 生效, 然后输入 axiomate 即可启动。
-首次启动时, axiomate 将自动生成模型路由配置。</sys:String>
+    <sys:String x:Key="Finish_HintNoWorkspace">请重新打开终端窗口让 PATH 生效, 然后输入 axiomate 即可启动。</sys:String>
     <sys:String x:Key="Finish_LaunchBtn">启动 Axiomate</sys:String>
 
     <!-- engine errors -->

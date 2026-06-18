@@ -17,6 +17,7 @@ public partial class OptionsPage : WizardPage
     private double _dragStartOffset;
 
     public override string HeaderSubtitleKey => "Opt_PageSubtitle";
+    public override string NextLabelKey => ModelChk?.IsChecked == true ? "Btn_Next" : "Btn_StartInstall";
 
     public OptionsPage() { InitializeComponent(); }
 
@@ -27,6 +28,11 @@ public partial class OptionsPage : WizardPage
         WorkspaceChk.IsChecked  = host.Options.CreateWorkspace;
         WorkspacePathBox.Text  = host.Options.WorkspaceDir;
         UpdateWorkspaceEnabled();
+    }
+
+    private void ModelChk_Toggle(object sender, RoutedEventArgs e)
+    {
+        if (Window.GetWindow(this) is MainWindow host) host.UpdateChrome(this);
     }
 
     private void WorkspaceChk_Toggle(object sender, RoutedEventArgs e) => UpdateWorkspaceEnabled();

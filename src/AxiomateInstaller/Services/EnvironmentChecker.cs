@@ -156,7 +156,7 @@ public sealed class EnvironmentChecker
             int major = int.Parse(m.Groups[1].Value);
             int minor = int.Parse(m.Groups[2].Value);
             bool ok = major > MinGitMajor || (major == MinGitMajor && minor >= MinGitMinor);
-            string disp = $"git {major}.{minor}" + (m.Groups[3].Success ? $".{m.Groups[3].Value}" : "");
+            string disp = $"Git {major}.{minor}" + (m.Groups[3].Success ? $".{m.Groups[3].Value}" : "");
             _log.Info($"Git check: {disp} -> {(ok ? "OK" : $"too old (need >= {MinGitMajor}.{MinGitMinor})")}");
             return (ok, disp);
         }

@@ -17,7 +17,7 @@ public static class DirGuard
     public static PathEvaluation Evaluate(string? raw)
     {
         if (string.IsNullOrWhiteSpace(raw))
-            return new(false, "请填写安装路径。");
+            return new(false, Strings.Get("DG_Empty"));
 
         string p;
         try
@@ -26,30 +26,24 @@ public static class DirGuard
         }
         catch (Exception ex)
         {
-            return new(false, $"路径无法解析：{ex.Message}");
+            return new(false, Strings.Format("DG_Unparseable_Format", ex.Message));
         }
 
         if (p.Length < 4) // e.g. "C:\"
-            return new(false, "不能直接安装到驱动器根目录。");
+            return new(false, Strings.Get("DG_Root"));
 
         if (!Path.IsPathRooted(p) || p.IndexOfAny(Path.GetInvalidPathChars()) >= 0)
-            return new(false, "路径包含非法字符或不是绝对路径。");
+            return new(false, Strings.Get("DG_Invalid"));
 
         // Drive root form "X:\"
         var root = Path.GetPathRoot(p);
         if (root != null && string.Equals(p.TrimEnd('\\'), root.TrimEnd('\\'), StringComparison.OrdinalIgnoreCase))
-            return new(false, "不能直接安装到驱动器根目录。");
+            return new(false, Strings.Get("DG_Root"));
 
         string userProfile = UserProfileResolver.GetUserProfile();
 
-        // Forbidden exact dirs.
         var forbiddenExact = new[]
         {
-            Environment.GetFolderPath(Environment.SpecialFolder.Windows),
-            Environment.GetFolderPath(Environment.SpecialFolder.System),
-            Environment.GetFolderPath(Environment.SpecialFolder.SystemX86),
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
-            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
             userProfile,
             Path.Combine(userProfile, "Desktop"),
             Path.Combine(userProfile, "Documents"),
@@ -64,17 +58,39 @@ public static class DirGuard
             if (string.IsNullOrEmpty(f)) continue;
             string canonicalForbidden = PathCanonicalizer.CanonicalizeForComparison(f);
             if (string.Equals(canonicalPath, canonicalForbidden, StringComparison.OrdinalIgnoreCase))
-                return new(false, $"不能安装到系统/用户保留目录：{f}");
+                return new(false, Strings.Format("DG_Reserved_Format", f));
         }
 
-        // Forbidden ancestors (e.g. you may install *under* C:\Program Files but never *as* C:\Program Files).
-        // Already covered above for exact match; subdirs are fine.
+        var protectedRoots = new[]
+        {
+            Environment.GetFolderPath(Environment.SpecialFolder.Windows),
+            Environment.GetFolderPath(Environment.SpecialFolder.System),
+            Environment.GetFolderPath(Environment.SpecialFolder.SystemX86),
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles),
+            Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86),
+            Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData),
+        };
+        foreach (var f in protectedRoots)
+        {
+            if (string.IsNullOrEmpty(f)) continue;
+            string canonicalRoot = PathCanonicalizer.CanonicalizeForComparison(f);
+            if (IsSameOrChild(canonicalPath, canonicalRoot))
+                return new(false, Strings.Format("DG_Protected_Format", f));
+        }
 
         // Path must be a child of *something* (avoid "C:\")
         if (Path.GetFileName(p).Length == 0)
-            return new(false, "请提供具体的子目录，不要直接装在根目录。");
+            return new(false, Strings.Get("DG_NoLeaf"));
 
         return new(true, null);
+    }
+
+    private static bool IsSameOrChild(string path, string root)
+    {
+        string normalizedPath = path.TrimEnd('\\');
+        string normalizedRoot = root.TrimEnd('\\');
+        return string.Equals(normalizedPath, normalizedRoot, StringComparison.OrdinalIgnoreCase)
+            || normalizedPath.StartsWith(normalizedRoot + "\\", StringComparison.OrdinalIgnoreCase);
     }
 
     public static bool DirectoryHasContent(string path)

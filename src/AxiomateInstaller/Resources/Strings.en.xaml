@@ -9,6 +9,7 @@
     <sys:String x:Key="Btn_Cancel">Cancel</sys:String>
     <sys:String x:Key="Btn_Browse">Browse...</sys:String>
     <sys:String x:Key="Btn_Finish">Finish</sys:String>
+    <sys:String x:Key="Btn_StartInstall">Start install</sys:String>
     <sys:String x:Key="Footer_About">About</sys:String>
     <sys:String x:Key="Confirm_ExitTitle">Exit Axiomate Installer</sys:String>
     <sys:String x:Key="Confirm_ExitBody">Are you sure you want to quit the installer?</sys:String>
@@ -59,11 +60,11 @@
     <!-- install path -->
     <sys:String x:Key="Path_Header">Install location</sys:String>
     <sys:String x:Key="Path_PageSubtitle">Choose install location</sys:String>
-    <sys:String x:Key="Path_Subtitle">All Axiomate binaries will be deployed here, and the directory added to system PATH.</sys:String>
+    <sys:String x:Key="Path_Subtitle">The installer clears the target directory before deployment. Choose a normal user-writable folder.</sys:String>
     <sys:String x:Key="Path_Lbl_Target">Target directory</sys:String>
     <sys:String x:Key="Path_Hint_Empty">Directory available.</sys:String>
     <sys:String x:Key="Path_Hint_NonEmpty">Note: this directory is not empty. It will be wiped during install.</sys:String>
-    <sys:String x:Key="Path_FooterNote">Note: when the target directory is non-empty the installer will wipe it after a confirmation prompt.</sys:String>
+    <sys:String x:Key="Path_FooterNote">Note: the installer clears the target directory before writing files. To avoid damaging system stability, critical directories such as Windows / Program Files / ProgramData and their subfolders are blocked.</sys:String>
     <sys:String x:Key="Path_BadTitle">Directory unavailable</sys:String>
     <sys:String x:Key="Path_ConfirmWipeTitle">Confirm wipe</sys:String>
     <sys:String x:Key="Path_ConfirmWipeBody_Format">Directory "{0}" is not empty.
@@ -75,7 +76,8 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="DG_Unparseable_Format">Path could not be parsed: {0}</sys:String>
     <sys:String x:Key="DG_Root">Cannot install directly under a drive root.</sys:String>
     <sys:String x:Key="DG_Invalid">Path contains invalid characters or is not absolute.</sys:String>
-    <sys:String x:Key="DG_Reserved_Format">Cannot install into a system / user reserved directory: {0}</sys:String>
+    <sys:String x:Key="DG_Reserved_Format">Cannot install into a reserved user directory: {0}</sys:String>
+    <sys:String x:Key="DG_Protected_Format">Cannot install under a protected directory or its subfolders. The installer clears the target directory first, so this location could damage system stability: {0}</sys:String>
     <sys:String x:Key="DG_NoLeaf">Please pick a sub-directory rather than the drive root.</sys:String>
 
     <!-- options -->
@@ -84,8 +86,8 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Opt_Subtitle">All optional. Axiomate works even if you skip them.</sys:String>
     <sys:String x:Key="Opt_ModelChk">Quick model config</sys:String>
     <sys:String x:Key="Opt_ModelHint">Optional. Writes ~/.axiomate.json after you choose a primary model and API key. You can skip this and configure models later.</sys:String>
-    <sys:String x:Key="Opt_BypassPermChk">Enable bypass permissionss</sys:String>
-    <sys:String x:Key="Opt_BypassPermHint">Optional. Lets AI run code without asking each time. Off by default.</sys:String>
+    <sys:String x:Key="Opt_BypassPermChk">Enable bypass permissions</sys:String>
+    <sys:String x:Key="Opt_BypassPermHint">Optional. Lets AI run code without asking each time.</sys:String>
     <sys:String x:Key="Opt_WorkspaceChk">Create workspace shortcuts</sys:String>
     <sys:String x:Key="Opt_WorkspaceHint">Adds Desktop and Start menu shortcuts that open Axiomate in the workspace.</sys:String>
     <sys:String x:Key="Opt_WorkspaceLabel">Workspace dir</sys:String>
@@ -148,8 +150,7 @@ Click "Yes" to open the log file.</sys:String>
     <sys:String x:Key="Finish_NextStepTitle">Next steps</sys:String>
     <sys:String x:Key="Finish_HintWithWorkspace">Desktop and Start menu shortcuts have been created. Double-click to launch the Axiomate TUI inside the workspace.
 If a shortcut isn't usable, run "axiomate" inside any new terminal.</sys:String>
-    <sys:String x:Key="Finish_HintNoWorkspace">Open a fresh terminal so the new PATH takes effect, then run "axiomate".
-On first launch axiomate auto-generates the model routing config.</sys:String>
+    <sys:String x:Key="Finish_HintNoWorkspace">Open a fresh terminal so the new PATH takes effect, then run "axiomate".</sys:String>
     <sys:String x:Key="Finish_LaunchBtn">Launch Axiomate</sys:String>
 
     <!-- engine errors -->

@@ -13,10 +13,5 @@
                 <TextBlock x:Name="HintText" TextWrapping="Wrap" Foreground="{StaticResource Text}" LineHeight="22"/>
             </StackPanel>
         </Border>
-
-        <StackPanel Orientation="Horizontal" Margin="0,18,0,0">
-            <Button x:Name="LaunchBtn" Content="{DynamicResource Finish_LaunchBtn}" Style="{StaticResource PrimaryButton}" Click="Launch_Click" IsEnabled="False"/>
-            <Button x:Name="CloseBtn"  Content="{DynamicResource Btn_Finish}" Margin="8,0,0,0" Style="{StaticResource SecondaryButton}" Click="Close_Click"/>
-        </StackPanel>
     </StackPanel>
 </pages:WizardPage>

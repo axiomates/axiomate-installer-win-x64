@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Windows;
 using AxiomateInstaller.Services;
 
 namespace AxiomateInstaller.Pages;
@@ -9,9 +8,10 @@ public partial class FinishPage : WizardPage
 {
     public override string HeaderSubtitleKey => "Finish_PageSubtitle";
     public override bool AllowBack   => false;
-    public override bool AllowNext   => false;
     public override bool AllowCancel => false;
+    public override string NextLabelKey => _canLaunch ? "Finish_LaunchBtn" : "Btn_Finish";
 
+    private bool _canLaunch;
 
     public FinishPage() { InitializeComponent(); }
 
@@ -29,29 +29,24 @@ public partial class FinishPage : WizardPage
                 Environment.GetFolderPath(Environment.SpecialFolder.CommonStartMenu),
                 "Programs",
                 "Axiomate.lnk");
-            LaunchBtn.IsEnabled = File.Exists(desktopShortcut) || File.Exists(startMenuShortcut);
-            LaunchBtn.Visibility = Visibility.Visible;
+            _canLaunch = File.Exists(desktopShortcut) || File.Exists(startMenuShortcut);
         }
         else
         {
             HintText.Text = Strings.Get("Finish_HintNoWorkspace");
-            LaunchBtn.IsEnabled = false;
-            LaunchBtn.Visibility = Visibility.Collapsed;
+            _canLaunch = false;
         }
     }
 
-    private void Launch_Click(object sender, RoutedEventArgs e)
+    public override void OnLeave(MainWindow host)
     {
-        try
+        if (_canLaunch)
         {
-            AxiomateLauncher.LaunchUnelevatedFromShortcut();
-            ((MainWindow)Window.GetWindow(this)!).Close();
+            try { AxiomateLauncher.LaunchUnelevatedFromShortcut(); }
+            catch (Exception ex) { host.Log.Warn($"Could not launch Axiomate from shortcut: {ex.Message}"); }
         }
-        catch { }
+        host.Close();
     }
 
-    private void Close_Click(object sender, RoutedEventArgs e)
-    {
-        ((MainWindow)Window.GetWindow(this)!).Close();
-    }
+    public override int NextIndex(MainWindow host, int current) => current;
 }

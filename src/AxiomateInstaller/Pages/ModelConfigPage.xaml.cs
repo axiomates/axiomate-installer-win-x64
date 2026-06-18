@@ -9,6 +9,7 @@ namespace AxiomateInstaller.Pages;
 public partial class ModelConfigPage : WizardPage
 {
     public override string HeaderSubtitleKey => "Model_PageSubtitle";
+    public override string NextLabelKey => "Btn_StartInstall";
 
     public ModelConfigPage() { InitializeComponent(); }
 
