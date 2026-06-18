@@ -82,7 +82,7 @@
     <sys:String x:Key="Opt_Header">安装选项</sys:String>
     <sys:String x:Key="Opt_PageSubtitle">安装选项</sys:String>
     <sys:String x:Key="Opt_Subtitle">这些选项可以省略；不勾选时也能正常使用 axiomate 命令。</sys:String>
-    <sys:String x:Key="Opt_ModelChk">快速模型配置 (DeepSeek 官方)</sys:String>
+    <sys:String x:Key="Opt_ModelChk">快速模型配置</sys:String>
     <sys:String x:Key="Opt_ModelHint">勾选后下一步可以选择模型并填入 API Key, 安装时会自动覆盖 ~/.axiomate.json 并清空 ~/.axiomate/ 目录。不勾选也可以继续安装；启动 Axiomate 后可按首次引导添加模型, 或手动编辑 ~/.axiomate.json 添加其他模型。</sys:String>
     <sys:String x:Key="Opt_WorkspaceChk">创建默认工作区与快捷方式</sys:String>
     <sys:String x:Key="Opt_WorkspaceHint">勾选后将在桌面与开始菜单创建 Axiomate 快捷方式, 双击直接以工作区目录为当前目录启动 axiomate TUI, 适合非命令行用户。</sys:String>
@@ -101,7 +101,7 @@
     <sys:String x:Key="Model_Subtitle">选择默认模型并填入 API Key。</sys:String>
     <sys:String x:Key="Model_Lbl_Site">模型站点</sys:String>
     <sys:String x:Key="Model_SiteDeepseek">DeepSeek 官方  ·  api.deepseek.com</sys:String>
-    <sys:String x:Key="Model_Lbl_Model">模型</sys:String>
+    <sys:String x:Key="Model_Lbl_Model">主要模型</sys:String>
     <sys:String x:Key="Model_Item_Pro">deepseek-v4-pro    (高质量, 强推理)</sys:String>
     <sys:String x:Key="Model_Item_Flash">deepseek-v4-flash  (轻量, 高速度)</sys:String>
     <sys:String x:Key="Model_Lbl_ApiKey">API Key</sys:String>

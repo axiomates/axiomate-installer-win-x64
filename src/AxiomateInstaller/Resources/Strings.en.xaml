@@ -82,7 +82,7 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Opt_Header">Install options</sys:String>
     <sys:String x:Key="Opt_PageSubtitle">Install options</sys:String>
     <sys:String x:Key="Opt_Subtitle">All optional. The axiomate command works fine even with everything unchecked.</sys:String>
-    <sys:String x:Key="Opt_ModelChk">Quick model config (DeepSeek official)</sys:String>
+    <sys:String x:Key="Opt_ModelChk">Quick model config</sys:String>
     <sys:String x:Key="Opt_ModelHint">When checked, the next page asks for a model and API key. The installer overwrites ~/.axiomate.json and wipes the existing ~/.axiomate/ directory. You can skip this and still install; after launching Axiomate, add other models through the first-run guide or by editing ~/.axiomate.json manually.</sys:String>
     <sys:String x:Key="Opt_WorkspaceChk">Create default workspace and shortcuts</sys:String>
     <sys:String x:Key="Opt_WorkspaceHint">Adds Axiomate shortcuts on the desktop and Start menu. Double-click launches axiomate TUI inside the workspace dir — handy for non-CLI users.</sys:String>
@@ -101,7 +101,7 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Model_Subtitle">Pick the default model and paste your API key.</sys:String>
     <sys:String x:Key="Model_Lbl_Site">Provider</sys:String>
     <sys:String x:Key="Model_SiteDeepseek">DeepSeek official  ·  api.deepseek.com</sys:String>
-    <sys:String x:Key="Model_Lbl_Model">Model</sys:String>
+    <sys:String x:Key="Model_Lbl_Model">Primary model</sys:String>
     <sys:String x:Key="Model_Item_Pro">deepseek-v4-pro    (high quality, strong reasoning)</sys:String>
     <sys:String x:Key="Model_Item_Flash">deepseek-v4-flash  (lightweight, fast)</sys:String>
     <sys:String x:Key="Model_Lbl_ApiKey">API key</sys:String>
