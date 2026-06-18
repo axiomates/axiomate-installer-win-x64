@@ -81,13 +81,13 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <!-- options -->
     <sys:String x:Key="Opt_Header">Install options</sys:String>
     <sys:String x:Key="Opt_PageSubtitle">Install options</sys:String>
-    <sys:String x:Key="Opt_Subtitle">All optional. The axiomate command works fine even with everything unchecked.</sys:String>
+    <sys:String x:Key="Opt_Subtitle">All optional. Axiomate works even if you skip them.</sys:String>
     <sys:String x:Key="Opt_ModelChk">Quick model config</sys:String>
-    <sys:String x:Key="Opt_ModelHint">When checked, the next page asks for a model and API key. The installer overwrites ~/.axiomate.json and wipes the existing ~/.axiomate/ directory. You can skip this and still install; after launching Axiomate, add other models through the first-run guide or by editing ~/.axiomate.json manually.</sys:String>
-    <sys:String x:Key="Opt_BypassPermChk">Enable bypass permission mode by default</sys:String>
-    <sys:String x:Key="Opt_BypassPermHint">When off, Axiomate uses the default permission flow and asks for confirmation. When on, the installer writes ~/.axiomate/settings.json so AI can execute code without asking each time. Off by default.</sys:String>
-    <sys:String x:Key="Opt_WorkspaceChk">Create default workspace and shortcuts</sys:String>
-    <sys:String x:Key="Opt_WorkspaceHint">Adds Axiomate shortcuts on the desktop and Start menu. Double-click launches axiomate TUI inside the workspace dir — handy for non-CLI users.</sys:String>
+    <sys:String x:Key="Opt_ModelHint">Optional. Writes ~/.axiomate.json after you choose a primary model and API key. You can skip this and configure models later.</sys:String>
+    <sys:String x:Key="Opt_BypassPermChk">Enable bypass permissions</sys:String>
+    <sys:String x:Key="Opt_BypassPermHint">Optional. Lets AI run code without asking each time. Off by default.</sys:String>
+    <sys:String x:Key="Opt_WorkspaceChk">Create workspace shortcuts</sys:String>
+    <sys:String x:Key="Opt_WorkspaceHint">Adds Desktop and Start menu shortcuts that open Axiomate in the workspace.</sys:String>
     <sys:String x:Key="Opt_WorkspaceLabel">Workspace dir</sys:String>
     <sys:String x:Key="Opt_FooterNote">Note: PATH registration is always performed and cannot be disabled.</sys:String>
     <sys:String x:Key="Opt_PickerTitle">Choose Axiomate workspace directory</sys:String>
