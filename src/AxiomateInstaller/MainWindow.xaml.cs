@@ -100,7 +100,7 @@ public partial class MainWindow : System.Windows.Window
     {
         try
         {
-            Process.Start(new ProcessStartInfo("http://axiomate.net") { UseShellExecute = true });
+            Process.Start(new ProcessStartInfo("http://axiomate.net/docs/install/windows/") { UseShellExecute = true });
         }
         catch (Exception ex)
         {
