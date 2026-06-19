@@ -66,7 +66,7 @@ End-user view, double-clicking the EXE on a clean Windows 11 box:
 1. Starts as the invoking user, captures SID/profile, then shows UAC and relaunches elevated.
 2. Welcome & environment-check pages run.
 3. If Git or Python are missing / too old, the installer offers to install bundled ones silently.
-4. Pick install dir (default `C:\Program Files\Axiomate`). Path is validated against a blacklist.
+4. Pick install dir (default `%USERPROFILE%\axiomate`). Path is validated against a blacklist.
 5. Optional: workspace + desktop / start-menu shortcuts.
 6. Optional: quick model config — pick DeepSeek model, paste API key.
 7. Optional: enable bypass permission mode by writing `permissions.defaultMode = "bypassPermissions"` to `~/.axiomate/settings.json`.
@@ -434,11 +434,15 @@ Path comparisons use final-path canonicalization where possible to reduce juncti
 
 - empty / non-rooted / paths with invalid chars;
 - a drive root (`C:\`);
-- exact matches of: `Windows`, `System32`, `SysWOW64`, `Program Files`, `Program Files (x86)`,
-  `UserProfile`, `Desktop`, `MyDocuments`, `LocalAppData`, `AppData`, system temp.
+- exact matches of: `UserProfile`, `Desktop`, `Documents`, `Downloads`, `AppData\Local`,
+  `AppData\Roaming`, system temp;
+- the `~/.axiomate` config dir **and any of its subdirectories**;
+- the protected system roots **and any of their subdirectories**: `Windows`, `System32`,
+  `SysWOW64`, `Program Files`, `Program Files (x86)`, `ProgramData`.
 
-Subdirectories of those are fine — that's how `C:\Program Files\Axiomate` works. `DirectoryHasContent`
-checks if the chosen dir is non-empty so the wizard can confirm the wipe.
+Because the protected roots are child-blocked, `C:\Program Files\Axiomate` is **not** a valid target —
+the default install dir is `%USERPROFILE%\axiomate`. `DirectoryHasContent` checks if the chosen dir
+is non-empty so the wizard can confirm the wipe.
 
 ### PATH registration (`Services/PathRegistrar.cs`)
 
@@ -618,7 +622,7 @@ Run on a clean Windows 11 VM and on a working dev box:
 After a successful install, the user's machine looks like:
 
 ```
-C:\Program Files\Axiomate\           ← <install-dir>
+C:\Users\<user>\axiomate\               ← <install-dir> (default %USERPROFILE%\axiomate)
   axiomate.exe                       ← entry point
   agent-browser.exe
   rg.exe
@@ -639,7 +643,7 @@ C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Axiomate.lnk
 %USERPROFILE%\.axiomate\             ← created by axiomate on first run
 
 HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Environment\Path
-  ... ;C:\Program Files\Axiomate
+  ... ;C:\Users\<user>\axiomate
 
 HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\Axiomate
   DisplayName = Axiomate
