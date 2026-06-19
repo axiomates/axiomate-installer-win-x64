@@ -10,7 +10,7 @@
     <sys:String x:Key="Btn_Browse">浏览...</sys:String>
     <sys:String x:Key="Btn_Finish">完成</sys:String>
     <sys:String x:Key="Btn_StartInstall">开始安装</sys:String>
-    <sys:String x:Key="Footer_About">关于</sys:String>
+    <sys:String x:Key="Footer_About">指南</sys:String>
     <sys:String x:Key="Confirm_ExitTitle">退出 Axiomate Installer</sys:String>
     <sys:String x:Key="Confirm_ExitBody">确定要退出安装器吗？</sys:String>
 
