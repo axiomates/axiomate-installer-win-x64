@@ -84,13 +84,13 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <!-- options -->
     <sys:String x:Key="Opt_Header">Install options</sys:String>
     <sys:String x:Key="Opt_PageSubtitle">Install options</sys:String>
-    <sys:String x:Key="Opt_Subtitle">All optional. Axiomate works even if you skip them.</sys:String>
-    <sys:String x:Key="Opt_ModelChk">Quick model config</sys:String>
-    <sys:String x:Key="Opt_ModelHint">Optional. Writes ~/.axiomate.json after you choose a primary model and API key. You can skip this and configure models later.</sys:String>
+    <sys:String x:Key="Opt_Subtitle">These setup helpers are optional. Axiomate will still be installed and usable if you leave them unchecked.</sys:String>
+    <sys:String x:Key="Opt_ModelChk">Quick model configuration</sys:String>
+    <sys:String x:Key="Opt_ModelHint">Choose a primary model and API key during setup. The installer will write ~/.axiomate.json; you can also skip this and configure models later from the first-run guide or by editing the config file manually.</sys:String>
     <sys:String x:Key="Opt_BypassPermChk">Enable bypass permissions</sys:String>
-    <sys:String x:Key="Opt_BypassPermHint">Optional. Lets AI run code without asking each time.</sys:String>
+    <sys:String x:Key="Opt_BypassPermHint">Write a permissions setting that lets Axiomate run local code actions without asking for confirmation each time. Leave this unchecked if you prefer step-by-step approval.</sys:String>
     <sys:String x:Key="Opt_WorkspaceChk">Create workspace shortcuts</sys:String>
-    <sys:String x:Key="Opt_WorkspaceHint">Adds Desktop and Start menu shortcuts that open Axiomate in the workspace.</sys:String>
+    <sys:String x:Key="Opt_WorkspaceHint">Create Desktop and Start menu shortcuts that open Axiomate TUI directly in the selected workspace, useful for users who are new to this kind of software.</sys:String>
     <sys:String x:Key="Opt_WorkspaceLabel">Workspace dir</sys:String>
     <sys:String x:Key="Opt_FooterNote">Note: PATH registration is always performed and cannot be disabled.</sys:String>
     <sys:String x:Key="Opt_PickerTitle">Choose Axiomate workspace directory</sys:String>
