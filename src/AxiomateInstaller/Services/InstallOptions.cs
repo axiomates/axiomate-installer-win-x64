@@ -7,7 +7,7 @@ namespace AxiomateInstaller.Services;
 /// </summary>
 public sealed class InstallOptions
 {
-    public string InstallDir { get; set; } = @"%USERPROFILE%\Axiomate";
+    public string InstallDir { get; set; } = @"%USERPROFILE%\axiomate";
 
     // Env-check page outcomes & user choices
     public bool NeedsGitInstall    { get; set; }
