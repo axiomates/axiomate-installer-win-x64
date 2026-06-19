@@ -61,6 +61,11 @@ public static class DirGuard
                 return new(false, Strings.Format("DG_Reserved_Format", f));
         }
 
+        string axiomateConfigDir = Path.Combine(userProfile, ".axiomate");
+        string canonicalConfigDir = PathCanonicalizer.CanonicalizeForComparison(axiomateConfigDir);
+        if (IsSameOrChild(canonicalPath, canonicalConfigDir))
+            return new(false, Strings.Format("DG_AxiomateConfig_Format", axiomateConfigDir));
+
         var protectedRoots = new[]
         {
             Environment.GetFolderPath(Environment.SpecialFolder.Windows),

@@ -21,7 +21,10 @@ public static class WorkspacePathGuard
         resolved = Environment.ExpandEnvironmentVariables(resolved);
         if (resolved.Contains('%')) throw new InstallStepException(Strings.Get("Opt_BadWorkspaceBody_Invalid"));
         if (!Path.IsPathRooted(resolved)) throw new InstallStepException(Strings.Get("Opt_BadWorkspaceBody_Invalid"));
-        return Normalize(resolved);
+        string normalized = Normalize(resolved);
+        var eval = DirGuard.Evaluate(normalized);
+        if (!eval.Ok) throw new InstallStepException(eval.Reason ?? Strings.Get("Opt_BadWorkspaceBody_Invalid"));
+        return normalized;
     }
 
     public static void EnsureSeparateFromInstallDir(string workspaceDir, string installDir, string userProfile)

@@ -77,7 +77,8 @@
     <sys:String x:Key="DG_Root">不能直接安装到驱动器根目录。</sys:String>
     <sys:String x:Key="DG_Invalid">路径包含非法字符或不是绝对路径。</sys:String>
     <sys:String x:Key="DG_Reserved_Format">不能安装到用户保留目录: {0}</sys:String>
-    <sys:String x:Key="DG_Protected_Format">不能安装到受保护目录或其子目录下。安装前会清空目标目录, 选择此类位置可能破坏系统稳定性: {0}</sys:String>
+    <sys:String x:Key="DG_Protected_Format">不能使用受保护目录或其子目录, 选择此类位置可能破坏系统稳定性或导致权限问题: {0}</sys:String>
+    <sys:String x:Key="DG_AxiomateConfig_Format">不能使用 Axiomate 配置目录或其子目录, 该目录固定用于保存配置: {0}</sys:String>
     <sys:String x:Key="DG_NoLeaf">请提供具体的子目录, 不要直接装在根目录。</sys:String>
 
     <!-- options -->

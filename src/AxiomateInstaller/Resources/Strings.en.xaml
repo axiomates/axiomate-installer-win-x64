@@ -77,7 +77,8 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="DG_Root">Cannot install directly under a drive root.</sys:String>
     <sys:String x:Key="DG_Invalid">Path contains invalid characters or is not absolute.</sys:String>
     <sys:String x:Key="DG_Reserved_Format">Cannot install into a reserved user directory: {0}</sys:String>
-    <sys:String x:Key="DG_Protected_Format">Cannot install under a protected directory or its subfolders. The installer clears the target directory first, so this location could damage system stability: {0}</sys:String>
+    <sys:String x:Key="DG_Protected_Format">Cannot use a protected directory or its subfolders because this may damage system stability or cause permission issues: {0}</sys:String>
+    <sys:String x:Key="DG_AxiomateConfig_Format">Cannot use the Axiomate configuration directory or its subfolders. This directory is reserved for settings: {0}</sys:String>
     <sys:String x:Key="DG_NoLeaf">Please pick a sub-directory rather than the drive root.</sys:String>
 
     <!-- options -->
