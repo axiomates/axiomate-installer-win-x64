@@ -13,7 +13,6 @@
     <sys:String x:Key="Footer_About">关于</sys:String>
     <sys:String x:Key="Confirm_ExitTitle">退出 Axiomate Installer</sys:String>
     <sys:String x:Key="Confirm_ExitBody">确定要退出安装器吗？</sys:String>
-    <sys:String x:Key="About_Title">关于</sys:String>
 
     <!-- welcome -->
     <sys:String x:Key="Welcome_Subtitle_Format">安装器版本 {0} · 包含 Axiomate {1}。下一步将检测您的运行环境。</sys:String>
@@ -183,13 +182,4 @@
 
 详细信息已写入日志, 可在弹窗中查看。</sys:String>
     <sys:String x:Key="Dlg_Err_TitleSuffix">Axiomate 安装器</sys:String>
-
-    <!-- about -->
-    <sys:String x:Key="About_Body_Format">Axiomate Installer
-安装器版本: {0}
-Axiomate:    {1}
-内置 Git:    {2}
-内置 Python: {3}
-
-官网: https://axiomate.net</sys:String>
 </ResourceDictionary>

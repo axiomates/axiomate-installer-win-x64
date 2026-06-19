@@ -13,7 +13,6 @@
     <sys:String x:Key="Footer_About">About</sys:String>
     <sys:String x:Key="Confirm_ExitTitle">Exit Axiomate Installer</sys:String>
     <sys:String x:Key="Confirm_ExitBody">Are you sure you want to quit the installer?</sys:String>
-    <sys:String x:Key="About_Title">About</sys:String>
 
     <!-- welcome -->
     <sys:String x:Key="Welcome_Subtitle_Format">Installer version {0} · ships Axiomate {1}. The next step will check your environment.</sys:String>
@@ -183,13 +182,4 @@ If a shortcut isn't usable, run "axiomate" inside any new terminal.</sys:String>
 
 Details have been written to the log; the dialog references the path.</sys:String>
     <sys:String x:Key="Dlg_Err_TitleSuffix">Axiomate Installer</sys:String>
-
-    <!-- about -->
-    <sys:String x:Key="About_Body_Format">Axiomate Installer
-Installer version: {0}
-Axiomate:          {1}
-Bundled Git:       {2}
-Bundled Python:    {3}
-
-Website: https://axiomate.net</sys:String>
 </ResourceDictionary>
