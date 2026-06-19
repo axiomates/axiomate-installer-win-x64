@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 using AxiomateInstaller.Pages;
 using AxiomateInstaller.Services;
@@ -94,18 +93,6 @@ public partial class MainWindow : System.Windows.Window
             Version.InstallerVersion, Version.AxiomateVersion,
             Version.BundledGitVersion, Version.BundledPythonVersion);
         MessageBox.Show(body, Strings.Get("About_Title"), MessageBoxButton.OK, MessageBoxImage.Information);
-    }
-
-    private void WebsiteLink_Click(object sender, System.Windows.RoutedEventArgs e)
-    {
-        try
-        {
-            Process.Start(new ProcessStartInfo("http://axiomate.net/docs/install/windows/") { UseShellExecute = true });
-        }
-        catch (Exception ex)
-        {
-            Log.Warn($"Could not open website: {ex.Message}");
-        }
     }
 
     /// <summary>Welcome page calls this when the user picks a language.</summary>
