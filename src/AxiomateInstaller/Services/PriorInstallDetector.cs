@@ -1,13 +1,16 @@
-using System.IO;
 using Microsoft.Win32;
 
 namespace AxiomateInstaller.Services;
 
-public sealed record PriorInstall(string InstallDir, string UninstallerExe);
+public sealed record PriorInstall(string InstallDir);
 
 /// <summary>
 /// Detects a previous Axiomate install via the Apps &amp; features uninstall key
-/// so the wizard can offer to remove it before deploying a fresh copy.
+/// so the wizard can offer to remove it before deploying a fresh copy. The
+/// registry InstallLocation is the authoritative signal; we no longer require
+/// the old Uninstaller.exe to be present since the new installer cleans up the
+/// prior install itself (and a stale PATH/registry entry should still be
+/// cleaned even if the old directory was deleted manually).
 /// </summary>
 public static class PriorInstallDetector
 {
@@ -19,9 +22,6 @@ public static class PriorInstallDetector
         string installDir = key.GetValue("InstallLocation") as string ?? "";
         if (string.IsNullOrWhiteSpace(installDir)) return null;
 
-        string uninstallerExe = Path.Combine(installDir, "Uninstaller.exe");
-        if (!File.Exists(uninstallerExe)) return null;
-
-        return new PriorInstall(installDir.TrimEnd('\\'), uninstallerExe);
+        return new PriorInstall(installDir.TrimEnd('\\'));
     }
 }
