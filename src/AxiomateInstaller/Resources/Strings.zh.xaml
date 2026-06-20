@@ -69,6 +69,8 @@
     <sys:String x:Key="Path_ConfirmWipeBody_Format">目录 "{0}" 非空。
 安装器将清空该目录后再写入。继续？</sys:String>
     <sys:String x:Key="Path_PickerTitle">选择 Axiomate 安装目录</sys:String>
+    <sys:String x:Key="Path_PriorInstallTitle">检测到已安装的 Axiomate</sys:String>
+    <sys:String x:Key="Path_PriorInstallBody_Format">检测到已安装的 Axiomate ({0})。继续将先卸载旧版本(清理 PATH、快捷方式与旧目录), 再安装新版本。是否继续？</sys:String>
 
     <!-- DirGuard -->
     <sys:String x:Key="DG_Empty">请填写安装路径。</sys:String>
@@ -141,6 +143,7 @@
     <sys:String x:Key="Step_Path">注册系统 PATH</sys:String>
     <sys:String x:Key="Step_WinTune">启用 PowerShell 脚本执行与开发人员模式</sys:String>
     <sys:String x:Key="Step_Model">写入 Axiomate 模型配置</sys:String>
+    <sys:String x:Key="Step_PriorUninstall">正在卸载旧版本</sys:String>
     <sys:String x:Key="Step_ClearConfig">正在清空配置目录</sys:String>
     <sys:String x:Key="Step_BypassPerm">写入 bypass permissions 权限配置</sys:String>
     <sys:String x:Key="Step_Workspace">创建工作区与快捷方式</sys:String>

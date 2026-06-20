@@ -42,6 +42,12 @@ public sealed class InstallEngine
         {
             ValidateFinalOptions(opt);
 
+            if (!string.IsNullOrEmpty(opt.PriorInstallDir))
+            {
+                Report("Step_PriorUninstall");
+                new PriorUninstaller(_log).Run(opt.PriorInstallDir);
+            }
+
             Report("Step_Extract");
             payload = extractor.Extract();
 
@@ -127,6 +133,7 @@ public sealed class InstallEngine
     private static int ComputeStepCount(InstallOptions opt)
     {
         int n = 1; // extract
+        if (!string.IsNullOrEmpty(opt.PriorInstallDir)) n++;
         if (opt.NeedsGitInstall) n++;
         if (opt.NeedsPythonInstall)
         {

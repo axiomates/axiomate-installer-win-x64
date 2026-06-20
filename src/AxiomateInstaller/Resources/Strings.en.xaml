@@ -69,6 +69,8 @@
     <sys:String x:Key="Path_ConfirmWipeBody_Format">Directory "{0}" is not empty.
 The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Path_PickerTitle">Choose Axiomate install directory</sys:String>
+    <sys:String x:Key="Path_PriorInstallTitle">Existing Axiomate detected</sys:String>
+    <sys:String x:Key="Path_PriorInstallBody_Format">An existing Axiomate install was detected ({0}). Continuing will first uninstall the old version (removing its PATH entry, shortcuts and directory) and then install the new one. Continue?</sys:String>
 
     <!-- DirGuard -->
     <sys:String x:Key="DG_Empty">Please enter an install path.</sys:String>
@@ -141,6 +143,7 @@ Click "Yes" to open the log file.</sys:String>
     <sys:String x:Key="Step_Path">Registering on system PATH</sys:String>
     <sys:String x:Key="Step_WinTune">Enabling PowerShell scripts and Developer Mode</sys:String>
     <sys:String x:Key="Step_Model">Writing Axiomate model config</sys:String>
+    <sys:String x:Key="Step_PriorUninstall">Uninstalling old version</sys:String>
     <sys:String x:Key="Step_ClearConfig">Clearing config directory</sys:String>
     <sys:String x:Key="Step_BypassPerm">Writing bypass permissions setting</sys:String>
     <sys:String x:Key="Step_Workspace">Creating workspace and shortcuts</sys:String>
