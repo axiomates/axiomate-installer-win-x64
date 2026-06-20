@@ -28,9 +28,6 @@ public sealed class InstallOptions
 
     // Resolved at run time
     public string PythonInstallDir { get; set; } = @"C:\Program Files\Python312";
-
-    // Prior install removal (set on the install-path page when the user confirms)
-    public string? PriorInstallDir { get; set; }
 }
 
 public enum PipMirror

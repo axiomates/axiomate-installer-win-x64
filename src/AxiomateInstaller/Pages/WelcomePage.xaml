@@ -34,5 +34,16 @@
             </Border>
             <TextBlock Text="{DynamicResource Welcome_Footer}" Margin="0,18,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap"/>
         </StackPanel>
+
+        <!-- busy overlay shown while uninstalling a prior install -->
+        <Border x:Name="BusyOverlay" Grid.Row="0" Grid.RowSpan="2" Visibility="Collapsed"
+                Background="#CCFFFFFF">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ProgressBar IsIndeterminate="True" Width="220" Height="6"
+                             Foreground="{StaticResource BrandPrimary}" Background="{StaticResource Line}" BorderThickness="0"/>
+                <TextBlock x:Name="BusyText" Margin="0,14,0,0" HorizontalAlignment="Center"
+                           Foreground="{StaticResource Text}" Text="{DynamicResource Welcome_Uninstalling}"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </pages:WizardPage>

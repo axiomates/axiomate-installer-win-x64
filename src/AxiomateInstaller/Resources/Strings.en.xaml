@@ -27,6 +27,7 @@
     <sys:String x:Key="Welcome_Task5">• Optional: quick setup for common models</sys:String>
     <sys:String x:Key="Welcome_Task6">• Optional: create a workspace folder and desktop / Start menu shortcuts</sys:String>
     <sys:String x:Key="Welcome_Footer">Click "Next" to continue.</sys:String>
+    <sys:String x:Key="Welcome_Uninstalling">Uninstalling the existing Axiomate, please wait...</sys:String>
     <sys:String x:Key="Welcome_LangLabel">Language</sys:String>
     <sys:String x:Key="Welcome_LangZh">中文</sys:String>
     <sys:String x:Key="Welcome_LangEn">English</sys:String>
@@ -144,7 +145,6 @@ Click "Yes" to open the log file.</sys:String>
     <sys:String x:Key="Step_Path">Registering on system PATH</sys:String>
     <sys:String x:Key="Step_WinTune">Enabling PowerShell scripts and Developer Mode</sys:String>
     <sys:String x:Key="Step_Model">Writing Axiomate model config</sys:String>
-    <sys:String x:Key="Step_PriorUninstall">Uninstalling old version</sys:String>
     <sys:String x:Key="Step_ClearConfig">Clearing config directory</sys:String>
     <sys:String x:Key="Step_BypassPerm">Writing bypass permissions setting</sys:String>
     <sys:String x:Key="Step_Workspace">Creating workspace and shortcuts</sys:String>
