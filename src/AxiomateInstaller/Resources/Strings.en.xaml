@@ -10,6 +10,7 @@
     <sys:String x:Key="Btn_Browse">Browse...</sys:String>
     <sys:String x:Key="Btn_Finish">Finish</sys:String>
     <sys:String x:Key="Btn_StartInstall">Start install</sys:String>
+    <sys:String x:Key="Btn_Continue">Continue</sys:String>
     <sys:String x:Key="Footer_About">Guide</sys:String>
     <sys:String x:Key="Confirm_ExitTitle">Exit Axiomate Installer</sys:String>
     <sys:String x:Key="Confirm_ExitBody">Are you sure you want to quit the installer?</sys:String>

@@ -27,6 +27,26 @@ public partial class WelcomePage : WizardPage
     private void LangZh_Checked(object sender, System.Windows.RoutedEventArgs e) => Switch(UiLang.Zh);
     private void LangEn_Checked(object sender, System.Windows.RoutedEventArgs e) => Switch(UiLang.En);
 
+    public override bool Validate(MainWindow host)
+    {
+        var prior = PriorInstallDetector.Detect();
+        if (prior is null)
+        {
+            host.Options.PriorInstallDir = null;
+            return true;
+        }
+
+        bool ok = LocalizedDialog.Confirm(
+            Strings.Get("Path_PriorInstallTitle"),
+            Strings.Format("Path_PriorInstallBody_Format", prior.InstallDir),
+            "Btn_Continue",
+            "Btn_Cancel");
+        if (!ok) return false;
+
+        host.Options.PriorInstallDir = prior.InstallDir;
+        return true;
+    }
+
     private void Switch(UiLang lang)
     {
         if (_suppress) return;

@@ -54,22 +54,6 @@ public partial class InstallPathPage : WizardPage
             return false;
         }
 
-        var prior = PriorInstallDetector.Detect();
-        if (prior is not null)
-        {
-            var res = MessageBox.Show(
-                Strings.Format("Path_PriorInstallBody_Format", prior.InstallDir),
-                Strings.Get("Path_PriorInstallTitle"),
-                MessageBoxButton.OKCancel,
-                MessageBoxImage.Warning);
-            if (res != MessageBoxResult.OK) return false;
-            host.Options.PriorInstallDir = prior.InstallDir;
-        }
-        else
-        {
-            host.Options.PriorInstallDir = null;
-        }
-
         if (DirGuard.DirectoryHasContent(PathBox.Text))
         {
             var res = MessageBox.Show(
