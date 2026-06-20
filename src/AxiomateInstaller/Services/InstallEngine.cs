@@ -73,6 +73,12 @@ public sealed class InstallEngine
             Report("Step_WinTune");
             await winTuner.ApplyAsync();
 
+            if (opt.ClearConfigDir)
+            {
+                Report("Step_ClearConfig");
+                ClearAxiomateConfigDir();
+            }
+
             if (opt.QuickModelConfig)
             {
                 Report("Step_Model");
@@ -128,11 +134,26 @@ public sealed class InstallEngine
             if (opt.ConfigurePipMirror) n++;
         }
         n += 3; // deploy + path + win-tune
+        if (opt.ClearConfigDir) n++;
         if (opt.QuickModelConfig) n++;
         if (opt.EnableBypassPermissions) n++;
         if (opt.CreateWorkspace) n++;
         n += 1; // uninstall registrar
         return n;
+    }
+
+    private void ClearAxiomateConfigDir()
+    {
+        string home = UserProfileResolver.GetUserProfile(_log);
+        if (string.IsNullOrEmpty(home)) return;
+        string dir = Path.Combine(home, ".axiomate");
+        if (!Directory.Exists(dir)) return;
+        _log.Info($"Removing existing {dir} (user opted to clear config directory).");
+        foreach (string file in Directory.EnumerateFiles(dir, "*", SearchOption.AllDirectories))
+        {
+            try { File.SetAttributes(file, FileAttributes.Normal); } catch { }
+        }
+        Directory.Delete(dir, recursive: true);
     }
 
     private void CreateShortcuts(ShortcutManager sm, InstallOptions opt, string workspaceDir)
