@@ -201,7 +201,7 @@ axiomate-installer-win-x64/
     │   │   ├── deepseek-v4-pro.json         ← embedded; {{API_KEY}} placeholder
     │   │   └── deepseek-v4-flash.json       ← embedded; {{API_KEY}} placeholder
     │   └── Resources/
-    │       ├── icon.ico                     ← multi-size (16/32/48/64/128/256) generated from logo
+    │       ├── axiomate-tui.ico             ← installer EXE icon (multi-size)
     │       ├── axiomate-logo.png            ← shown in header banner
     │       ├── Git-2.54.0-64-bit.exe        ← embedded as <EmbeddedResource>
     │       ├── python-3.12.10-amd64.exe     ← embedded as <EmbeddedResource>

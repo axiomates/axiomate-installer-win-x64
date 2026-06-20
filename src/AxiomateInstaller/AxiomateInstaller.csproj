@@ -13,7 +13,7 @@
     <IncludeAllContentInSingleFile>true</IncludeAllContentInSingleFile>
     <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
     <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\axiomate-tui.ico</ApplicationIcon>
     <AssemblyName>axiomate-installer</AssemblyName>
     <RootNamespace>AxiomateInstaller</RootNamespace>
     <!-- versions injected by build.ps1; defaults below let dotnet build work standalone -->
