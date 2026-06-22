@@ -16,6 +16,14 @@ public partial class OptionsPage : WizardPage
     private Point _dragStart;
     private double _dragStartOffset;
 
+    // The user's genuine choice for "clear .axiomate.json", independent of the
+    // quick-config force. Quick config visually forces the box checked+locked,
+    // but we persist this pref so toggling quick config back off restores the
+    // user's real intent (default: unchecked) instead of leaking the force.
+    private bool _userClearJsonPref;
+    // Guards the clear-json toggle handler while we set the box programmatically.
+    private bool _syncingClearJson;
+
     public override string HeaderSubtitleKey => "Opt_PageSubtitle";
     public override string NextLabelKey => ModelChk?.IsChecked == true ? "Btn_Next" : "Btn_StartInstall";
 
@@ -28,12 +36,44 @@ public partial class OptionsPage : WizardPage
         BypassPermChk.IsChecked = host.Options.EnableBypassPermissions;
         WorkspaceChk.IsChecked  = host.Options.CreateWorkspace;
         WorkspacePathBox.Text  = host.Options.WorkspaceDir;
+        _userClearJsonPref = host.Options.ClearConfigJson;
+        SyncClearJsonState();
         UpdateWorkspaceEnabled();
     }
 
     private void ModelChk_Toggle(object sender, RoutedEventArgs e)
     {
+        SyncClearJsonState();
         if (Window.GetWindow(this) is MainWindow host) host.UpdateChrome(this);
+    }
+
+    /// <summary>
+    /// Quick config overwrites ~/.axiomate.json, so clearing it is mandatory:
+    /// force the box checked + locked while quick config is on. When off,
+    /// re-enable it and restore the user's own choice.
+    /// </summary>
+    private void SyncClearJsonState()
+    {
+        if (ClearConfigJsonChk == null) return;
+        _syncingClearJson = true;
+        if (ModelChk.IsChecked == true)
+        {
+            ClearConfigJsonChk.IsChecked = true;
+            ClearConfigJsonChk.IsEnabled = false;
+        }
+        else
+        {
+            ClearConfigJsonChk.IsEnabled = true;
+            ClearConfigJsonChk.IsChecked = _userClearJsonPref;
+        }
+        _syncingClearJson = false;
+    }
+
+    private void ClearConfigJsonChk_Toggle(object sender, RoutedEventArgs e)
+    {
+        // Only record genuine user toggles, not our programmatic sync.
+        if (_syncingClearJson) return;
+        _userClearJsonPref = ClearConfigJsonChk.IsChecked == true;
     }
 
     private void WorkspaceChk_Toggle(object sender, RoutedEventArgs e) => UpdateWorkspaceEnabled();
@@ -143,6 +183,9 @@ public partial class OptionsPage : WizardPage
     {
         host.Options.QuickModelConfig = ModelChk.IsChecked == true;
         host.Options.ClearConfigDir   = ClearConfigChk.IsChecked == true;
+        // Persist the user's genuine choice, not the quick-config force — the
+        // engine deletes the json when (ClearConfigJson || QuickModelConfig).
+        host.Options.ClearConfigJson  = _userClearJsonPref;
         host.Options.EnableBypassPermissions = BypassPermChk.IsChecked == true;
         host.Options.CreateWorkspace  = WorkspaceChk.IsChecked == true;
         host.Options.WorkspaceDir     = WorkspacePathBox.Text.Trim().TrimEnd('\\');

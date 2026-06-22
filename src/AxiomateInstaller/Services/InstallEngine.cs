@@ -79,6 +79,16 @@ public sealed class InstallEngine
                 ClearAxiomateConfigDir();
             }
 
+            // Must run before the quick-config write so a stale/readonly
+            // .axiomate.json can't block the overwrite. Quick config always
+            // clears it (it overwrites the file anyway); the options page
+            // forces the checkbox on to make that explicit to the user.
+            if (opt.ClearConfigJson || opt.QuickModelConfig)
+            {
+                Report("Step_ClearConfigJson");
+                ClearAxiomateConfigJson();
+            }
+
             if (opt.QuickModelConfig)
             {
                 Report("Step_Model");
@@ -135,6 +145,7 @@ public sealed class InstallEngine
         }
         n += 3; // deploy + path + win-tune
         if (opt.ClearConfigDir) n++;
+        if (opt.ClearConfigJson || opt.QuickModelConfig) n++;
         if (opt.QuickModelConfig) n++;
         if (opt.EnableBypassPermissions) n++;
         if (opt.CreateWorkspace) n++;
@@ -154,6 +165,17 @@ public sealed class InstallEngine
             try { File.SetAttributes(file, FileAttributes.Normal); } catch { }
         }
         Directory.Delete(dir, recursive: true);
+    }
+
+    private void ClearAxiomateConfigJson()
+    {
+        string home = UserProfileResolver.GetUserProfile(_log);
+        if (string.IsNullOrEmpty(home)) return;
+        string configPath = Path.Combine(home, ".axiomate.json");
+        if (!File.Exists(configPath)) return;
+        _log.Info($"Removing existing {configPath} (user opted to clear model config).");
+        try { File.SetAttributes(configPath, FileAttributes.Normal); } catch { }
+        File.Delete(configPath);
     }
 
     private void CreateShortcuts(ShortcutManager sm, InstallOptions opt, string workspaceDir)

@@ -92,6 +92,8 @@
     <sys:String x:Key="Opt_ModelHint">勾选后下一步可以选择模型并填入 API Key, 安装时会写入 ~/.axiomate.json。不勾选也可以继续安装；启动 Axiomate 后可按首次引导添加模型, 或手动编辑 ~/.axiomate.json 添加其他模型。</sys:String>
     <sys:String x:Key="Opt_ClearConfigChk">清空 Axiomate 配置目录</sys:String>
     <sys:String x:Key="Opt_ClearConfigHint">Axiomate 目前处于测试阶段, 版本升级可能不兼容旧数据文件。如遇异常可勾选此项清空 ~/.axiomate/ 目录。默认不勾选；勾选前如有重要内容(如 skill 等)请先备份。</sys:String>
+    <sys:String x:Key="Opt_ClearConfigJsonChk">清空模型配置 (.axiomate.json)</sys:String>
+    <sys:String x:Key="Opt_ClearConfigJsonHint">删除 ~/.axiomate.json, 避免版本升级带来的兼容性问题。默认不勾选；如有自定义模型或想保留当前配置, 请先备份。快速配置会覆盖该文件, 因此会强制勾选此项。</sys:String>
     <sys:String x:Key="Opt_BypassPermChk">默认开启 bypass permissions 模式</sys:String>
     <sys:String x:Key="Opt_BypassPermHint">关闭时 Axiomate 会按默认权限策略询问确认；开启后会写入 ~/.axiomate/settings.json，让 AI 可以不再逐次询问权限而自动执行代码。</sys:String>
     <sys:String x:Key="Opt_WorkspaceChk">创建默认工作区与快捷方式</sys:String>
@@ -150,6 +152,7 @@
     <sys:String x:Key="Step_WinTune">启用 PowerShell 脚本执行与开发人员模式</sys:String>
     <sys:String x:Key="Step_Model">写入 Axiomate 模型配置</sys:String>
     <sys:String x:Key="Step_ClearConfig">正在清空配置目录</sys:String>
+    <sys:String x:Key="Step_ClearConfigJson">正在清空模型配置</sys:String>
     <sys:String x:Key="Step_BypassPerm">写入 bypass permissions 权限配置</sys:String>
     <sys:String x:Key="Step_Workspace">创建工作区与快捷方式</sys:String>
     <sys:String x:Key="Step_Uninst">注册卸载器</sys:String>

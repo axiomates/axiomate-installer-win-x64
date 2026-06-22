@@ -92,6 +92,8 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Opt_ModelHint">Choose a primary model and API key during setup. The installer will write ~/.axiomate.json; you can also skip this and configure models later from the first-run guide or by editing the config file manually.</sys:String>
     <sys:String x:Key="Opt_ClearConfigChk">Clear Axiomate config directory</sys:String>
     <sys:String x:Key="Opt_ClearConfigHint">Axiomate is still in beta and data compatibility across upgrades is not guaranteed. Check this to clear ~/.axiomate/ if you run into issues. Off by default; back up important items (such as skills) before enabling it.</sys:String>
+    <sys:String x:Key="Opt_ClearConfigJsonChk">Clear model config (.axiomate.json)</sys:String>
+    <sys:String x:Key="Opt_ClearConfigJsonHint">Deletes ~/.axiomate.json to avoid compatibility issues across version upgrades. Off by default; if you've customized models or want to keep your current config, back it up first. Quick config overwrites this file, so it forces this option on.</sys:String>
     <sys:String x:Key="Opt_BypassPermChk">Enable bypass permissions</sys:String>
     <sys:String x:Key="Opt_BypassPermHint">Write a permissions setting that lets Axiomate run local code actions without asking for confirmation each time. Leave this unchecked if you prefer step-by-step approval.</sys:String>
     <sys:String x:Key="Opt_WorkspaceChk">Create workspace shortcuts</sys:String>
@@ -150,6 +152,7 @@ Click "Yes" to open the log file.</sys:String>
     <sys:String x:Key="Step_WinTune">Enabling PowerShell scripts and Developer Mode</sys:String>
     <sys:String x:Key="Step_Model">Writing Axiomate model config</sys:String>
     <sys:String x:Key="Step_ClearConfig">Clearing config directory</sys:String>
+    <sys:String x:Key="Step_ClearConfigJson">Clearing model config</sys:String>
     <sys:String x:Key="Step_BypassPerm">Writing bypass permissions setting</sys:String>
     <sys:String x:Key="Step_Workspace">Creating workspace and shortcuts</sys:String>
     <sys:String x:Key="Step_Uninst">Registering uninstaller</sys:String>

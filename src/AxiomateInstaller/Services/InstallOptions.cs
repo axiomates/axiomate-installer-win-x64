@@ -18,6 +18,7 @@ public sealed class InstallOptions
     // Options page choices
     public bool QuickModelConfig { get; set; }
     public bool ClearConfigDir { get; set; }
+    public bool ClearConfigJson { get; set; }
     public bool EnableBypassPermissions { get; set; }
     public bool CreateWorkspace  { get; set; }
     public string WorkspaceDir   { get; set; } = @"%USERPROFILE%\axiomate-workspace";
@@ -96,7 +97,7 @@ public static class ModelSiteExtensions
     public static string ApiKeyUrl(this ModelSite s) => s switch
     {
         ModelSite.Deepseek => "https://platform.deepseek.com/api_keys",
-        ModelSite.Zhipu    => "https://bigmodel.cn/usercenter/apikeys",
+        ModelSite.Zhipu    => "https://bigmodel.cn/apikey/platform",
         _ => throw new ArgumentOutOfRangeException(nameof(s))
     };
 
