@@ -20,8 +20,8 @@
     <sys:String x:Key="Welcome_Header">Welcome to Axiomate</sys:String>
     <sys:String x:Key="Welcome_PageSubtitle">Welcome</sys:String>
     <sys:String x:Key="Welcome_TasksTitle">The installer will:</sys:String>
-    <sys:String x:Key="Welcome_Task1">• Check Windows 10+ / x64 / Windows Terminal / Git / Python prerequisites</sys:String>
-    <sys:String x:Key="Welcome_Task2">• Silently install bundled Git 2.54 (required) and Python 3.12 (optional) when missing</sys:String>
+    <sys:String x:Key="Welcome_Task1">• Check Windows 10+ / x64 / Git / Python prerequisites</sys:String>
+    <sys:String x:Key="Welcome_Task2">• Install missing required components: Git 2.54 is required; Windows 10 also requires Windows Terminal; Python 3.12 is optional</sys:String>
     <sys:String x:Key="Welcome_Task3">• Deploy Axiomate to your chosen directory and register it on PATH</sys:String>
     <sys:String x:Key="Welcome_Task4">• Enable PowerShell script execution (RemoteSigned) and Windows Developer Mode</sys:String>
     <sys:String x:Key="Welcome_Task5">• Optional: quick setup for common models</sys:String>

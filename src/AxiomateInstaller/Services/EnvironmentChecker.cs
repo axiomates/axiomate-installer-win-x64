@@ -122,7 +122,7 @@ public sealed class EnvironmentChecker
         var (archOk, archDisplay) = CheckArch();
         var (gitOk, gitDisp) = await CheckGitAsync();
         var (pyOk, pyDisp)   = await CheckPythonAsync();
-        var (wtOk, wtDisp)   = await CheckWindowsTerminalAsync(isWindows10);
+        var (wtOk, wtDisp)   = CheckWindowsTerminal(isWindows10);
         return new EnvCheckResult(osOk, isWindows10, osDisplay, archOk, archDisplay, gitOk, gitDisp, pyOk, pyDisp, wtOk, wtDisp);
     }
 
@@ -175,7 +175,7 @@ public sealed class EnvironmentChecker
         }
     }
 
-    private async Task<(bool, string?)> CheckWindowsTerminalAsync(bool isWindows10)
+    private (bool, string?) CheckWindowsTerminal(bool isWindows10)
     {
         if (!isWindows10)
         {
@@ -190,10 +190,8 @@ public sealed class EnvironmentChecker
             return (false, null);
         }
 
-        string? raw = await RunCaptureAsync(exe, new[] { "--version" }, timeoutMs: 5000);
-        string display = string.IsNullOrWhiteSpace(raw) ? "Windows Terminal" : raw.Trim();
-        _log.Info($"Windows Terminal check: {display} -> OK");
-        return (true, display);
+        _log.Info($"Windows Terminal check: found {exe} -> OK");
+        return (true, "Windows Terminal");
     }
 
     private async Task<(bool, string?)> CheckPythonAsync()

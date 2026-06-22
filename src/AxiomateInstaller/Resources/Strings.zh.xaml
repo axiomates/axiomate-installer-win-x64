@@ -20,8 +20,8 @@
     <sys:String x:Key="Welcome_Header">欢迎使用 Axiomate</sys:String>
     <sys:String x:Key="Welcome_PageSubtitle">欢迎</sys:String>
     <sys:String x:Key="Welcome_TasksTitle">安装器将完成以下事情:</sys:String>
-    <sys:String x:Key="Welcome_Task1">• 检查 Windows 10+ / x64 / Windows Terminal / Git / Python 环境</sys:String>
-    <sys:String x:Key="Welcome_Task2">• 缺失时使用内置 Git 2.54 与 Python 3.12 静默安装 (Git 必装, Python 可选)</sys:String>
+    <sys:String x:Key="Welcome_Task1">• 检查 Windows 10+ / x64 / Git / Python 环境</sys:String>
+    <sys:String x:Key="Welcome_Task2">• 缺失时安装必需组件: Git 2.54 必装；Windows 10 额外需要 Windows Terminal；Python 3.12 可选</sys:String>
     <sys:String x:Key="Welcome_Task3">• 释放 Axiomate 到您选择的目录, 并把它加入系统 PATH</sys:String>
     <sys:String x:Key="Welcome_Task4">• 启用 PowerShell 脚本执行 (RemoteSigned) 与 Windows 开发人员模式</sys:String>
     <sys:String x:Key="Welcome_Task5">• 可选: 快速配置常见模型</sys:String>
