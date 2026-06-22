@@ -15,9 +15,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="{DynamicResource Model_Lbl_Site}" VerticalAlignment="Center" Foreground="{StaticResource Text}"/>
-                    <ComboBox  Grid.Column="1" x:Name="SiteCombo" SelectedIndex="0">
-                        <ComboBoxItem Content="{DynamicResource Model_SiteDeepseek}"/>
-                    </ComboBox>
+                    <ComboBox  Grid.Column="1" x:Name="SiteCombo" SelectionChanged="SiteCombo_SelectionChanged"/>
                 </Grid>
                 <Grid Margin="0,0,0,10">
                     <Grid.ColumnDefinitions>
@@ -25,10 +23,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Grid.Column="0" Text="{DynamicResource Model_Lbl_Model}" VerticalAlignment="Center" Foreground="{StaticResource Text}"/>
-                    <ComboBox  Grid.Column="1" x:Name="ModelCombo" SelectedIndex="0">
-                        <ComboBoxItem Content="{DynamicResource Model_Item_Pro}"   Tag="DeepseekV4Pro"/>
-                        <ComboBoxItem Content="{DynamicResource Model_Item_Flash}" Tag="DeepseekV4Flash"/>
-                    </ComboBox>
+                    <ComboBox  Grid.Column="1" x:Name="ModelCombo"/>
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -43,8 +38,8 @@
                 </Grid>
                 <TextBlock Margin="0,12,0,0" Foreground="{StaticResource Muted}" TextWrapping="Wrap">
                     <Run Text="{DynamicResource Model_Footer_BeforeLink}"/>
-                    <Hyperlink Click="DeepSeekPlatformLink_Click" Foreground="#2563EB">
-                        <Run Text="{DynamicResource Model_Footer_Link}"/>
+                    <Hyperlink Click="ApiKeyPlatformLink_Click" Foreground="#2563EB">
+                        <Run x:Name="ApiKeyLinkText" Text="{DynamicResource Model_Footer_Link_Deepseek}"/>
                     </Hyperlink>
                     <Run Text="{DynamicResource Model_Footer_AfterLink}"/>
                 </TextBlock>
