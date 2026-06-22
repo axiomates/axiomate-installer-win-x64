@@ -117,8 +117,10 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Model_Lbl_Model">Primary model</sys:String>
     <sys:String x:Key="Model_Item_Pro">deepseek-v4-pro    (high quality, strong reasoning)</sys:String>
     <sys:String x:Key="Model_Item_Flash">deepseek-v4-flash  (lightweight, fast)</sys:String>
-    <sys:String x:Key="Model_Item_Glm52">glm-5.2    (high quality, strong reasoning)</sys:String>
-    <sys:String x:Key="Model_Item_Glm47">glm-4.7    (balanced, cost-effective)</sys:String>
+    <sys:String x:Key="Model_Item_Glm52Coding">glm-5.2    (Coding Plan, cheaper)</sys:String>
+    <sys:String x:Key="Model_Item_Glm47Coding">glm-4.7    (Coding Plan, cheaper)</sys:String>
+    <sys:String x:Key="Model_Item_Glm52">glm-5.2    (general endpoint)</sys:String>
+    <sys:String x:Key="Model_Item_Glm47">glm-4.7    (general endpoint)</sys:String>
     <sys:String x:Key="Model_Lbl_ApiKey">API key</sys:String>
     <sys:String x:Key="Model_ShowKey">Show</sys:String>
     <sys:String x:Key="Model_Footer_BeforeLink">Get your API key from </sys:String>

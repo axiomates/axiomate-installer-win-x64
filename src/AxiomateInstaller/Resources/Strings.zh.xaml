@@ -117,8 +117,10 @@
     <sys:String x:Key="Model_Lbl_Model">主要模型</sys:String>
     <sys:String x:Key="Model_Item_Pro">deepseek-v4-pro    (高质量, 强推理)</sys:String>
     <sys:String x:Key="Model_Item_Flash">deepseek-v4-flash  (轻量, 高速度)</sys:String>
-    <sys:String x:Key="Model_Item_Glm52">glm-5.2    (高质量, 强推理)</sys:String>
-    <sys:String x:Key="Model_Item_Glm47">glm-4.7    (均衡, 高性价比)</sys:String>
+    <sys:String x:Key="Model_Item_Glm52Coding">glm-5.2    (Coding Plan, 更便宜)</sys:String>
+    <sys:String x:Key="Model_Item_Glm47Coding">glm-4.7    (Coding Plan, 更便宜)</sys:String>
+    <sys:String x:Key="Model_Item_Glm52">glm-5.2    (通用端点)</sys:String>
+    <sys:String x:Key="Model_Item_Glm47">glm-4.7    (通用端点)</sys:String>
     <sys:String x:Key="Model_Lbl_ApiKey">API Key</sys:String>
     <sys:String x:Key="Model_ShowKey">显示</sys:String>
     <sys:String x:Key="Model_Footer_BeforeLink">可在 </sys:String>

@@ -71,6 +71,8 @@ public enum ModelChoice
 {
     DeepseekV4Pro,
     DeepseekV4Flash,
+    Glm52Coding,
+    Glm47Coding,
     Glm52,
     Glm47
 }
@@ -81,7 +83,7 @@ public static class ModelSiteExtensions
     public static ModelChoice[] Models(this ModelSite s) => s switch
     {
         ModelSite.Deepseek => new[] { ModelChoice.DeepseekV4Pro, ModelChoice.DeepseekV4Flash },
-        ModelSite.Zhipu    => new[] { ModelChoice.Glm52, ModelChoice.Glm47 },
+        ModelSite.Zhipu    => new[] { ModelChoice.Glm52Coding, ModelChoice.Glm47Coding, ModelChoice.Glm52, ModelChoice.Glm47 },
         _ => throw new ArgumentOutOfRangeException(nameof(s))
     };
 
@@ -116,6 +118,8 @@ public static class ModelChoiceExtensions
     {
         ModelChoice.DeepseekV4Pro   => "deepseek-v4-pro.json",
         ModelChoice.DeepseekV4Flash => "deepseek-v4-flash.json",
+        ModelChoice.Glm52Coding     => "glm-5.2-coding.json",
+        ModelChoice.Glm47Coding     => "glm-4.7-coding.json",
         ModelChoice.Glm52           => "glm-5.2.json",
         ModelChoice.Glm47           => "glm-4.7.json",
         _ => throw new ArgumentOutOfRangeException(nameof(c))
@@ -125,6 +129,8 @@ public static class ModelChoiceExtensions
     {
         ModelChoice.DeepseekV4Pro   => "DeepSeek V4 Pro",
         ModelChoice.DeepseekV4Flash => "DeepSeek V4 Flash",
+        ModelChoice.Glm52Coding     => "GLM-5.2 Coding Plan",
+        ModelChoice.Glm47Coding     => "GLM-4.7 Coding Plan",
         ModelChoice.Glm52           => "GLM-5.2",
         ModelChoice.Glm47           => "GLM-4.7",
         _ => throw new ArgumentOutOfRangeException(nameof(c))
@@ -135,6 +141,8 @@ public static class ModelChoiceExtensions
     {
         ModelChoice.DeepseekV4Pro   => "Model_Item_Pro",
         ModelChoice.DeepseekV4Flash => "Model_Item_Flash",
+        ModelChoice.Glm52Coding     => "Model_Item_Glm52Coding",
+        ModelChoice.Glm47Coding     => "Model_Item_Glm47Coding",
         ModelChoice.Glm52           => "Model_Item_Glm52",
         ModelChoice.Glm47           => "Model_Item_Glm47",
         _ => throw new ArgumentOutOfRangeException(nameof(c))
@@ -144,7 +152,7 @@ public static class ModelChoiceExtensions
     public static ModelSite Site(this ModelChoice c) => c switch
     {
         ModelChoice.DeepseekV4Pro or ModelChoice.DeepseekV4Flash => ModelSite.Deepseek,
-        ModelChoice.Glm52 or ModelChoice.Glm47 => ModelSite.Zhipu,
+        ModelChoice.Glm52Coding or ModelChoice.Glm47Coding or ModelChoice.Glm52 or ModelChoice.Glm47 => ModelSite.Zhipu,
         _ => throw new ArgumentOutOfRangeException(nameof(c))
     };
 }
