@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace AxiomateInstaller.Pages;
@@ -13,6 +14,7 @@ public abstract class WizardPage : Page
     public virtual void OnEnter(MainWindow host) { }
     public virtual void OnLeave(MainWindow host) { }
     public virtual bool Validate(MainWindow host) => true;
+    public virtual Task<bool> BeforeNextAsync(MainWindow host) => Task.FromResult(true);
 
     public virtual int NextIndex(MainWindow host, int current) => current + 1;
     public virtual int PrevIndex(MainWindow host, int current) => current - 1;

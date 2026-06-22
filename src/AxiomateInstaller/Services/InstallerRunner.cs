@@ -89,6 +89,48 @@ public sealed class InstallerRunner
         }
     }
 
+    public async Task RunWindowsTerminalAsync()
+    {
+        string winget = ResolveWinget() ?? throw new InstallStepException(Strings.Get("Err_Wt_WingetMissing"));
+        string[] args =
+        {
+            "install",
+            "--id", "Microsoft.WindowsTerminal",
+            "--exact",
+            "--source", "winget",
+            "--accept-package-agreements",
+            "--accept-source-agreements",
+            "--disable-interactivity"
+        };
+        _log.Info($"Running Windows Terminal install: {winget} {string.Join(' ', args)}");
+        int code = await RunAsync(winget, args);
+        if (code == 0)
+        {
+            _log.Info("Windows Terminal install succeeded.");
+            return;
+        }
+        throw new InstallStepException(Strings.Format("Err_Wt_Fail_Format", code));
+    }
+
+    private static string? ResolveWinget()
+    {
+        foreach (string dir in (Environment.GetEnvironmentVariable("PATH") ?? "").Split(';', StringSplitOptions.RemoveEmptyEntries))
+        {
+            string candidate = Path.Combine(dir, "winget.exe");
+            if (File.Exists(candidate)) return candidate;
+        }
+
+        string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+        string localWinget = Path.Combine(localAppData, "Microsoft", "WindowsApps", "winget.exe");
+        if (File.Exists(localWinget)) return localWinget;
+
+        string userProfile = UserProfileResolver.GetUserProfile();
+        string targetWinget = Path.Combine(userProfile, "AppData", "Local", "Microsoft", "WindowsApps", "winget.exe");
+        if (File.Exists(targetWinget)) return targetWinget;
+
+        return null;
+    }
+
     private async Task<int> RunAsync(string exe, string[] args)
     {
         var psi = new ProcessStartInfo(exe)

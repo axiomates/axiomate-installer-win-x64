@@ -1,7 +1,7 @@
 {
   "installerVersion": "1.0.0",
   "axiomateVersion": "auto",
-  "axiomateBuildNumber": 27,
+  "axiomateBuildNumber": 28,
   "bundledGitVersion": "2.54.0",
   "bundledPythonVersion": "3.12.10"
 }

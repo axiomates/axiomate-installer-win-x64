@@ -12,23 +12,28 @@ namespace AxiomateInstaller.Services;
 
 public sealed record EnvCheckResult(
     bool IsSupportedOs,
+    bool IsWindows10,
     string OsDisplay,
     bool IsX64,
     string ArchDisplay,
     bool GitOk,
     string? GitVersionDisplay,
     bool PythonOk,
-    string? PythonVersionDisplay)
+    string? PythonVersionDisplay,
+    bool WindowsTerminalOk,
+    string? WindowsTerminalDisplay)
 {
-    public bool MeetsBaselineRequirements => IsSupportedOs && IsX64;
+    public bool NeedsWindowsTerminal => IsWindows10 && !WindowsTerminalOk;
+    public bool MeetsBaselineRequirements => IsSupportedOs && IsX64 && !NeedsWindowsTerminal;
 }
 
 /// <summary>
 /// Detects whether the current machine meets baseline requirements
-/// (Windows 11+, x64) and whether Git/Python are present at acceptable versions.
+/// (Windows 10+, x64) and whether Git/Python/Windows Terminal are present.
 /// </summary>
 public sealed class EnvironmentChecker
 {
+    public const int MinWin10Build  = 10240;
     public const int MinWin11Build  = 22000;
     public const int MinGitMajor    = 2;
     public const int MinGitMinor    = 40;
@@ -113,21 +118,24 @@ public sealed class EnvironmentChecker
 
     public async Task<EnvCheckResult> RunAsync()
     {
-        var (osOk, osDisplay) = CheckOs();
+        var (osOk, isWindows10, osDisplay) = CheckOs();
         var (archOk, archDisplay) = CheckArch();
         var (gitOk, gitDisp) = await CheckGitAsync();
         var (pyOk, pyDisp)   = await CheckPythonAsync();
-        return new EnvCheckResult(osOk, osDisplay, archOk, archDisplay, gitOk, gitDisp, pyOk, pyDisp);
+        var (wtOk, wtDisp)   = await CheckWindowsTerminalAsync(isWindows10);
+        return new EnvCheckResult(osOk, isWindows10, osDisplay, archOk, archDisplay, gitOk, gitDisp, pyOk, pyDisp, wtOk, wtDisp);
     }
 
-    private (bool, string) CheckOs()
+    private (bool ok, bool isWindows10, string display) CheckOs()
     {
         var v = Environment.OSVersion.Version;
-        bool ok = v.Major >= 10 && v.Build >= MinWin11Build;
-        string family = v.Major == 10 && v.Build >= MinWin11Build ? "Windows 11" : $"Windows {v.Major}.{v.Minor}";
+        bool ok = v.Major >= 10 && v.Build >= MinWin10Build;
+        bool isWindows11 = v.Major == 10 && v.Build >= MinWin11Build;
+        bool isWindows10 = ok && !isWindows11;
+        string family = isWindows11 ? "Windows 11" : ok ? "Windows 10" : $"Windows {v.Major}.{v.Minor}";
         string display = $"{family} (build {v.Build})";
-        _log.Info($"OS check: {display} -> {(ok ? "OK" : $"FAIL (need Windows 11 build {MinWin11Build}+)")}");
-        return (ok, display);
+        _log.Info($"OS check: {display} -> {(ok ? "OK" : $"FAIL (need Windows 10 build {MinWin10Build}+)")}");
+        return (ok, isWindows10, display);
     }
 
     private (bool, string) CheckArch()
@@ -165,6 +173,27 @@ public sealed class EnvironmentChecker
             _log.Info($"Git check: probe error -> {ex.Message}");
             return (false, null);
         }
+    }
+
+    private async Task<(bool, string?)> CheckWindowsTerminalAsync(bool isWindows10)
+    {
+        if (!isWindows10)
+        {
+            _log.Info("Windows Terminal check: skipped (not Windows 10)");
+            return (true, null);
+        }
+
+        string? exe = AxiomateLauncher.TryResolveWindowsTerminal();
+        if (exe is null)
+        {
+            _log.Info("Windows Terminal check: wt.exe not found");
+            return (false, null);
+        }
+
+        string? raw = await RunCaptureAsync(exe, new[] { "--version" }, timeoutMs: 5000);
+        string display = string.IsNullOrWhiteSpace(raw) ? "Windows Terminal" : raw.Trim();
+        _log.Info($"Windows Terminal check: {display} -> OK");
+        return (true, display);
     }
 
     private async Task<(bool, string?)> CheckPythonAsync()

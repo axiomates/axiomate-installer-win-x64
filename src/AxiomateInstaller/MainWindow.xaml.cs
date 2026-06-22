@@ -48,10 +48,11 @@ public partial class MainWindow : System.Windows.Window
         UpdateChrome(page);
     }
 
-    public void GoNext()
+    public async void GoNext()
     {
         var page = _pages[_index];
         if (!page.Validate(this)) return;
+        if (!await page.BeforeNextAsync(this)) return;
         page.OnLeave(this);
 
 

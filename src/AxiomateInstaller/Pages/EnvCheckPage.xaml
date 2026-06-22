@@ -30,6 +30,19 @@
                         <TextBlock Grid.Column="1" x:Name="ArchText"  Foreground="{StaticResource Muted}" VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="2" x:Name="ArchBadge" FontWeight="SemiBold" VerticalAlignment="Center"/>
                     </Grid>
+                    <Grid x:Name="WtRow" Margin="0,8,0,4" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="120"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{DynamicResource Env_Lbl_Wt}" Foreground="{StaticResource Text}" VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="1" x:Name="WtText"  Foreground="{StaticResource Muted}" VerticalAlignment="Center"/>
+                        <Grid       Grid.Column="2">
+                            <CheckBox  x:Name="WtInstallChk" Content="{DynamicResource Env_WtInstallRequired}" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="WtOkBadge"     Text="✓" FontWeight="SemiBold" Foreground="Green" VerticalAlignment="Center" Visibility="Collapsed"/>
+                        </Grid>
+                    </Grid>
                     <Grid Margin="0,8,0,4">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="120"/>
