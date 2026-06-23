@@ -1,0 +1,32 @@
+{
+  "models": {
+    "kimi-k2.7-code-highspeed": {
+      "model": "kimi-k2.7-code-highspeed",
+      "name": "Kimi K2.7 Code Highspeed",
+      "protocol": "openai-chat",
+      "contextWindow": 262144,
+      "maxOutputTokens": 32768,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": true
+      },
+      "baseUrl": "https://api.moonshot.ai/v1",
+      "apiKey": "{{API_KEY}}"
+    }
+  },
+  "model": {
+    "defaultRoute": "kimi-k2.7-main",
+    "routes": {
+      "kimi-k2.7-main": {
+        "primary": "kimi-k2.7-code-highspeed",
+        "fallbackChain": [],
+        "recoveryProfile": "main-agent",
+        "allowActions": [
+          "retry_same_model",
+          "adapt_request"
+        ],
+        "switchModelOn": []
+      }
+    }
+  }
+}

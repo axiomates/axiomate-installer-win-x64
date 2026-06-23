@@ -64,7 +64,10 @@ public static class PipMirrorExtensions
 public enum ModelSite
 {
     Deepseek,
-    Zhipu
+    Zhipu,
+    ZhipuIntl,
+    Moonshot,
+    MoonshotIntl
 }
 
 public enum ModelChoice
@@ -74,7 +77,15 @@ public enum ModelChoice
     Glm52Coding,
     Glm47Coding,
     Glm52,
-    Glm47
+    Glm47,
+    Glm52ZaiCoding,
+    Glm47ZaiCoding,
+    Glm52Zai,
+    Glm47Zai,
+    KimiK27Cn,
+    KimiK25Cn,
+    KimiK27Intl,
+    KimiK25Intl
 }
 
 public static class ModelSiteExtensions
@@ -82,32 +93,44 @@ public static class ModelSiteExtensions
     /// <summary>Models offered for this site, in display order. First is the default.</summary>
     public static ModelChoice[] Models(this ModelSite s) => s switch
     {
-        ModelSite.Deepseek => new[] { ModelChoice.DeepseekV4Pro, ModelChoice.DeepseekV4Flash },
-        ModelSite.Zhipu    => new[] { ModelChoice.Glm52Coding, ModelChoice.Glm47Coding, ModelChoice.Glm52, ModelChoice.Glm47 },
+        ModelSite.Deepseek     => new[] { ModelChoice.DeepseekV4Pro, ModelChoice.DeepseekV4Flash },
+        ModelSite.Zhipu        => new[] { ModelChoice.Glm52Coding, ModelChoice.Glm47Coding, ModelChoice.Glm52, ModelChoice.Glm47 },
+        ModelSite.ZhipuIntl    => new[] { ModelChoice.Glm52ZaiCoding, ModelChoice.Glm47ZaiCoding, ModelChoice.Glm52Zai, ModelChoice.Glm47Zai },
+        ModelSite.Moonshot     => new[] { ModelChoice.KimiK27Cn, ModelChoice.KimiK25Cn },
+        ModelSite.MoonshotIntl => new[] { ModelChoice.KimiK27Intl, ModelChoice.KimiK25Intl },
         _ => throw new ArgumentOutOfRangeException(nameof(s))
     };
 
     /// <summary>Resource key for the site label shown in the provider dropdown.</summary>
     public static string LabelKey(this ModelSite s) => s switch
     {
-        ModelSite.Deepseek => "Model_SiteDeepseek",
-        ModelSite.Zhipu    => "Model_SiteZhipu",
+        ModelSite.Deepseek     => "Model_SiteDeepseek",
+        ModelSite.Zhipu        => "Model_SiteZhipu",
+        ModelSite.ZhipuIntl    => "Model_SiteZhipuIntl",
+        ModelSite.Moonshot     => "Model_SiteMoonshot",
+        ModelSite.MoonshotIntl => "Model_SiteMoonshotIntl",
         _ => throw new ArgumentOutOfRangeException(nameof(s))
     };
 
     /// <summary>Console page where the user creates an API key for this site.</summary>
     public static string ApiKeyUrl(this ModelSite s) => s switch
     {
-        ModelSite.Deepseek => "https://platform.deepseek.com/api_keys",
-        ModelSite.Zhipu    => "https://bigmodel.cn/apikey/platform",
+        ModelSite.Deepseek     => "https://platform.deepseek.com/api_keys",
+        ModelSite.Zhipu        => "https://bigmodel.cn/apikey/platform",
+        ModelSite.ZhipuIntl    => "https://z.ai/manage-apikey/apikey-list",
+        ModelSite.Moonshot     => "https://platform.moonshot.cn/console/api-keys",
+        ModelSite.MoonshotIntl => "https://platform.moonshot.ai/console/api-keys",
         _ => throw new ArgumentOutOfRangeException(nameof(s))
     };
 
     /// <summary>Resource key for the "get your key from …" link text.</summary>
     public static string FooterLinkKey(this ModelSite s) => s switch
     {
-        ModelSite.Deepseek => "Model_Footer_Link_Deepseek",
-        ModelSite.Zhipu    => "Model_Footer_Link_Zhipu",
+        ModelSite.Deepseek     => "Model_Footer_Link_Deepseek",
+        ModelSite.Zhipu        => "Model_Footer_Link_Zhipu",
+        ModelSite.ZhipuIntl    => "Model_Footer_Link_ZhipuIntl",
+        ModelSite.Moonshot     => "Model_Footer_Link_Moonshot",
+        ModelSite.MoonshotIntl => "Model_Footer_Link_MoonshotIntl",
         _ => throw new ArgumentOutOfRangeException(nameof(s))
     };
 }
@@ -122,6 +145,14 @@ public static class ModelChoiceExtensions
         ModelChoice.Glm47Coding     => "glm-4.7-coding.json",
         ModelChoice.Glm52           => "glm-5.2.json",
         ModelChoice.Glm47           => "glm-4.7.json",
+        ModelChoice.Glm52ZaiCoding  => "glm-5.2-zai-coding.json",
+        ModelChoice.Glm47ZaiCoding  => "glm-4.7-zai-coding.json",
+        ModelChoice.Glm52Zai        => "glm-5.2-zai.json",
+        ModelChoice.Glm47Zai        => "glm-4.7-zai.json",
+        ModelChoice.KimiK27Cn       => "kimi-k2.7-cn.json",
+        ModelChoice.KimiK25Cn       => "kimi-k2.5-cn.json",
+        ModelChoice.KimiK27Intl     => "kimi-k2.7-intl.json",
+        ModelChoice.KimiK25Intl     => "kimi-k2.5-intl.json",
         _ => throw new ArgumentOutOfRangeException(nameof(c))
     };
 
@@ -133,6 +164,14 @@ public static class ModelChoiceExtensions
         ModelChoice.Glm47Coding     => "GLM-4.7 Coding Plan",
         ModelChoice.Glm52           => "GLM-5.2",
         ModelChoice.Glm47           => "GLM-4.7",
+        ModelChoice.Glm52ZaiCoding  => "GLM-5.2 Coding Plan (z.ai)",
+        ModelChoice.Glm47ZaiCoding  => "GLM-4.7 Coding Plan (z.ai)",
+        ModelChoice.Glm52Zai        => "GLM-5.2 (z.ai)",
+        ModelChoice.Glm47Zai        => "GLM-4.7 (z.ai)",
+        ModelChoice.KimiK27Cn       => "Kimi K2.7 Code Highspeed",
+        ModelChoice.KimiK25Cn       => "Kimi K2.5",
+        ModelChoice.KimiK27Intl     => "Kimi K2.7 Code Highspeed (intl)",
+        ModelChoice.KimiK25Intl     => "Kimi K2.5 (intl)",
         _ => throw new ArgumentOutOfRangeException(nameof(c))
     };
 
@@ -145,6 +184,14 @@ public static class ModelChoiceExtensions
         ModelChoice.Glm47Coding     => "Model_Item_Glm47Coding",
         ModelChoice.Glm52           => "Model_Item_Glm52",
         ModelChoice.Glm47           => "Model_Item_Glm47",
+        ModelChoice.Glm52ZaiCoding  => "Model_Item_Glm52ZaiCoding",
+        ModelChoice.Glm47ZaiCoding  => "Model_Item_Glm47ZaiCoding",
+        ModelChoice.Glm52Zai        => "Model_Item_Glm52Zai",
+        ModelChoice.Glm47Zai        => "Model_Item_Glm47Zai",
+        ModelChoice.KimiK27Cn       => "Model_Item_KimiK27",
+        ModelChoice.KimiK25Cn       => "Model_Item_KimiK25",
+        ModelChoice.KimiK27Intl     => "Model_Item_KimiK27",
+        ModelChoice.KimiK25Intl     => "Model_Item_KimiK25",
         _ => throw new ArgumentOutOfRangeException(nameof(c))
     };
 
@@ -153,6 +200,9 @@ public static class ModelChoiceExtensions
     {
         ModelChoice.DeepseekV4Pro or ModelChoice.DeepseekV4Flash => ModelSite.Deepseek,
         ModelChoice.Glm52Coding or ModelChoice.Glm47Coding or ModelChoice.Glm52 or ModelChoice.Glm47 => ModelSite.Zhipu,
+        ModelChoice.Glm52ZaiCoding or ModelChoice.Glm47ZaiCoding or ModelChoice.Glm52Zai or ModelChoice.Glm47Zai => ModelSite.ZhipuIntl,
+        ModelChoice.KimiK27Cn or ModelChoice.KimiK25Cn => ModelSite.Moonshot,
+        ModelChoice.KimiK27Intl or ModelChoice.KimiK25Intl => ModelSite.MoonshotIntl,
         _ => throw new ArgumentOutOfRangeException(nameof(c))
     };
 }

@@ -1,0 +1,32 @@
+{
+  "models": {
+    "kimi-k2.5": {
+      "model": "kimi-k2.5",
+      "name": "Kimi K2.5",
+      "protocol": "openai-chat",
+      "contextWindow": 262144,
+      "maxOutputTokens": 16384,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": true
+      },
+      "baseUrl": "https://api.moonshot.ai/v1",
+      "apiKey": "{{API_KEY}}"
+    }
+  },
+  "model": {
+    "defaultRoute": "kimi-k2.5-main",
+    "routes": {
+      "kimi-k2.5-main": {
+        "primary": "kimi-k2.5",
+        "fallbackChain": [],
+        "recoveryProfile": "main-agent",
+        "allowActions": [
+          "retry_same_model",
+          "adapt_request"
+        ],
+        "switchModelOn": []
+      }
+    }
+  }
+}
