@@ -124,7 +124,7 @@
     <sys:String x:Key="Model_SiteZhipu">智谱 BigModel  ·  open.bigmodel.cn</sys:String>
     <sys:String x:Key="Model_SiteZhipuIntl">智谱 Z.ai (国际)  ·  api.z.ai</sys:String>
     <sys:String x:Key="Model_SiteMoonshot">月之暗面 Kimi  ·  api.moonshot.cn</sys:String>
-    <sys:String x:Key="Model_SiteMoonshotIntl">Moonshot Kimi (intl)  ·  api.moonshot.ai</sys:String>
+    <sys:String x:Key="Model_SiteMoonshotIntl">Moonshot Kimi (国际)  ·  api.moonshot.ai</sys:String>
     <sys:String x:Key="Model_Lbl_Model">主要模型</sys:String>
     <sys:String x:Key="Model_Item_Pro">deepseek-v4-pro    (高质量, 强推理)</sys:String>
     <sys:String x:Key="Model_Item_Flash">deepseek-v4-flash  (轻量, 高速度)</sys:String>
