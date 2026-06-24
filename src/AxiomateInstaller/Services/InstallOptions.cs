@@ -75,7 +75,9 @@ public enum ModelSite
     MimoCn,
     MimoIntl,
     MinimaxCn,
-    MinimaxIntl
+    MinimaxIntl,
+    DoubaoCn,
+    DoubaoIntl
 }
 
 public enum ModelChoice
@@ -121,7 +123,13 @@ public enum ModelChoice
     MinimaxLowCn,
     // MiniMax Intl
     MinimaxHighIntl,
-    MinimaxLowIntl
+    MinimaxLowIntl,
+    // Doubao CN
+    DoubaoHighCn,
+    DoubaoLowCn,
+    // Doubao Intl
+    DoubaoHighIntl,
+    DoubaoLowIntl
 }
 
 public static class ModelSiteExtensions
@@ -142,6 +150,8 @@ public static class ModelSiteExtensions
         ModelSite.MimoIntl       => new[] { ModelChoice.MimoProIntl, ModelChoice.MimoStdIntl },
         ModelSite.MinimaxCn      => new[] { ModelChoice.MinimaxHighCn, ModelChoice.MinimaxLowCn },
         ModelSite.MinimaxIntl    => new[] { ModelChoice.MinimaxHighIntl, ModelChoice.MinimaxLowIntl },
+        ModelSite.DoubaoCn       => new[] { ModelChoice.DoubaoHighCn, ModelChoice.DoubaoLowCn },
+        ModelSite.DoubaoIntl     => new[] { ModelChoice.DoubaoHighIntl, ModelChoice.DoubaoLowIntl },
         _ => throw new ArgumentOutOfRangeException(nameof(s))
     };
 
@@ -161,6 +171,8 @@ public static class ModelSiteExtensions
         ModelSite.MimoIntl       => "Model_SiteMimoIntl",
         ModelSite.MinimaxCn      => "Model_SiteMinimaxCn",
         ModelSite.MinimaxIntl    => "Model_SiteMinimaxIntl",
+        ModelSite.DoubaoCn       => "Model_SiteDoubaoCn",
+        ModelSite.DoubaoIntl     => "Model_SiteDoubaoIntl",
         _ => throw new ArgumentOutOfRangeException(nameof(s))
     };
 
@@ -180,6 +192,8 @@ public static class ModelSiteExtensions
         ModelSite.MimoIntl       => "https://platform.xiaomimimo.com/api-keys",
         ModelSite.MinimaxCn      => "https://platform.minimaxi.com/user-center/basic-information/interface-key",
         ModelSite.MinimaxIntl    => "https://platform.minimax.io/user-center/basic-information/interface-key",
+        ModelSite.DoubaoCn       => "https://console.volcengine.com/ark/region:ark+cn-beijing/apiKey",
+        ModelSite.DoubaoIntl     => "https://console.byteplus.com/ark/apiKey",
         _ => throw new ArgumentOutOfRangeException(nameof(s))
     };
 
@@ -199,6 +213,8 @@ public static class ModelSiteExtensions
         ModelSite.MimoIntl       => "Model_Footer_Link_MimoIntl",
         ModelSite.MinimaxCn      => "Model_Footer_Link_MinimaxCn",
         ModelSite.MinimaxIntl    => "Model_Footer_Link_MinimaxIntl",
+        ModelSite.DoubaoCn       => "Model_Footer_Link_DoubaoCn",
+        ModelSite.DoubaoIntl     => "Model_Footer_Link_DoubaoIntl",
         _ => throw new ArgumentOutOfRangeException(nameof(s))
     };
 }
@@ -237,6 +253,10 @@ public static class ModelChoiceExtensions
         ModelChoice.MinimaxLowCn      => "minimax-low-cn.json",
         ModelChoice.MinimaxHighIntl   => "minimax-high-intl.json",
         ModelChoice.MinimaxLowIntl    => "minimax-low-intl.json",
+        ModelChoice.DoubaoHighCn      => "doubao-high-cn.json",
+        ModelChoice.DoubaoLowCn       => "doubao-low-cn.json",
+        ModelChoice.DoubaoHighIntl    => "doubao-high-intl.json",
+        ModelChoice.DoubaoLowIntl     => "doubao-low-intl.json",
         _ => throw new ArgumentOutOfRangeException(nameof(c))
     };
 
@@ -272,6 +292,10 @@ public static class ModelChoiceExtensions
         ModelChoice.MinimaxLowCn      => "MiniMax-M2.5",
         ModelChoice.MinimaxHighIntl   => "MiniMax-M3 (intl)",
         ModelChoice.MinimaxLowIntl    => "MiniMax-M2.5 (intl)",
+        ModelChoice.DoubaoHighCn      => "Doubao Seed 2.1 Pro + Turbo",
+        ModelChoice.DoubaoLowCn       => "Doubao Seed 2.1 Turbo + Lite",
+        ModelChoice.DoubaoHighIntl    => "Doubao Seed 2.1 Pro + Turbo (intl)",
+        ModelChoice.DoubaoLowIntl     => "Doubao Seed 2.1 Turbo + Lite (intl)",
         _ => throw new ArgumentOutOfRangeException(nameof(c))
     };
 
@@ -308,6 +332,10 @@ public static class ModelChoiceExtensions
         ModelChoice.MinimaxLowCn      => "Model_Item_MinimaxLow",
         ModelChoice.MinimaxHighIntl   => "Model_Item_MinimaxHigh",
         ModelChoice.MinimaxLowIntl    => "Model_Item_MinimaxLow",
+        ModelChoice.DoubaoHighCn      => "Model_Item_DoubaoHigh",
+        ModelChoice.DoubaoLowCn       => "Model_Item_DoubaoLow",
+        ModelChoice.DoubaoHighIntl    => "Model_Item_DoubaoHigh",
+        ModelChoice.DoubaoLowIntl     => "Model_Item_DoubaoLow",
         _ => throw new ArgumentOutOfRangeException(nameof(c))
     };
 
@@ -327,6 +355,8 @@ public static class ModelChoiceExtensions
         ModelChoice.MimoProIntl or ModelChoice.MimoStdIntl => ModelSite.MimoIntl,
         ModelChoice.MinimaxHighCn or ModelChoice.MinimaxLowCn => ModelSite.MinimaxCn,
         ModelChoice.MinimaxHighIntl or ModelChoice.MinimaxLowIntl => ModelSite.MinimaxIntl,
+        ModelChoice.DoubaoHighCn or ModelChoice.DoubaoLowCn => ModelSite.DoubaoCn,
+        ModelChoice.DoubaoHighIntl or ModelChoice.DoubaoLowIntl => ModelSite.DoubaoIntl,
         _ => throw new ArgumentOutOfRangeException(nameof(c))
     };
 }

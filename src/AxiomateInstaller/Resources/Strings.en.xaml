@@ -133,6 +133,8 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Model_SiteMimoIntl">Xiaomi MiMo (intl)  ·  token-plan-sgp.xiaomimimo.com</sys:String>
     <sys:String x:Key="Model_SiteMinimaxCn">MiniMax  ·  api.minimaxi.com (Anthropic)</sys:String>
     <sys:String x:Key="Model_SiteMinimaxIntl">MiniMax (intl)  ·  api.minimax.io (Anthropic)</sys:String>
+    <sys:String x:Key="Model_SiteDoubaoCn">Volcengine Ark Doubao  ·  ark.cn-beijing.volces.com</sys:String>
+    <sys:String x:Key="Model_SiteDoubaoIntl">Volcengine Ark Doubao (intl)  ·  ark.ap-southeast.bytepluses.com</sys:String>
     <sys:String x:Key="Model_Lbl_Model">Primary model</sys:String>
     <sys:String x:Key="Model_Item_Pro">deepseek-v4-pro    (high quality, strong reasoning)</sys:String>
     <sys:String x:Key="Model_Item_Flash">deepseek-v4-flash  (lightweight, fast)</sys:String>
@@ -152,6 +154,8 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Model_Item_MimoStd">mimo-v2.5  (low tier, multimodal, 1M context)</sys:String>
     <sys:String x:Key="Model_Item_MinimaxHigh">MiniMax-M3  (high tier, multimodal, 1M context)</sys:String>
     <sys:String x:Key="Model_Item_MinimaxLow">MiniMax-M2.5  (low tier, 192K context, cost-effective)</sys:String>
+    <sys:String x:Key="Model_Item_DoubaoHigh">doubao-seed-2.1-pro  (high tier, 256K context, strong reasoning)</sys:String>
+    <sys:String x:Key="Model_Item_DoubaoLow">doubao-seed-2.1-turbo  (low tier, 256K context, cost-effective)</sys:String>
     <sys:String x:Key="Model_Lbl_ApiKey">API key</sys:String>
     <sys:String x:Key="Model_ShowKey">Show</sys:String>
     <sys:String x:Key="Model_Footer_BeforeLink">Get your API key from </sys:String>
@@ -168,6 +172,8 @@ The installer will wipe it before deploying. Continue?</sys:String>
     <sys:String x:Key="Model_Footer_Link_MimoIntl">the Xiaomi MiMo international platform</sys:String>
     <sys:String x:Key="Model_Footer_Link_MinimaxCn">the MiniMax open platform</sys:String>
     <sys:String x:Key="Model_Footer_Link_MinimaxIntl">the MiniMax international platform</sys:String>
+    <sys:String x:Key="Model_Footer_Link_DoubaoCn">the Volcengine Ark platform</sys:String>
+    <sys:String x:Key="Model_Footer_Link_DoubaoIntl">the Volcengine Ark BytePlus platform</sys:String>
     <sys:String x:Key="Model_Footer_AfterLink">. After creating an API key, copy and use it; it must not contain * characters.</sys:String>
     <sys:String x:Key="Model_BadKeyTitle">Model configuration</sys:String>
     <sys:String x:Key="Model_BadKeyBody">Please enter the API key.</sys:String>
