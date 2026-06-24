@@ -1,0 +1,104 @@
+{
+  "models": {
+    "qwen3.7-max": {
+      "model": "qwen3.7-max",
+      "name": "Qwen3.7 Max",
+      "protocol": "openai-chat",
+      "contextWindow": 1000000,
+      "maxOutputTokens": 65536,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": true
+      },
+      "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "apiKey": "{{API_KEY}}"
+    },
+    "qwen3.7-plus": {
+      "model": "qwen3.7-plus",
+      "name": "Qwen3.7 Plus",
+      "protocol": "openai-chat",
+      "contextWindow": 1000000,
+      "maxOutputTokens": 65536,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": true
+      },
+      "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "apiKey": "{{API_KEY}}"
+    },
+    "qwen3.6-flash": {
+      "model": "qwen3.6-flash",
+      "name": "Qwen3.6 Flash",
+      "protocol": "openai-chat",
+      "contextWindow": 1000000,
+      "maxOutputTokens": 65536,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": false
+      },
+      "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      "apiKey": "{{API_KEY}}"
+    }
+  },
+  "model": {
+    "defaultRoute": "qwen-high-main",
+    "routes": {
+      "qwen-high-main": {
+        "primary": "qwen3.7-max",
+        "fallbackChain": [
+          "qwen3.7-plus"
+        ],
+        "recoveryProfile": "main-agent",
+        "allowActions": [
+          "retry_same_model",
+          "adapt_request",
+          "switch_model"
+        ],
+        "switchModelOn": [
+          "rate_limit",
+          "overloaded",
+          "timeout",
+          "connection",
+          "server_error",
+          "malformed_response",
+          "responses_null_output",
+          "model_not_found"
+        ]
+      }
+    }
+  },
+  "auxiliary": {
+    "goalJudge": {
+      "recoveryProfile": "auxiliary-judge",
+      "failure": "fail_open",
+      "timeoutMs": 30000,
+      "primary": "qwen3.6-flash",
+      "fallbackChain": [
+        "qwen3.7-plus"
+      ]
+    },
+    "promptSuggestion": {
+      "recoveryProfile": "auxiliary-fast",
+      "allowActions": [
+        "retry_same_model"
+      ],
+      "switchModelOn": [
+        "timeout",
+        "connection",
+        "server_error"
+      ],
+      "failure": "return_null",
+      "timeoutMs": 8000,
+      "maxOutputTokens": 96,
+      "primary": "qwen3.6-flash",
+      "fallbackChain": []
+    },
+    "tokenCounting": {
+      "recoveryProfile": "auxiliary-fast",
+      "failure": "return_null",
+      "timeoutMs": 15000,
+      "primary": "qwen3.6-flash",
+      "fallbackChain": []
+    }
+  }
+}

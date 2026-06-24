@@ -1,0 +1,57 @@
+{
+  "models": {
+    "qwen3.6-plus": {
+      "model": "qwen3.6-plus",
+      "name": "Qwen3.6 Plus",
+      "protocol": "openai-chat",
+      "contextWindow": 1000000,
+      "maxOutputTokens": 65536,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": true
+      },
+      "baseUrl": "https://dashscope-us.aliyuncs.com/compatible-mode/v1",
+      "apiKey": "{{API_KEY}}"
+    },
+    "qwen3.6-flash": {
+      "model": "qwen3.6-flash",
+      "name": "Qwen3.6 Flash",
+      "protocol": "openai-chat",
+      "contextWindow": 1000000,
+      "maxOutputTokens": 65536,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": false
+      },
+      "baseUrl": "https://dashscope-us.aliyuncs.com/compatible-mode/v1",
+      "apiKey": "{{API_KEY}}"
+    }
+  },
+  "model": {
+    "defaultRoute": "qwen-low-intl-main",
+    "routes": {
+      "qwen-low-intl-main": {
+        "primary": "qwen3.6-plus",
+        "fallbackChain": [
+          "qwen3.6-flash"
+        ],
+        "recoveryProfile": "main-agent",
+        "allowActions": [
+          "retry_same_model",
+          "adapt_request",
+          "switch_model"
+        ],
+        "switchModelOn": [
+          "rate_limit",
+          "overloaded",
+          "timeout",
+          "connection",
+          "server_error",
+          "malformed_response",
+          "responses_null_output",
+          "model_not_found"
+        ]
+      }
+    }
+  }
+}

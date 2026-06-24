@@ -1,0 +1,32 @@
+{
+  "models": {
+    "mimo-v2.5": {
+      "model": "mimo-v2.5",
+      "name": "MiMo V2.5",
+      "protocol": "openai-chat",
+      "contextWindow": 1000000,
+      "maxOutputTokens": 131072,
+      "supportsImages": true,
+      "thinking": {
+        "enabled": true
+      },
+      "baseUrl": "https://token-plan-sgp.xiaomimimo.com/v1",
+      "apiKey": "{{API_KEY}}"
+    }
+  },
+  "model": {
+    "defaultRoute": "mimo-std-intl-main",
+    "routes": {
+      "mimo-std-intl-main": {
+        "primary": "mimo-v2.5",
+        "fallbackChain": [],
+        "recoveryProfile": "main-agent",
+        "allowActions": [
+          "retry_same_model",
+          "adapt_request"
+        ],
+        "switchModelOn": []
+      }
+    }
+  }
+}

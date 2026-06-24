@@ -1,0 +1,57 @@
+{
+  "models": {
+    "MiniMax-M3": {
+      "model": "MiniMax-M3",
+      "name": "MiniMax-M3",
+      "protocol": "anthropic",
+      "contextWindow": 1000000,
+      "maxOutputTokens": 131072,
+      "supportsImages": true,
+      "thinking": {
+        "enabled": true
+      },
+      "baseUrl": "https://api.minimax.io/anthropic",
+      "apiKey": "{{API_KEY}}"
+    },
+    "MiniMax-M2.7-highspeed": {
+      "model": "MiniMax-M2.7-highspeed",
+      "name": "MiniMax-M2.7 Highspeed",
+      "protocol": "anthropic",
+      "contextWindow": 196608,
+      "maxOutputTokens": 65536,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": true
+      },
+      "baseUrl": "https://api.minimax.io/anthropic",
+      "apiKey": "{{API_KEY}}"
+    }
+  },
+  "model": {
+    "defaultRoute": "minimax-high-intl-main",
+    "routes": {
+      "minimax-high-intl-main": {
+        "primary": "MiniMax-M3",
+        "fallbackChain": [
+          "MiniMax-M2.7-highspeed"
+        ],
+        "recoveryProfile": "main-agent",
+        "allowActions": [
+          "retry_same_model",
+          "adapt_request",
+          "switch_model"
+        ],
+        "switchModelOn": [
+          "rate_limit",
+          "overloaded",
+          "timeout",
+          "connection",
+          "server_error",
+          "malformed_response",
+          "responses_null_output",
+          "model_not_found"
+        ]
+      }
+    }
+  }
+}

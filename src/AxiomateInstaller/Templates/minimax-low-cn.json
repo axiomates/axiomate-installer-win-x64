@@ -1,0 +1,57 @@
+{
+  "models": {
+    "MiniMax-M2.5-highspeed": {
+      "model": "MiniMax-M2.5-highspeed",
+      "name": "MiniMax-M2.5 Highspeed",
+      "protocol": "anthropic",
+      "contextWindow": 196608,
+      "maxOutputTokens": 65536,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": true
+      },
+      "baseUrl": "https://api.minimaxi.com/anthropic",
+      "apiKey": "{{API_KEY}}"
+    },
+    "MiniMax-M2.7-highspeed": {
+      "model": "MiniMax-M2.7-highspeed",
+      "name": "MiniMax-M2.7 Highspeed",
+      "protocol": "anthropic",
+      "contextWindow": 196608,
+      "maxOutputTokens": 65536,
+      "supportsImages": false,
+      "thinking": {
+        "enabled": true
+      },
+      "baseUrl": "https://api.minimaxi.com/anthropic",
+      "apiKey": "{{API_KEY}}"
+    }
+  },
+  "model": {
+    "defaultRoute": "minimax-low-main",
+    "routes": {
+      "minimax-low-main": {
+        "primary": "MiniMax-M2.5-highspeed",
+        "fallbackChain": [
+          "MiniMax-M2.7-highspeed"
+        ],
+        "recoveryProfile": "main-agent",
+        "allowActions": [
+          "retry_same_model",
+          "adapt_request",
+          "switch_model"
+        ],
+        "switchModelOn": [
+          "rate_limit",
+          "overloaded",
+          "timeout",
+          "connection",
+          "server_error",
+          "malformed_response",
+          "responses_null_output",
+          "model_not_found"
+        ]
+      }
+    }
+  }
+}
