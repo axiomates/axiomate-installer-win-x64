@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Security.Principal;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ public partial class App : Application
 
         if (!IsElevated())
         {
-            RelaunchElevatedWithTargetUser();
+            TryRelaunchElevatedWithTargetUser();
             Shutdown();
             return;
         }
@@ -46,22 +47,31 @@ public partial class App : Application
         return new WindowsPrincipal(identity).IsInRole(WindowsBuiltInRole.Administrator);
     }
 
-    private static void RelaunchElevatedWithTargetUser()
+    private const int ErrorCancelled = 1223;
+
+    private static bool TryRelaunchElevatedWithTargetUser()
     {
-        string exe = Process.GetCurrentProcess().MainModule?.FileName ?? Environment.ProcessPath ?? "";
-        string sid = WindowsIdentity.GetCurrent().User?.Value ?? "";
-        string profile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
-        var psi = new ProcessStartInfo(exe)
+        try
         {
-            UseShellExecute = true,
-            Verb = "runas",
-        };
-        psi.ArgumentList.Add("--elevated");
-        psi.ArgumentList.Add("--target-user-sid");
-        psi.ArgumentList.Add(sid);
-        psi.ArgumentList.Add("--target-user-profile");
-        psi.ArgumentList.Add(profile);
-        Process.Start(psi);
+            string exe = Process.GetCurrentProcess().MainModule?.FileName ?? Environment.ProcessPath ?? "";
+            string sid = WindowsIdentity.GetCurrent().User?.Value ?? "";
+            string profile = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+            var psi = new ProcessStartInfo(exe)
+            {
+                UseShellExecute = true,
+                Verb = "runas",
+            };
+            psi.ArgumentList.Add("--elevated");
+            psi.ArgumentList.Add("--target-user-sid");
+            psi.ArgumentList.Add(sid);
+            psi.ArgumentList.Add("--target-user-profile");
+            psi.ArgumentList.Add(profile);
+            return Process.Start(psi) is not null;
+        }
+        catch (Win32Exception ex) when (ex.NativeErrorCode == ErrorCancelled)
+        {
+            return false;
+        }
     }
 
     private static string? GetArgValue(string[] args, string name)
