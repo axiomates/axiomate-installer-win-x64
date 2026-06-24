@@ -128,7 +128,7 @@ if ($LASTEXITCODE -ne 0) { throw "Installer publish failed (exit $LASTEXITCODE)"
 
 # ---------- 6. Rename + report ----------
 $rawExe   = Join-Path $InstallerOut "axiomate-installer.exe"
-$finalExe = Join-Path $InstallerOut ("axiomate-installer-{0}.exe" -f $installerVersion)
+$finalExe = Join-Path $InstallerOut ("axiomate-installer-{0}-windows-x64.exe" -f $axiomateVersion)
 if (-not (Test-Path $rawExe)) { throw "Expected installer exe missing: $rawExe" }
 if ((Test-Path $finalExe) -and (-not $KeepArtifactsRaw)) { Remove-Item -Force $finalExe }
 if (-not $KeepArtifactsRaw) {
