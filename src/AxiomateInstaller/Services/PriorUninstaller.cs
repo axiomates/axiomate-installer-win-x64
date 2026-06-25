@@ -40,6 +40,7 @@ public sealed class PriorUninstaller
             if (Directory.Exists(installDir))
             {
                 EnsureSafeInstallDirForDeletion(installDir);
+                new RunningProcessGuard(_log).TerminateProcessesUnder(installDir);
                 ForceDeleteDirectory(installDir);
                 _log.Info($"Prior install dir removed: {installDir}");
             }

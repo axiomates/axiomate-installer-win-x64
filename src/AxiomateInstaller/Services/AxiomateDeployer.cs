@@ -29,6 +29,11 @@ public sealed class AxiomateDeployer
         {
             if (Directory.Exists(installDir))
             {
+                // A still-running Axiomate (or its helpers) holds open handles to
+                // its own image under installDir, which makes the delete below fail
+                // with "Access to the path 'axiomate.exe' is denied". Terminate
+                // those first (we already hold the elevation needed to do so).
+                new RunningProcessGuard(_log).TerminateProcessesUnder(installDir);
                 _log.Info($"Cleaning install dir {installDir}");
                 ForceDeleteDirectory(installDir);
             }

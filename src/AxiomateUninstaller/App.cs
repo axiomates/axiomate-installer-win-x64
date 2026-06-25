@@ -95,6 +95,12 @@ public partial class App : System.Windows.Application
             catch { }
 
             EnsureSafeInstallDirForDeletion(installDir);
+            // A still-running axiomate.exe (or a helper it spawned) holds an open
+            // handle to its own image under installDir, which makes the delete fail
+            // with "Access to the path 'axiomate.exe' is denied". We are elevated
+            // (requireAdministrator), so terminate those first — symmetric with the
+            // installer's RunningProcessGuard.
+            TerminateRunningProcessesUnder(installDir);
             Directory.Delete(installDir, recursive: true);
             TryDeleteSelf(helperExe);
             return 0;
@@ -283,6 +289,64 @@ public partial class App : System.Windows.Application
     {
         try { MoveFileEx(helperExe, null, MOVEFILE_DELAY_UNTIL_REBOOT); }
         catch { }
+    }
+
+    private static readonly string[] AxiomateProcessNames =
+    {
+        "axiomate", "agent-browser", "rg", "rtk"
+    };
+
+    /// <summary>
+    /// Terminate Axiomate processes whose image lives under <paramref name="installDir"/>
+    /// so the directory can be deleted. Matching is by executable path under the dir,
+    /// never by name alone: rg.exe / rtk.exe / agent-browser.exe are common tool names,
+    /// so we must not kill an unrelated ripgrep the user runs elsewhere. Best-effort;
+    /// failures are logged and never thrown.
+    /// </summary>
+    private static void TerminateRunningProcessesUnder(string installDir)
+    {
+        if (string.IsNullOrWhiteSpace(installDir) || !Directory.Exists(installDir)) return;
+
+        string canonicalDir = CanonicalizeForComparison(installDir);
+        var killed = new List<Process>();
+
+        foreach (string name in AxiomateProcessNames)
+        {
+            Process[] procs;
+            try { procs = Process.GetProcessesByName(name); }
+            catch (Exception ex) { LogIgnore($"enumerating '{name}' processes failed", ex); continue; }
+
+            foreach (var p in procs)
+            {
+                string? exePath;
+                try { exePath = p.MainModule?.FileName; }
+                catch (Exception ex) { LogIgnore($"cannot read module path of pid {p.Id}", ex); p.Dispose(); continue; }
+                if (exePath is null) { p.Dispose(); continue; }
+
+                if (!IsUnder(CanonicalizeForComparison(exePath), canonicalDir)) { p.Dispose(); continue; }
+
+                try { p.Kill(entireProcessTree: true); killed.Add(p); }
+                catch (Exception ex) { LogIgnore($"could not kill pid {p.Id}", ex); p.Dispose(); }
+            }
+        }
+
+        foreach (var p in killed)
+        {
+            try { p.WaitForExit(10000); }
+            catch (Exception ex) { LogIgnore($"WaitForExit pid {p.Id} failed", ex); }
+            finally { p.Dispose(); }
+        }
+
+        // Give Windows a moment to release the image handles after exit.
+        if (killed.Count > 0) System.Threading.Thread.Sleep(300);
+    }
+
+    private static bool IsUnder(string path, string root)
+    {
+        string normalizedPath = path.TrimEnd('\\');
+        string normalizedRoot = root.TrimEnd('\\');
+        return string.Equals(normalizedPath, normalizedRoot, StringComparison.OrdinalIgnoreCase)
+            || normalizedPath.StartsWith(normalizedRoot + "\\", StringComparison.OrdinalIgnoreCase);
     }
 
     private static void LogIgnore(string msg, Exception ex)
