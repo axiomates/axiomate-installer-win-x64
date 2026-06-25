@@ -9,7 +9,7 @@
       4. Publish AxiomateUninstaller.exe and stash it as Resources/Uninstaller.exe so
          the main installer can embed it.
       5. Publish AxiomateInstaller.exe (single-file, self-contained, win-x64).
-      6. Rename the produced exe with the installer version and report final path/size.
+      6. Rename the produced exe to axiomate-installer-windows-x64.exe and report final path/size.
 #>
 
 [CmdletBinding()]
@@ -128,7 +128,7 @@ if ($LASTEXITCODE -ne 0) { throw "Installer publish failed (exit $LASTEXITCODE)"
 
 # ---------- 6. Rename + report ----------
 $rawExe   = Join-Path $InstallerOut "axiomate-installer.exe"
-$finalExe = Join-Path $InstallerOut ("axiomate-installer-{0}-windows-x64.exe" -f $axiomateVersion)
+$finalExe = Join-Path $InstallerOut "axiomate-installer-windows-x64.exe"
 if (-not (Test-Path $rawExe)) { throw "Expected installer exe missing: $rawExe" }
 if ((Test-Path $finalExe) -and (-not $KeepArtifactsRaw)) { Remove-Item -Force $finalExe }
 if (-not $KeepArtifactsRaw) {

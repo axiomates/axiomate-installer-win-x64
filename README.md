@@ -6,7 +6,7 @@ Wraps the Axiomate Windows agent dist together with bundled Git / Python install
 
 | | |
 |---|---|
-| Output | `artifacts/installer/axiomate-installer-<axiomateVersion>-windows-x64.exe` |
+| Output | `artifacts/installer/axiomate-installer-windows-x64.exe` |
 | Size | ~278 MB (axiomate dist 165 MB + Git 62 MB + Python 26 MB + WPF runtime + uninstaller) |
 | Target OS | Windows 11 (build 22000+), x64 only |
 | Privilege | self-elevates: starts as invoker, captures original user SID/profile, then relaunches with UAC |
@@ -51,7 +51,7 @@ pwsh build.ps1
 #    -KeepArtifactsRaw  keep the unversioned axiomate-installer.exe alongside the renamed copy
 
 # 4. final deliverable
-ls artifacts/installer/axiomate-installer-*-windows-x64.exe   # single file, ~278 MB
+ls artifacts/installer/axiomate-installer-windows-x64.exe   # single file, ~278 MB
 ```
 
 The build runs `dotnet publish` for both the uninstaller (intermediate) and the main installer.
@@ -70,7 +70,7 @@ or update a GitHub Release.
 3. If changing the installer product version, update `installerVersion` in `version.json`.
 4. Run `pwsh build.ps1`.
 5. Use the single generated EXE under `artifacts/installer/`:
-   `axiomate-installer-<axiomateVersion>-windows-x64.exe`.
+   `axiomate-installer-windows-x64.exe`.
 
 Use `pwsh build.ps1 -SkipDistSync` only when the embedded Axiomate dist has not changed, for example
 when rebuilding after installer-code-only changes.
@@ -282,7 +282,7 @@ UI / log usage:
 - About dialog: 4 versions (installer / axiomate / bundled Git / bundled Python).
 - Apps & features `DisplayVersion` = `axiomateVersion`; `Comments` = `Installer <installerVersion>`.
 - Log file: `%TEMP%\axiomate-installer\install-<installerVersion>-<yyyyMMdd-HHmmss>.log`.
-- Final EXE filename: `axiomate-installer-<axiomateVersion>-windows-x64.exe`.
+- Final EXE filename: `axiomate-installer-windows-x64.exe`.
 
 ---
 
@@ -298,7 +298,7 @@ UI / log usage:
 | 4 | Verify `Git-2.54.0-64-bit.exe` and `python-3.12.10-amd64.exe` exist under `Resources/`. |
 | 5 | `dotnet publish` AxiomateUninstaller → `artifacts/_intermediate/uninstaller/`, copy resulting EXE to `Resources/Uninstaller.exe`. |
 | 6 | `dotnet publish` AxiomateInstaller → `artifacts/installer/`. |
-| 7 | Rename `axiomate-installer.exe` → `axiomate-installer-<axiomateVersion>-windows-x64.exe`. Strip `.pdb` and the copied `version.json` so the folder ends up with **one file only**. |
+| 7 | Rename `axiomate-installer.exe` → `axiomate-installer-windows-x64.exe`. Strip `.pdb` and the copied `version.json` so the folder ends up with **one file only**. |
 
 Both projects are configured for single-file self-contained `win-x64`:
 
@@ -339,7 +339,7 @@ Windows build, the normal update flow is:
 pwsh build.ps1
 
 # 3. Smoke-test the generated EXE.
-.\artifacts\installer\axiomate-installer-*-windows-x64.exe
+.\artifacts\installer\axiomate-installer-windows-x64.exe
 ```
 
 What changes automatically:
@@ -350,7 +350,7 @@ What changes automatically:
 - If `version.json` keeps `"axiomateVersion": "auto"`, the displayed bundled Axiomate version is
   `major.minor.patch.<axiomateBuildNumber>` from the new `dist\axiomate.exe`; commit/hash suffixes are stripped.
   Update `axiomateBuildNumber` when producing a new package build.
-- The installer output remains `artifacts/installer/axiomate-installer-<axiomateVersion>-windows-x64.exe`.
+- The installer output remains `artifacts/installer/axiomate-installer-windows-x64.exe`.
 
 What to edit manually:
 
